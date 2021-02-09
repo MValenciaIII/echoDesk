@@ -17,7 +17,7 @@ function SignUp() {
             <label class="block mb-2">Email: </label>
             <input type="text" name="name" id="user-email" class="w-full md:border-2  border-b-2"></input>
             <br></br>
-            <label class="block mb-2">Password: </label>
+            <label class="block mb-2">Password:: </label>
             <input type="password" name="name" id="user-password" class="w-full md:border-2  border-b-2 "></input>
             <br></br>
             <input type="submit"  id="login-button"></input>
