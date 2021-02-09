@@ -5,6 +5,7 @@ function AgentLogin() {
   return (
     <>
     <div class="main-background">
+    <div class="login-background">
      <div class="p-4 container">
       <div className="grid md:grid-cols-12 gap-2">
         <div class="p-8 md:col-span-5 py-16 px-5 bg-gray rounded-md shadow-lg text-sm ">
@@ -27,6 +28,7 @@ function AgentLogin() {
           </form>
        </div>
      </div>
+    </div>
     </div>
     </div>
     </>
