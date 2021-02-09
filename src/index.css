@@ -2,3 +2,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.footer-logo {
+
+margin-top: 2%;
+
+}
+
+.footer-ulTitle {
+
+margin-top: 5%;
+
+}
+.footer-li {
+
+margin-top: 2%;
+
+}
+
+.footer-background {
+
+padding-bottom: 5%;
+    
+}
