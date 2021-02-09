@@ -9,7 +9,7 @@ function Header(props) {
           {/* todo:higher quality image for this size and not shrunk so much */}
           <img src="/media/mema-seal.png" alt="Mema Seal" className="w-16" />
         </div>
-        <h1 className="m-2 text-white text-5xl font-sans">EchoDesk</h1>
+        <h1 className="m-2 text-white text-5xl logo">EchoDesk</h1>
       </nav>
     </>
   );
