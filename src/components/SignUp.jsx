@@ -15,10 +15,10 @@ function SignUp() {
             <input type="text" name="name" id="user-name"  class=" w-full sm:border-2 md:border-2 border-b-2"></input>
             </div>
             <label class="block mb-2">Email: </label>
-            <input type="text" name="name" id="user-email" class="w-full md:border-2  border-b-2"></input>
+            <input type="text" name="email" id="user-email" class="w-full md:border-2  border-b-2"></input>
             <br></br>
             <label class="block mb-2">Password:: </label>
-            <input type="password" name="name" id="user-password" class="w-full md:border-2  border-b-2 "></input>
+            <input type="password" name="password" id="user-password" class="w-full md:border-2  border-b-2 "></input>
             <br></br>
             <input type="submit"  id="login-button"></input>
           </form>
