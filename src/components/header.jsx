@@ -8,7 +8,7 @@ function Header(props) {
         <div className="max-w-screen-2xl">
           <div className="bg-red-500 rounded-full p-4 w-10 h-10"></div>
         </div>
-        <h1 className="m-2 text-white text-5xl font-sans">EchoDesk</h1>
+        <h1 className="m-2 text-white text-5xl logo">EchoDesk</h1>
       </nav>
     </>
   );

@@ -7,6 +7,31 @@
    margin-top: 2%;
    min-height: 750px;
 }
+.logo {
+    font-family: 'Exo', sans-serif;
+
+}
+
+
+
+/*///////////////////////// DASHBOARD STYLING ///////////////////////////////////*/
+
+
+.dashboard-background {
+
+background-color: #686963;
+opacity: 30%;
+
+}
+
+
+.dashboard-nav {
+    background-color: #F1EDEE;
+}
+
+
+
+/*///////////////////////// FOOTER STYLING //////////////////////////////////////*/
 .footer-logo {
 
 margin-top: 2%;
@@ -25,7 +50,7 @@ margin-top: 2%;
 }
 
 .footer-background {
-
+padding-left: 5%;
 padding-bottom: 5%;
     
 }
