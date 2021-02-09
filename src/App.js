@@ -1,12 +1,3 @@
-// import './App.css';
-// import Header from './components/header.jsx';
-
-// function App() {
-//   return <Header></Header>;
-// }
-
-// export default App;
-
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Login from './components/Login';

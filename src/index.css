@@ -3,7 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
+.login-background{
+  margin-top: 2%;
+   min-height: 750px;
+}
 .footer-logo {
 
 margin-top: 2%;
