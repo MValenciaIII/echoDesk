@@ -26,7 +26,14 @@ opacity: 30%;
 
 
 .dashboard-nav {
+    /*height: 81.3vh; */
     background-color: #F1EDEE;
+}
+
+.dashboard-mobilenav {
+
+background-color: #F1EDEE;
+
 }
 
 
@@ -34,7 +41,7 @@ opacity: 30%;
 /*///////////////////////// FOOTER STYLING //////////////////////////////////////*/
 .footer-logo {
 
-margin-top: 2%;
+margin-top: 3%;
 
 }
 
