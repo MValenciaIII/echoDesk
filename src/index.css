@@ -3,8 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-.login-background{
+.main-background{
    margin-top: 2%;
+   margin-left: 25%;
    min-height: 750px;
 }
 .logo {
