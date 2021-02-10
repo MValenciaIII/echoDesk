@@ -1,14 +1,29 @@
 let fakeData = [
   {
     id: '1',
-    status: 'new',
+    status: 'Open',
     title: 'Printer does not work',
     description: 'My printer takes forever to print',
     assignedTo: 'Gray',
     raisedBy: 'Jim',
-    category: 'Printers',
+    department: 'Executive',
+    category: 'IT',
+    subcategory: 'Email',
     priority: 'Urgent',
-    dueIn: '3 days',
+    contactEmail: 'Bob@memam.ms.gov',
+    contactPhone: '555-555-5555',
+    dueIn: '1613082440', //unix epoch seconds;
+  },
+  {
+    id: '3',
+    status: 'new',
+    title: 'I have problems',
+    description: 'Whatever my problem is',
+    assignedTo: 'Gray',
+    raisedBy: 'Jim',
+    category: 'Printers',
+    priority: 'Low',
+    dueIn: '4 days',
   },
   {
     id: '2',
