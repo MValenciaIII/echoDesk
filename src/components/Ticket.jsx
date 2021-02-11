@@ -122,13 +122,14 @@ function Ticket() {
               </label>
            </div>
             <div class="flex items-center justify-between">
-            {/* <div><Link>Cancel</Link>
-                 <Link> Create</Link>
-                 </div> */}
               <button class="py-2 px-4 rounded font-bold bg-blue hover:bg-blue-dark text-white" type="button">
                <div>
                   <Link>Cancel </Link>
-                  <Link> Create</Link>
+                </div>
+              </button>
+              <button class="py-2 px-4 rounded font-bold bg-blue hover:bg-blue-dark text-white" type="button">
+               <div>
+                  <Link>Create</Link>
                 </div>
               </button>
             </div>
