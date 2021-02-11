@@ -8,6 +8,8 @@ import Home from './components/Home';
 import Dashboard from './components/Dashboard'
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Ticket from './components/Ticket';
+import TicketsContainer from './containers/TicketsContainer';
 
 function App() {
   return (
