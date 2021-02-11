@@ -9,7 +9,7 @@ function Login() {
        <div className="grid md:grid-cols-12 gap-2">
         <div class="p-8 md:col-span-5 py-16 px-5 bg-gray rounded-md shadow-lg text-sm ">
           <h1>Login into EchoDesk support portal</h1>
-          <form action="/" method="get">
+          <form action="/dashboard" method="get">
             <div>
             <input type="text" name="name" id="user-login" placeholder="Enter Your Email Here " class="sm:border-2 md:border-2 "></input>
             </div>
