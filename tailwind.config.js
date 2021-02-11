@@ -14,6 +14,9 @@ module.exports = {
       },
     },
   },
+  height: {
+   screen: '81.3vh',
+   },
   variants: {
     extend: {},
   },
