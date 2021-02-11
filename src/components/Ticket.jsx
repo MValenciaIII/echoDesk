@@ -101,6 +101,7 @@ Ticket.Status = function TicketStatus({
     newState[index].priority = value;
     setTickets(newState);
   }
+
   const [showPriority, setshowPriority] = useState(false);
   return (
     <div
