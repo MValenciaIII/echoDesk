@@ -61,4 +61,68 @@ margin-top: 2%;
 padding-left: 5%;
 padding-bottom: 5%;
     
+=======
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*///////////////////////// ENTIRE PAGE STYLING ///////////////////////////////////*/
+.main-background{
+   /* margin-top: 2%;
+   margin-left: 25%; */
+   min-height: 500px;
+}
+.logo {
+    font-family: 'Exo', sans-serif;
+
+}
+
+
+
+/*///////////////////////// DASHBOARD STYLING ///////////////////////////////////*/
+
+
+.dashboard-background {
+
+background-color: #686963;
+opacity: 30%;
+
+}
+
+
+.dashboard-nav {
+    /*height: 81.3vh; */
+    background-color: #F1EDEE;
+}
+
+.dashboard-mobilenav {
+
+background-color: #F1EDEE;
+
+}
+
+
+
+/*///////////////////////// FOOTER STYLING //////////////////////////////////////*/
+.footer-logo {
+
+margin-top: 3%;
+
+}
+
+.footer-ulTitle {
+
+margin-top: 5%;
+
+}
+.footer-li {
+
+margin-top: 2%;
+
+}
+
+.footer-background {
+padding-left: 5%;
+padding-bottom: 5%;
 }
