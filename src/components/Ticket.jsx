@@ -101,7 +101,12 @@ Ticket.Status = function TicketStatus({
     newState[index].priority = value;
     setTickets(newState);
   }
-  const [showPriority, setshowPriority] = useState(false);
+  // todo: State updates in handle change, DB updates with put request here; could extract to custom hook to extract DB logic from component presentation logic;
+  // useEffect(() => {
+  // PUT/POST TO API with stateful tickets in dependency array
+  // }, [tickets]);
+
+  // const [showPriority, setshowPriority] = useState(false);
   return (
     <div
       className={`col-span-1  relative text-sm w-full justify-self-stretch self-stretch `}
