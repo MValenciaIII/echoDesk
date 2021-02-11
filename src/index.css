@@ -3,10 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/*///////////////////////// ENTIRE PAGE STYLING ///////////////////////////////////*/
 .main-background{
-   margin-top: 2%;
-   margin-left: 25%;
-   min-height: 750px;
+   /* margin-top: 2%;
+   margin-left: 25%; */
+   min-height: 500px;
 }
 .logo {
     font-family: 'Exo', sans-serif;

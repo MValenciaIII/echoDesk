@@ -5,32 +5,29 @@ function AgentLogin() {
   return (
     <>
     <div class="main-background">
-    <div class="login-background">
-     <div class="p-4 container">
-      <div className="grid md:grid-cols-12 gap-2">
-        <div class="p-8 md:col-span-5 py-16 px-5 bg-gray rounded-md shadow-lg text-sm ">
-          <form action="/" method="get">
-          <label>Email</label>
-            <div>
-            <input type="text" name="name" id="user-email" placeholder="Enter Email" class="md:border-2"></input>
-            </div>
-            <br></br>
-            <label>Password</label>
-            <div>
-            <input type="password" name="name" id="user-password" placeholder="Enter a Password " class="md:border-2"></input>
-            </div>
-            <br></br>
-            <p> 
-            <input type="checkbox" defaultChecked={false}/>  
-             Keep me logged in</p>
-            <br></br>
-            <input type="submit"  id="login-button"></input>
-          </form>
-       </div>
-     </div>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+    <div class="mb-4">
+      <label class="block text-grey-darker text-sm font-bold mb-2" for="username">
+        Username
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="username" type="text" placeholder="Username"/>
     </div>
+    <div class="mb-6">
+      <label class="block text-grey-darker text-sm font-bold mb-2" for="password">
+        Password
+      </label>
+      <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3" id="password" type="password" placeholder="******************"/>
     </div>
+    <div class="flex items-center justify-between">
+      <button class="bg-blue hover:bg-blue-dark text-white font-bold py-2 px-4 rounded" type="button">
+        Sign In
+      </button>
+      <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
+        Forgot Password?
+      </a>
     </div>
+</div>
+</div>
     </>
   );
 }
