@@ -1,12 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useReducer } from 'react';
 // import { TicketContext } from '../ticketContext.js';
 import fakeTickets from '../fakeTickets.js';
+import useUpdateTicket from '../hooks/useUpdateTicket';
+import getTimeFxn from '../utils/timeConverter.js';
+import ticketCategories from '../utils/ticketCategories.js';
 
 export default function Ticket({
   children,
   id,
   tickets,
   setTickets,
+  handleChange,
   ...restProps
 }) {
   const [activityLogShown, setActivityLogShown] = useState(false);
@@ -15,16 +19,18 @@ export default function Ticket({
     return React.cloneElement(child, {
       activityLogShown: activityLogShown,
       id: id,
+      handleChange: handleChange,
       tickets: tickets,
       setTickets: setTickets,
       onClick: () =>
         setActivityLogShown((activityLogShown) => !activityLogShown),
     });
   });
+
   return (
     <div
       {...restProps}
-      className="grid grid-cols-10 mx-auto my-4 w-80 md:w-4/5 lg:max-w-screen-xl  border-2 border-black"
+      className="grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-10 mx-auto my-4 w-80 md:w-4/5 lg:max-w-screen-xl  border rounded-md border-gray-300 shadow divide-x-2 divide-gray-200 truncate"
     >
       {childrenWithProps}
     </div>
@@ -61,9 +67,10 @@ export default function Ticket({
 Ticket.Status = function TicketStatus({
   children,
   id,
+  priority,
   tickets,
   setTickets,
-  priority,
+  handleChange,
   status,
   ...restProps
 }) {
@@ -95,12 +102,7 @@ Ticket.Status = function TicketStatus({
         return;
     }
   }
-  function handleChange(id, value) {
-    let index = tickets.findIndex((ticket) => ticket.id === id);
-    let newState = [...tickets];
-    newState[index].priority = value;
-    setTickets(newState);
-  }
+
   // todo: State updates in handle change, DB updates with put request here; could extract to custom hook to extract DB logic from component presentation logic;
   // useEffect(() => {
   // PUT/POST TO API with stateful tickets in dependency array
@@ -109,20 +111,20 @@ Ticket.Status = function TicketStatus({
   // const [showPriority, setshowPriority] = useState(false);
   return (
     <div
-      className={`col-span-1  relative text-sm w-full justify-self-stretch self-stretch `}
+      className={`col-span-1  relative text-sm w-full justify-self-stretch self-stretch h-full`}
     >
-      <p className="w-full">
-        <span className={`${statusClasses()} inline-block p-1 w-full`}>
+      <p className="w-full h-1/2">
+        <span className={`${statusClasses()} inline-block p-1 h-full w-full`}>
           {status}
         </span>
       </p>
       <select
-        className={`${priorityClasses()} w-full text-center`}
+        className={`${priorityClasses()} w-full text-center h-1/2`}
         name="priority"
         id=""
         value={priority}
         onChange={(event) => {
-          handleChange(id, event.target.value);
+          handleChange(id, 'priority', event.target.value);
         }}
       >
         <option className={`bg-green-800 text-white`} value="Low">
@@ -146,7 +148,10 @@ Ticket.Description = function TicketDescription({
   children,
   title,
   description,
+  department,
   activityLogShown,
+  raisedBy,
+  timeSubmitted,
   onClick, //drilled from topRow, then from ticket;
   ...restProps
 }) {
@@ -157,14 +162,29 @@ Ticket.Description = function TicketDescription({
   return (
     <div className="col-span-9 p-1 bg-gray-100 border border-red-500 flex-grow">
       <div className="">
-        <h2 className="inline-block text-black">{title}</h2>
-        <img
-          src="/media/icons/arrow-down.svg"
-          alt="arrow-down"
-          className={`${arrowClasses()} inline-block ml-8 duration-150`}
-          onClick={onClick}
-        />
-        <h3 className=" text-gray-600">{description}</h3>
+        <h2 className="inline-block text-black font-bold text-md">{title}</h2>
+        {/* todo: relocate this img to a better place */}
+        <h3 className=" text-gray-600 text-sm">
+          {description}
+          <p className="">
+            submitted by
+            <span className="font-bold">{` ${raisedBy} `} </span>
+            <span className="font-italic text-xs"> ({department}) </span>
+            on
+            <span className="text-sm text-gray-500">
+              {` ${getTimeFxn(timeSubmitted)} `}
+              <span className="inline-block ml1 text-xs">
+                (Click to see more below)
+              </span>
+            </span>
+            <img
+              src="/media/icons/arrow-down.svg"
+              alt="arrow-down"
+              className={`${arrowClasses()} inline-block w-6 p-1 duration-150`}
+              onClick={onClick}
+            />
+          </p>
+        </h3>
       </div>
     </div>
   );
@@ -173,65 +193,142 @@ Ticket.Description = function TicketDescription({
 Ticket.AssignedTo = function TicketAssignedTo({
   children,
   assignedTo,
+  handleChange,
+  id,
   ...restProps
 }) {
   return (
-    <div className="col-span-2">
-      <h3>Assigned To:</h3>
-
-      <h4>{assignedTo}</h4>
+    <div className="col-span-2 lg:col-span-1 text-center p-1">
+      <span className="text-sm mr-px inline-block">
+        Assigned To: {assignedTo}
+      </span>
     </div>
   );
 };
 
-Ticket.RaisedBy = function TicketRaisedBy({
-  children,
-  raisedBy,
-  ...restProps
-}) {
-  return (
-    <div className="col-span-2">
-      <h3>Raised by:</h3>
-      <h4>{raisedBy}</h4>
-    </div>
-  );
-};
+// Ticket.RaisedBy = function TicketRaisedBy({
+//   children,
+//   raisedBy,
+//   ...restProps
+// }) {
+//   return (
+//     <div className="col-span-2">
+//       <h3>Raised by:</h3>
+//       <h4>{raisedBy}</h4>
+//     </div>
+//   );
+// };
 
-Ticket.Priority = function TicketPriority({
-  children,
-  priority,
-  ...restProps
-}) {
-  function priorityClasses() {
-    switch (priority) {
-      case 'Urgent':
-        return 'bg-red-700 text-red-100';
-      case 'Low':
-        return 'bg-green-700 text-green-100';
-      default:
-        return;
-    }
-  }
+// Ticket.Priority = function TicketPriority({
+//   children,
+//   priority,
+//   ticket,
+//   ...restProps
+// }) {
+//   function priorityClasses() {
+//     switch (priority) {
+//       case 'Urgent':
+//         return 'bg-red-700 text-red-100';
+//       case 'Low':
+//         return 'bg-green-700 text-green-100';
+//       default:
+//         return;
+//     }
+//   }
 
-  return (
-    <div className={`${priorityClasses()} col-span-2`}>
-      <h3>Priority:</h3>
-      <h4>{priority}</h4>
-    </div>
-  );
-};
-Ticket.Category = function TicketCategory({
+//   return (
+//     <div className={`${priorityClasses()} col-span-2`}>
+//       <h3>Priority:</h3>
+//       <h4>{priority}</h4>
+//     </div>
+//   );
+// };
+
+Ticket.Location = function TicketLocation({
   children,
-  category,
+  mainLocation,
+  office,
   ...restProps
 }) {
   return (
     <div className="col-span-1">
-      <h3>Category:</h3>
-      <h4>{category}</h4>
+      <span className="text-sm mr-px inline-block">
+        Location: {mainLocation}
+      </span>
     </div>
   );
 };
+
+Ticket.Category = function TicketCategory({
+  children,
+  id,
+  category,
+  subcategory,
+  handleChange,
+  ...restProps
+}) {
+  return (
+    <div className="col-span-2 text-center">
+      <h3>Category:</h3>
+      <select
+        className="bg-gray-200"
+        name="category"
+        id=""
+        value={category}
+        onChange={(event) => {
+          handleChange(id, 'category', event.target.value);
+        }}
+      >
+        <option value="Building">Building</option>
+        <option value="IT">IT</option>
+        <option value="Communications">Communications</option>
+        <option value="GIS">GIS</option>
+        <option value="Employee Setup">Employee Setup</option>
+      </select>
+      <select
+        className="bg-gray-200 ml-2"
+        name="subcategory"
+        id=""
+        value={subcategory}
+        onChange={(event) => {
+          handleChange(id, 'subcategory', event.target.value);
+        }}
+      >
+        {ticketCategories(category)}
+      </select>
+    </div>
+  );
+};
+
+Ticket.ContactInfo = function TicketContactInfo({
+  children,
+  contactPhone,
+  contactEmail,
+  dueIn,
+  title,
+  ...restProps
+}) {
+  return (
+    <div className="col-span-2">
+      <p>
+        Phone:{' '}
+        <a className="text-blue-500 underline" href={`tel:${contactPhone}`}>
+          {contactPhone}
+        </a>
+      </p>
+      <p>
+        Email:{' '}
+        <a
+          className="text-blue-500 underline"
+          href={`mailto:${contactEmail}?subject=${title}`}
+        >
+          {contactEmail}
+        </a>
+      </p>
+    </div>
+  );
+};
+
 Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   return (
     <div className="w-1/3 md:w-auto flex-grow p-2  md:border-0   md:text-lg lg:text-2xl xl:text-3xl">
@@ -241,7 +338,7 @@ Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   );
 };
 
-Ticket.ActivityLog = function TicketActivityLog({
+Ticket.ActivityLogContainer = function ActivityLogContainer({
   children,
   activityLogShown,
   ...restProps
@@ -249,9 +346,26 @@ Ticket.ActivityLog = function TicketActivityLog({
   //todo: see if this use of flex works for a smoother height animation; https://css-tricks.com/using-css-transitions-auto-dimensions/
   if (activityLogShown) {
     return (
-      <div className="w-full border border-yellow-700 p-10">{children}</div>
+      <div className="col-span-full border border-yellow-700 p-4 ">
+        {children}
+      </div>
     );
   } else {
-    return '';
+    return null;
   }
+};
+
+Ticket.ActivityLogEntry = function ActivityLogEntry({
+  children,
+  user,
+  message,
+  timeStamp,
+  activityLogShown,
+  ...restProps
+}) {
+  return (
+    <p>
+      {user}: {message} on {timeStamp}
+    </p>
+  );
 };
