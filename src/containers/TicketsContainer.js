@@ -13,7 +13,7 @@ export default function TicketsContainer(props) {
   }
 
   return (
-    <div className="mx-auto ">
+    <div id="TicketsContainer" className="mx-auto">
       {tickets.map((ticket, idx) => (
         <Ticket
           key={ticket.id}
@@ -47,6 +47,7 @@ export default function TicketsContainer(props) {
           <Ticket.ActivityLogContainer>
             {ticket.updates?.map((update) => (
               <Ticket.ActivityLogEntry
+                key={ticket.id}
                 user={update.user}
                 message={update.message}
                 timeStamp={update.timeStamp}

@@ -30,7 +30,7 @@ export default function Ticket({
   return (
     <div
       {...restProps}
-      className="grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-10 mx-auto my-4 w-80 md:w-4/5 lg:max-w-screen-xl  border rounded-md border-gray-300 shadow divide-x-2 divide-gray-200 truncate"
+      className="grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-10 mx-auto my-4 w-full border rounded-md border-gray-800 shadow divide-x divide-gray-800 truncate bg-gray-200"
     >
       {childrenWithProps}
     </div>
@@ -121,7 +121,7 @@ Ticket.Status = function TicketStatus({
       <select
         className={`${priorityClasses()} w-full text-center h-1/2`}
         name="priority"
-        id=""
+        title="Priority"
         value={priority}
         onChange={(event) => {
           handleChange(id, 'priority', event.target.value);
@@ -164,27 +164,27 @@ Ticket.Description = function TicketDescription({
       <div className="">
         <h2 className="inline-block text-black font-bold text-md">{title}</h2>
         {/* todo: relocate this img to a better place */}
-        <h3 className=" text-gray-600 text-sm">
+        <h3 className=" text-gray-600 text-sm break-words max-w-prose whitespace-normal">
           {description}
-          <p className="">
-            submitted by
-            <span className="font-bold">{` ${raisedBy} `} </span>
-            <span className="font-italic text-xs"> ({department}) </span>
-            on
-            <span className="text-sm text-gray-500">
-              {` ${getTimeFxn(timeSubmitted)} `}
-              <span className="inline-block ml1 text-xs">
-                (Click to see more below)
-              </span>
-            </span>
-            <img
-              src="/media/icons/arrow-down.svg"
-              alt="arrow-down"
-              className={`${arrowClasses()} inline-block w-6 p-1 duration-150`}
-              onClick={onClick}
-            />
-          </p>
         </h3>
+        <p className="">
+          submitted by
+          <span className="font-bold">{` ${raisedBy} `} </span>
+          <span className="font-italic text-xs"> ({department}) </span>
+          on
+          <span className="text-sm text-gray-500">
+            {` ${getTimeFxn(timeSubmitted)} `}
+            <span className="inline-block ml1 text-xs">
+              (Click to see more below)
+            </span>
+          </span>
+          <img
+            src="/media/icons/arrow-down.svg"
+            alt="arrow-down"
+            className={`${arrowClasses()} inline-block w-6 p-1 duration-150`}
+            onClick={onClick}
+          />
+        </p>
       </div>
     </div>
   );
@@ -198,7 +198,7 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-2 lg:col-span-1 text-center p-1">
+    <div className="col-span-2 lg:col-span-2 text-center p-1 bg-gray-200">
       <span className="text-sm mr-px inline-block">
         Assigned To: {assignedTo}
       </span>
@@ -251,8 +251,8 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-1">
-      <span className="text-sm mr-px inline-block">
+    <div className="col-span-2 bg-gray-200">
+      <span className="text-sm mr-px inline-block text-center">
         Location: {mainLocation}
       </span>
     </div>
@@ -271,7 +271,7 @@ Ticket.Category = function TicketCategory({
     <div className="col-span-2 text-center">
       <h3>Category:</h3>
       <select
-        className="bg-gray-200"
+        className="bg-gray-700 text-white  block w-max"
         name="category"
         id=""
         value={category}
@@ -286,7 +286,7 @@ Ticket.Category = function TicketCategory({
         <option value="Employee Setup">Employee Setup</option>
       </select>
       <select
-        className="bg-gray-200 ml-2"
+        className="bg-gray-700 text-white  block mt-2 "
         name="subcategory"
         id=""
         value={subcategory}
@@ -369,4 +369,3 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
     </p>
   );
 };
-

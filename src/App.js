@@ -1,11 +1,13 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import ClientLoginPage from './pages/ClientLogin.js';
+import ClientDashboard from './pages/ClientHome.js';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Ticket from './components/Ticket';
 import AgentLogin from './components/AgentLogin';
 import Home from './components/Home';
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import Footer from './components/Footer';
 // import Ticket from './components/Ticket';
@@ -17,9 +19,9 @@ function App() {
       <div id="App">
         <Header />
         <Switch>
-          <Route path="/" component={Home} exact />
+          <Route exact path="/" component={ClientLoginPage} />
           <Route path="/login" component={Login} />
-          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/clientHome" component={ClientDashboard} />
           <Route path="/signup" component={SignUp} />
           <Route path="/agent" component={AgentLogin} />
           <Route path="/ticket" component={Ticket} />

@@ -1,37 +1,40 @@
-import { React } from "react";
-import { Link } from "react-router-dom";
-
+import { React } from 'react';
+import { Link } from 'react-router-dom';
+import Ticketcontainer from '../containers/TicketsContainer';
 
 function Dashboard(props) {
-    return (
-      <>
-        <div className="dashboard-background box-border">
-            
-                <div className="grid sm:grid-cols-1  md:grid-cols-12 lg:grid-cols-12 gap-10 h-screen">
-                    <div className="col-span-1 h-16 dashboard-mobilenav md:hidden lg:hidden">
-                        <p className="text-center text-4xl pt-3">▼▼▼</p>
-                    </div>
-                    <div className="  dashboard-nav ">
-                        
-                    </div>
-                    <div className="md:col-span-6 lg:col-start-2 lg:col-span-9 p-10 ">
-                      <div className="ticketPanel h-full border-black border-4">
-
-                      </div>
-                    </div>
-                    <div className="md:col-span-3 lg:col-start-11 lg:col-span-8  p-10">
-                      <div className=" h-full border-black border-4">
-                          <div className="grid grid-rows-1">
-                            <div className="row-span-1">
-                              <p className="text-right text-white text-2xl ">Create a Ticket</p>
-                            </div>
-                          </div>
-                      </div>
-                    </div>
+  return (
+    <>
+      <div className="dashboard-background box-border py-4">
+        <div className="border-4 border-blue-900 flex flex-col lg:flex-row">
+          <div className="dashboard-mobilenav md:hidden lg:hidden">
+            <p className="text-center text-4xl pt-3">▼▼▼</p>
+          </div>
+          <div className="border-2 border-black flex flex-column w-14 invisible md:visible dashboard-nav ">
+            <p>I am the icons for dash</p>
+            {/*//! big dashboard and icons can go here  */}
+          </div>
+          <div className="ticketPanel lg:w-4/5 p-2 h-full border-black border-4">
+            {/*//! render tickets here */}
+            <h2 className="mx-auto my-2 text-lg text-center font-bold text-gray-100">
+              Your Current Tickets
+            </h2>
+            <Ticketcontainer />
+          </div>
+          <div className="lg:w-1/5 border-2 border-red-800">
+            <div className=" h-full border-black border-4">
+              <div className="grid grid-rows-1">
+                <div className="row-span-1">
+                  <p className="text-right text-white text-2xl ">
+                    Create a Ticket
+                  </p>
                 </div>
-            
+              </div>
+            </div>
+          </div>
         </div>
-      </>
-    );
-  }
-  export default Dashboard;
+      </div>
+    </>
+  );
+}
+export default Dashboard;
