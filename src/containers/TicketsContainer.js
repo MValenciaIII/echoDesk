@@ -13,7 +13,7 @@ export default function TicketsContainer(props) {
   }
 
   return (
-    <div id="TicketsContainer" className="mx-auto">
+    <div id="TicketsContainer" className="">
       {tickets.map((ticket, idx) => (
         <Ticket
           key={ticket.id}

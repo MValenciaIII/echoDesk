@@ -30,7 +30,7 @@ export default function Ticket({
   return (
     <div
       {...restProps}
-      className="grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-10 mx-auto my-4 w-full border rounded-md border-gray-800 shadow divide-x divide-gray-800 truncate bg-gray-200"
+      className="grid grid-cols-6 lg:grid-cols-10 my-4 w-full border rounded-md border-gray-800 shadow divide-x divide-gray-800 divide-y divide-gray-300 lg:divide-y-0 truncate bg-gray-200 max-w-screen-xl"
     >
       {childrenWithProps}
     </div>
@@ -88,16 +88,26 @@ Ticket.Status = function TicketStatus({
         return;
     }
   }
-  function priorityClasses() {
+  function priorityClasses(el) {
+    let bgRed = 'bg-red-800';
+    let bgBlue = 'bg-blue-800';
+    let bgYellow = 'bg-yellow-800';
+    let bgGreen = 'bg-green-800';
+    // if (el === 'select') {
+    //   bgRed = 'bg-red-900';
+    //   bgBlue = 'bg-blue-900';
+    //   bgYellow = 'bg-yellow-900';
+    //   bgGreen = 'bg-green-900';
+    // }
     switch (priority) {
       case 'Low':
-        return 'bg-green-800 text-white';
+        return `${bgGreen} text-white`;
       case 'Medium':
-        return 'bg-blue-800 text-white';
+        return `${bgBlue} text-white`;
       case 'High':
-        return 'bg-yellow-600 text-white';
+        return `${bgYellow} text-white`;
       case 'Urgent':
-        return 'bg-red-800 text-white';
+        return `${bgRed} text-white`;
       default:
         return;
     }
@@ -111,35 +121,40 @@ Ticket.Status = function TicketStatus({
   // const [showPriority, setshowPriority] = useState(false);
   return (
     <div
-      className={`col-span-1  relative text-sm w-full justify-self-stretch self-stretch h-full`}
+      className={`col-span-6 md:col-span-1 lg:col-span-1 flex md:block relative text-sm w-full justify-self-stretch self-stretch h-full text-center`}
     >
-      <p className="w-full h-1/2">
+      <p className="w-full md:h-1/2 ">
         <span className={`${statusClasses()} inline-block p-1 h-full w-full`}>
           {status}
         </span>
       </p>
-      <select
-        className={`${priorityClasses()} w-full text-center h-1/2`}
-        name="priority"
-        title="Priority"
-        value={priority}
-        onChange={(event) => {
-          handleChange(id, 'priority', event.target.value);
-        }}
+      <div
+        name="SelectContainer"
+        className={`${priorityClasses()} text-black w-full md:h-1/2`}
       >
-        <option className={`bg-green-800 text-white`} value="Low">
-          Low
-        </option>
-        <option className={`bg-blue-800 text-white`} value="Medium">
-          Medium
-        </option>
-        <option className={`bg-yellow-600 text-white`} value="High">
-          High
-        </option>
-        <option className={`bg-red-800 text-white`} alue="Urgent">
-          Urgent
-        </option>
-      </select>
+        <select
+          className={`bg-transparent text-white inline-block align-middle`}
+          name="priority"
+          title="Priority"
+          value={priority}
+          onChange={(event) => {
+            handleChange(id, 'priority', event.target.value);
+          }}
+        >
+          <option className={`bg-green-800 text-white`} value="Low">
+            Low
+          </option>
+          <option className={`bg-blue-800 text-white`} value="Medium">
+            Medium
+          </option>
+          <option className={`bg-yellow-600 text-white`} value="High">
+            High
+          </option>
+          <option className={`bg-red-800 text-white`} alue="Urgent">
+            Urgent
+          </option>
+        </select>
+      </div>
     </div>
   );
 };
@@ -160,19 +175,22 @@ Ticket.Description = function TicketDescription({
   }
 
   return (
-    <div className="col-span-9 p-1 bg-gray-100 border border-red-500 flex-grow">
+    <div className="col-span-6 md:col-span-5 lg:col-span-9 p-1 bg-gray-100 border border-red-500 flex-grow">
       <div className="">
         <h2 className="inline-block text-black font-bold text-md">{title}</h2>
         {/* todo: relocate this img to a better place */}
-        <h3 className=" text-gray-600 text-sm break-words max-w-prose whitespace-normal">
+        <h3 className=" text-gray-600 text-xs md:text-sm break-words max-w-prose whitespace-normal">
           {description}
         </h3>
-        <p className="">
+        <p
+          name="metaTicketInfo"
+          className="mt-1 sm:mt-auto text-xs md:text-sm sm:w-auto break-words whitespace-normal"
+        >
           submitted by
           <span className="font-bold">{` ${raisedBy} `} </span>
           <span className="font-italic text-xs"> ({department}) </span>
           on
-          <span className="text-sm text-gray-500">
+          <span className="text-gray-500">
             {` ${getTimeFxn(timeSubmitted)} `}
             <span className="inline-block ml1 text-xs">
               (Click to see more below)
@@ -198,9 +216,9 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-2 lg:col-span-2 text-center p-1 bg-gray-200">
+    <div className="col-span-3 md:col-span-1 md:text-sm lg:col-span-2 text-center  bg-gray-200">
       <span className="text-sm mr-px inline-block">
-        Assigned To: {assignedTo}
+        Assigned To: <br /> {assignedTo}
       </span>
     </div>
   );
@@ -251,9 +269,9 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-2 bg-gray-200">
+    <div className="col-span-3 md:col-span-1 lg:col-span-2 bg-gray-200 text-center">
       <span className="text-sm mr-px inline-block text-center">
-        Location: {mainLocation}
+        Location: <br /> {mainLocation}
       </span>
     </div>
   );
@@ -268,10 +286,10 @@ Ticket.Category = function TicketCategory({
   ...restProps
 }) {
   return (
-    <div className="col-span-2 text-center">
-      <h3>Category:</h3>
+    <div className="col-span-6 md:col-span-2 lg:col-span-3 flex justify-center flex-wrap text-center">
+      <h3 className="w-full text-center">Category:</h3>
       <select
-        className="bg-gray-700 text-white  block w-max"
+        className="m-2 p-1 w-32 md:w-24 lg:m-1 bg-gray-700 text-white block text-xs"
         name="category"
         id=""
         value={category}
@@ -286,7 +304,7 @@ Ticket.Category = function TicketCategory({
         <option value="Employee Setup">Employee Setup</option>
       </select>
       <select
-        className="bg-gray-700 text-white  block mt-2 "
+        className="m-2 p-1 w-32 md:w-24  lg:m-1 bg-gray-700 text-white block text-xs"
         name="subcategory"
         id=""
         value={subcategory}
@@ -309,7 +327,7 @@ Ticket.ContactInfo = function TicketContactInfo({
   ...restProps
 }) {
   return (
-    <div className="col-span-2">
+    <div className="col-span-6 md:col-span-2 lg:col-span-3 lg:text-sm p-2">
       <p>
         Phone:{' '}
         <a className="text-blue-500 underline" href={`tel:${contactPhone}`}>
