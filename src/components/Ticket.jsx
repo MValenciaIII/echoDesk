@@ -121,7 +121,7 @@ Ticket.Status = function TicketStatus({
   // const [showPriority, setshowPriority] = useState(false);
   return (
     <div
-      className={`col-span-6 md:col-span-1 lg:col-span-1 flex md:block relative text-sm w-full justify-self-stretch self-stretch h-full text-center`}
+      className={`col-span-6 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
       <p className="w-full md:h-1/2 ">
         <span className={`${statusClasses()} inline-block p-1 h-full w-full`}>

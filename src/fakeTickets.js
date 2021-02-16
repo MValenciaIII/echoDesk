@@ -31,7 +31,7 @@ let fakeData = [
   },
   {
     id: '2',
-    status: 'In Progress',
+    status: 'Resolved',
     title: 'Need new software',
     description: 'Need adobe to do the jobs',
     assignedTo: 'Casey',
