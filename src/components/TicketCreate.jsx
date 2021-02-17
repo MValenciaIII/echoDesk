@@ -121,8 +121,10 @@ function TicketCreate() {
         </select> 
         </label>
     </div>
+    <div>
         <Link to="/dashboard" >     </Link>  
         <input type="submit" class="py-2 px-4 rounded font-bold bg-blue hover:bg-blue-dark text-white" />
+    </div>
     </form>
   </>
   );

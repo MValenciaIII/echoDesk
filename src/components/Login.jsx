@@ -25,7 +25,7 @@ function Login() {
             </div>
             <div class="flex items-center justify-between">
               <button class="py-2 px-4 rounded font-bold bg-blue hover:bg-blue-dark text-white" type="button">
-                <Link>Sign In</Link>
+                <Link to="/">Sign In</Link>
               </button>
               <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
                 Forgot Password?
