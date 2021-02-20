@@ -12,6 +12,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 // import Ticket from './components/Ticket';
 import TicketsContainer from './containers/TicketsContainer';
+import ProfileSetttings from './components/ProfileSettings.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" component={SignUp} />
           <Route path="/agent" component={AgentLogin} />
           <Route path="/ticket" component={Ticket} />
+          <Route path="/profilesettings" component={ProfileSetttings} />
         </Switch>
         <Footer />
       </div>
