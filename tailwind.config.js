@@ -15,8 +15,12 @@ module.exports = {
     },
   },
   height: {
-   screen: '81.3vh',
-   },
+    screen: '81.3vh',
+  },
+  gridTemplateColumns: {
+    // Simple 16 column grid
+    16: 'repeat(16, minmax(0, 1fr))',
+  },
   variants: {
     extend: {},
   },
