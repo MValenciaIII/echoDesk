@@ -62,13 +62,12 @@ function Login() {
               <div class="mb-6 font-bold">
                 <h2>
                   NEED AN ACCOUNT?
-                  <Link
+                </h2>
+                <Link
                     class="py-1 px-1 mx-1 hover:bg-blue-dark text-white font-bold rounded bg-blue"
                     to="/signup"
-                  >
-                    SIGN UP HERE
+                  > SIGN UP HERE
                   </Link>
-                </h2>
               </div>
               <div class="flex items-center justify-between">
                 <p>

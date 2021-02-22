@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import ClientLoginPage from './pages/ClientLogin.js';
-import ClientDashboard from './pages/ClientHome.js';
+import ClientDashboard from './pages/clientHome';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Ticket from './components/Ticket';
