@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Dashboard from '../components/Dashboard';
 
 // Header
@@ -7,6 +9,11 @@ import Dashboard from '../components/Dashboard';
 // Form?
 
 function ClientDashboard(props) {
+  const { user, isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated) {
+    useEffect;
+  }
   return <Dashboard />;
 }
 

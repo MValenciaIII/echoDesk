@@ -19,9 +19,9 @@ function App() {
     <div id="App" className="flex flex-col min-h-screen">
       <Header />
       <Switch>
-        <Route exact path="/" component={ClientLoginPage} />
+        {/* <Route exact path="/" component={ClientLoginPage} /> */}
         <Route path="/login" component={Login} />
-        <Route path="/clientHome" component={ClientDashboard} />
+        <Route exact path="/" component={ClientDashboard} />
         <Route path="/signup" component={SignUp} />
         <Route path="/agent" component={AgentLogin} />
         <Route path="/ticket" component={Ticket} />
