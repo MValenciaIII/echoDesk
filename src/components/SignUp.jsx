@@ -21,6 +21,9 @@ function SignUp() {
     <form className="bg-gray-800 p-4 mx-auto " onSubmit={handleSubmit(onSubmit)}>
       <div class="main-background">
        <div class="container">
+          <h2 className=" col-span-5 text-center text-2xl font-bold mb-2 text-white">
+               SIGN UP WITH ECHODESK
+          </h2>
           <div className="grid md:grid-cols-12">
             <div class="sm:col-span-4 md:col-span-8  px-8 pt-6 pb-8 mb-4 flex flex-col bg-white shadow-md rounded"> 
               <div class="mb-4">
@@ -28,7 +31,7 @@ function SignUp() {
                       First Name
                   </label>
                   <input type="text" name="fname" ref={register({ required: true })} class="w-full py-2 px-3 shadow appearance-none border rounded text-grey-darker" placeholder="Enter First Name"/>
-                  <ErrorMessage errors={errors} name="fname" message="First name is required" />
+                   <ErrorMessage errors={errors} name="fname" message="First name is required" />
               </div>
               <div class="mb-4">
                   <label class="block text-grey-darker text-sm font-bold mb-2">
