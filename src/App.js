@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Ticket from './components/Ticket';
-import TicketCreate from './components/TicketCreate';
 import AgentLogin from './components/AgentLogin';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard'
@@ -23,7 +22,6 @@ function App() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/signup" component={SignUp} />
           <Route path="/agent" component={AgentLogin} />
-          <Route path="/ticketcreate" component={TicketCreate} />
           <Route path="/ticket" component={Ticket} />
         </Switch>
         <Footer />
