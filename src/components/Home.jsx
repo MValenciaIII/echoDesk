@@ -5,7 +5,6 @@ import TicketsContainer from '../containers/TicketsContainer.js';
 function Home() {
   return (
     <>
-      <h2>Home</h2>
       <TicketsContainer />
     </>
   );

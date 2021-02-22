@@ -19,7 +19,6 @@ function Login() {
   });
 
   return (
-    <>
       <form className="bg-gray-800 p-4 mx-auto " onSubmit={handleSubmit(onSubmit)}>
         <div class="main-background"> 
             <div className="grid grid-cols-1 sm:grid-cols-12 lg:mx-1 sm:mx-20 gap-2">
@@ -43,6 +42,7 @@ function Login() {
                   <h2> NEED AN ACCOUNT?
                   <Link class="hover:bg-blue-dark text-black" to="/signup"> SIGN UP </Link> </h2>
                 </div>
+
               </div>
               <div class="col-span-4 md:col-span-4 sm:col-span-4 p-4 py-10 px-5 hidden sm:block flex flex-col pt-6 pb-8 mb-4 shadow-md rounded bg-white">
                 <div class="mb-4">
