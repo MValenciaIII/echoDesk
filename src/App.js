@@ -16,21 +16,19 @@ import ProfileSetttings from './components/ProfileSettings.jsx';
 
 function App() {
   return (
-    <>
-      <div id="App">
-        <Header />
-        <Switch>
-          <Route exact path="/" component={ClientLoginPage} />
-          <Route path="/login" component={Login} />
-          <Route path="/clientHome" component={ClientDashboard} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/agent" component={AgentLogin} />
-          <Route path="/ticket" component={Ticket} />
-          <Route path="/profilesettings" component={ProfileSetttings} />
-        </Switch>
-        <Footer />
-      </div>
-    </>
+    <div id="App" className="flex flex-col min-h-screen">
+      <Header />
+      <Switch>
+        <Route exact path="/" component={ClientLoginPage} />
+        <Route path="/login" component={Login} />
+        <Route path="/clientHome" component={ClientDashboard} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/agent" component={AgentLogin} />
+        <Route path="/ticket" component={Ticket} />
+        <Route path="/profilesettings" component={ProfileSetttings} />
+      </Switch>
+      <Footer />
+    </div>
   );
 }
 export default App;

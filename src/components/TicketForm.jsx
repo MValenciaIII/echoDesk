@@ -41,7 +41,7 @@ export default function InputTicketForm() {
         <label className="block ">
           Full Name
           <input
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="fullName"
             type="text"
             placeholder="Your name"
@@ -53,7 +53,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Department
           <select
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="department"
             ref={register({ required: true })}
           >
@@ -80,7 +80,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Location
           <select
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="location"
             ref={register({ required: true })}
           >
@@ -97,7 +97,7 @@ export default function InputTicketForm() {
           <input
             name="phone"
             type="tel"
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             ref={register({ required: true })}
           />
         </label>
@@ -106,7 +106,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Subject
           <input
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="subject"
             type="text"
             ref={register({ required: true })}
@@ -117,7 +117,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Service Type
           <select
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="serviceType"
             ref={register({ required: true })}
           >
@@ -130,10 +130,10 @@ export default function InputTicketForm() {
         </label>
 
         {/* //@@Sub-Service type */}
-        <label className="block mt-3 w-52">
+        <label className="block mt-3 w-52 lg:w-72">
           Detail:
           <select
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="subServiceType"
             ref={register({ required: true })}
           >
@@ -145,7 +145,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Priority
           <select
-            className="block w-52 text-black"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="priority"
             ref={register({ required: true })}
           >
@@ -160,7 +160,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Description
           <textarea
-            className="block p-2 text-black"
+            className="block p-2 text-black py-0.5 px-1"
             ref={register({ required: true })}
             name="description"
             cols="30"
