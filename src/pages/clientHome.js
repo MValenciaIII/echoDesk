@@ -9,11 +9,8 @@ import Dashboard from '../components/Dashboard';
 // Form?
 
 function ClientDashboard(props) {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
 
-  if (!isAuthenticated) {
-    useEffect;
-  }
   return <Dashboard />;
 }
 

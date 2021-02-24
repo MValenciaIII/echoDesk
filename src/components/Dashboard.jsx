@@ -10,7 +10,7 @@ function Dashboard(props) {
         <div className="flex flex-col lg:flex-row">
           <div
             id="dashboardTicketsContainer"
-            className="md:w-full order-4 lg:order-none lg:w-2/3 ticketPanel p-2 h-full mx-2 "
+            className="md:w-full order-4 lg:order-none lg:w-2/3 ticketPanel p-4 h-full lg:mx-2 "
           >
             {/*//! render tickets here */}
             <h2 className="mx-auto my-2 text-2xl font-bold mb-2 text-white text-center">
