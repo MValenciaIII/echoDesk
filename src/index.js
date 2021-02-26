@@ -3,21 +3,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
+import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 ReactDOM.render(
-  <Auth0Provider
-    domain={domain}
-    clientId={clientId}
-    redirectUri={window.location.origin}
-  >
-    <Router>
+  <Router>
+    <Auth0ProviderWithHistory
+      domain={domain}
+      clientId={clientId}
+      redirectUri={window.location.origin}
+      audience="https://memaechodesk.us.auth0.com/api/v2/"
+      scope="read:current_user read:users_app_metadata update:current_user_metadata"
+    >
       <App />
-    </Router>
-  </Auth0Provider>,
+    </Auth0ProviderWithHistory>
+  </Router>,
   document.getElementById('root')
 );
 

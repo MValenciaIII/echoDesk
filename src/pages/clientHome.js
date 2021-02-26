@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import Dashboard from '../components/Dashboard';
+import LoginPrompt from '../components/Login';
 
 // Header
 // Footer
@@ -9,9 +10,18 @@ import Dashboard from '../components/Dashboard';
 // Form?
 
 function ClientDashboard(props) {
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, user, loginWithPopup } = useAuth0();
+  console.log(user);
 
-  return <Dashboard />;
+  // useEffect(() => {
+  //   straightToLogin();
+  // }, [user]);
+
+  if (isAuthenticated) {
+    return <Dashboard />;
+  } else {
+    return <LoginPrompt />;
+  }
 }
 
 export default ClientDashboard;

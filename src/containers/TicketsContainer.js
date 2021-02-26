@@ -1,9 +1,13 @@
 import React, { useState, useReducer } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import fakeTickets from '../fakeTickets';
 import Ticket from '../components/Ticket';
 
 export default function TicketsContainer(props) {
   const [tickets, setTickets] = useState(fakeTickets);
+  const { loginWithPopup, logout, user } = useAuth0();
+  console.log({ user });
+  console.log(user.metadata);
 
   function handleChange(id, prop, value) {
     let index = tickets.findIndex((ticket) => ticket.id === id);
@@ -56,6 +60,8 @@ export default function TicketsContainer(props) {
           </Ticket.ActivityLogContainer>
         </Ticket>
       ))}
+      {/* //! test sectoin */}
+      <div className="text-white">{JSON.stringify(user, null, 3)}</div>
     </div>
   );
 }
