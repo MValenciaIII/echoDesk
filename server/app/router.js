@@ -1,0 +1,17 @@
+const express = require('express');
+const router = express.Router(); // express has its on internal router. We are using express internal ability to chain routers together.
+
+// /api/movies
+//dont mean: http://localhost:3000/tickets <<<<- does not exist
+router.use('/tickets', require('./api/ticketsRoutes')); // calls tickets file.
+
+router.use('/priority', require('./api/priorityRoutes'));
+
+router.use('/status', require('./api/statusRoutes'));
+
+router.use('/details', require('./api/detailsRoutes'));
+
+router.use('/departments', require('./api/departmentRoutes'));
+//it allows us to add in additional routes on the api. We created a system in which all routes will be pre-fixed with /api. We have the ability to create additional endpoints.
+
+module.exports = router;
