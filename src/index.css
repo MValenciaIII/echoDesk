@@ -7,7 +7,7 @@
   margin-top: 2%;
   min-height: 750px;
 }
-.logo {
+.font-logo {
   font-family: 'Exo', sans-serif;
 }
 
@@ -26,22 +26,3 @@
 .dashboard-mobilenav {
   background-color: #f1edee;
 }
-
-/*///////////////////////// FOOTER STYLING //////////////////////////////////////*/
-/* .footer-logo {
-  margin-top: 3%;
-}
-
-.footer-ulTitle {
-  margin-top: 5%;
-}
-.footer-li {
-  margin-top: 2%;
-}
-
-.footer-background {
-  padding-left: 5%;
-  padding-bottom: 5%;
-} */
-
-/*///////////////////////// ENTIRE PAGE STYLING ///////////////////////////////////*/

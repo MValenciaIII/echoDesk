@@ -1,7 +1,5 @@
 import React, { useState, useContext, useReducer } from 'react';
 // import { TicketContext } from '../ticketContext.js';
-import fakeTickets from '../fakeTickets.js';
-import useUpdateTicket from '../hooks/useUpdateTicket';
 import getTimeFxn from '../utils/timeConverter.js';
 import ticketCategories from '../utils/ticketCategories.js';
 
@@ -37,33 +35,6 @@ export default function Ticket({
   );
 }
 
-// Ticket.TopRow = function TicketTopRow({
-//   children,
-//   activityLogShown,
-//   onClick,
-//   ...restProps
-// }) {
-//   // !: Drilling props through to the down arrow icon;
-//   let childrenWithProps = React.Children.map(children, (child) => {
-//     return React.cloneElement(child, {
-//       activityLogShown: activityLogShown,
-//       onClick: onClick,
-//     });
-//   });
-//   return (
-//     <div className="flex border-b-2 border-blue-800 w-full">
-//       {childrenWithProps}
-//     </div>
-//   );
-// };
-// Ticket.BottomRow = function TicketBottomRow({ children, ...restProps }) {
-//   return (
-//     <div className="flex flex-wrap justify-center text-center md:flex-nowrap divide-y-2 divide-x-2 md:divide-blue-500 md:divide-y-0 w-full">
-//       {children}
-//     </div>
-//   );
-// };
-
 Ticket.Status = function TicketStatus({
   children,
   id,
@@ -88,17 +59,14 @@ Ticket.Status = function TicketStatus({
         return;
     }
   }
+
+  // COLORS DIV HOLDING PRIORITY SEMANTICALLY
   function priorityClasses(el) {
     let bgRed = 'bg-red-800';
     let bgBlue = 'bg-blue-800';
     let bgYellow = 'bg-yellow-800';
     let bgGreen = 'bg-green-800';
-    // if (el === 'select') {
-    //   bgRed = 'bg-red-900';
-    //   bgBlue = 'bg-blue-900';
-    //   bgYellow = 'bg-yellow-900';
-    //   bgGreen = 'bg-green-900';
-    // }
+
     switch (priority) {
       case 'Low':
         return `${bgGreen} text-white`;
@@ -141,16 +109,16 @@ Ticket.Status = function TicketStatus({
             handleChange(id, 'priority', event.target.value);
           }}
         >
-          <option className={`bg-green-800 text-white`} value="Low">
+          <option className={`uppercase text-black`} value="Low">
             Low
           </option>
-          <option className={`bg-blue-800 text-white`} value="Medium">
+          <option className={`uppercase text-black`} value="Medium">
             Medium
           </option>
-          <option className={`bg-yellow-600 text-white`} value="High">
+          <option className={`uppercase text-black`} value="High">
             High
           </option>
-          <option className={`bg-red-800 text-white`} alue="Urgent">
+          <option className={`uppercase text-black`} alue="Urgent">
             Urgent
           </option>
         </select>
@@ -167,6 +135,7 @@ Ticket.Description = function TicketDescription({
   activityLogShown,
   raisedBy,
   timeSubmitted,
+  ticketNotes,
   onClick, //drilled from topRow, then from ticket;
   ...restProps
 }) {
@@ -178,8 +147,8 @@ Ticket.Description = function TicketDescription({
     <div className="col-span-6 md:col-span-5 lg:col-span-9 p-1 bg-gray-100 border border-red-500 flex-grow">
       <div className="">
         <h2 className="inline-block text-black font-bold text-md">{title}</h2>
-        {/* todo: relocate this img to a better place */}
-        <h3 className=" text-gray-600 text-xs md:text-sm break-words max-w-prose whitespace-normal">
+        {/*// todo: relocate this img to a better place */}
+        <h3 className=" text-gray-600 text-xs md:text-sm break-words w-11/12 md:w-5/6 whitespace-normal">
           {description}
         </h3>
         <p
@@ -192,9 +161,10 @@ Ticket.Description = function TicketDescription({
           on
           <span className="text-gray-500">
             {` ${getTimeFxn(timeSubmitted)} `}
-            <span className="inline-block ml1 text-xs">
-              (Click to see more below)
-            </span>
+          </span>
+          <span className="inline-block ml1 text-xs">
+            (Click to view or manage notes below) (
+            {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
           </span>
           <img
             src="/media/icons/arrow-down.svg"
@@ -224,44 +194,6 @@ Ticket.AssignedTo = function TicketAssignedTo({
   );
 };
 
-// Ticket.RaisedBy = function TicketRaisedBy({
-//   children,
-//   raisedBy,
-//   ...restProps
-// }) {
-//   return (
-//     <div className="col-span-2">
-//       <h3>Raised by:</h3>
-//       <h4>{raisedBy}</h4>
-//     </div>
-//   );
-// };
-
-// Ticket.Priority = function TicketPriority({
-//   children,
-//   priority,
-//   ticket,
-//   ...restProps
-// }) {
-//   function priorityClasses() {
-//     switch (priority) {
-//       case 'Urgent':
-//         return 'bg-red-700 text-red-100';
-//       case 'Low':
-//         return 'bg-green-700 text-green-100';
-//       default:
-//         return;
-//     }
-//   }
-
-//   return (
-//     <div className={`${priorityClasses()} col-span-2`}>
-//       <h3>Priority:</h3>
-//       <h4>{priority}</h4>
-//     </div>
-//   );
-// };
-
 Ticket.Location = function TicketLocation({
   children,
   mainLocation,
@@ -287,7 +219,7 @@ Ticket.Category = function TicketCategory({
 }) {
   return (
     <div className="col-span-6 md:col-span-2 lg:col-span-3 flex justify-center flex-wrap text-center">
-      <h3 className="w-full text-center">Category:</h3>
+      <h3 className="w-full text-center text-sm">Category:</h3>
       <select
         className="m-2 p-1 w-32 md:w-24 lg:m-1 bg-gray-700 text-white block text-xs"
         name="category"
@@ -304,7 +236,7 @@ Ticket.Category = function TicketCategory({
         <option value="Employee Setup">Employee Setup</option>
       </select>
       <select
-        className="m-2 p-1 w-32 md:w-24  lg:m-1 bg-gray-700 text-white block text-xs"
+        className="m-2 p-1 w-32 md:w-24  lg:m-1 bg-gray-100 text-black dark:bg-gray-700 dark:text-white block text-xs"
         name="subcategory"
         id=""
         value={subcategory}
@@ -382,8 +314,25 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
   ...restProps
 }) {
   return (
-    <p>
+    <p className="border-b border-gray-900 mb-3">
       {user}: {message} on {timeStamp}
     </p>
+  );
+};
+
+Ticket.InputNote = function inputNote({ children, ...restProps }) {
+  return (
+    <form action="">
+      <textarea
+        name="ticketNote"
+        id=""
+        cols="30"
+        rows="2"
+        className="w-full md:w-4/5 lg:w-3/5 p-4 text-sm"
+      ></textarea>
+      <button className="block bg-blue text-white hover:bg-green-900 px-2 py-1 rounded-md text-sm">
+        Submit Notes
+      </button>
+    </form>
   );
 };

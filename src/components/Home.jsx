@@ -4,9 +4,9 @@ import TicketsContainer from '../containers/TicketsContainer.js';
 
 function Home() {
   return (
-    <>
+    
       <TicketsContainer />
-    </>
+
   );
 }
 
