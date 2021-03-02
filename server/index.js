@@ -19,10 +19,13 @@ app.use(bodyParser.json()); //parse json package that is sent back to our api.
 //ALL ROUTES
 app.get('/', (req, res) => {
   res.json({
-    'All tickets': 'http://localhost:3075/api/tickets',
-    'Find by priority': 'http://localhost:3075/api/priority',
-    'Find by status': 'http://localhost:3075/api/status',
-    'Find by departments': 'http://localhost:3075/api/departments',
+    'All tickets': 'http://localhost:3070/api/tickets',
+    'Find by priority': 'http://localhost:3070/api/priority',
+    'Find by status': 'http://localhost:3070/api/status',
+    'Find by departments': 'http://localhost:3070/api/departments',
+    'Find by details': 'http://localhost:3070/api/details',
+    'Find by service': 'http://localhost:3070/api/service',
+    'Find by location': 'http://localhost:3070/api/location',
   });
 });
 

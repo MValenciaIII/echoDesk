@@ -7,7 +7,7 @@ class TicketDao {
   }
   findAll(req, res) {
     // let sql = "SELECT * FROM movies where deleted_at is NULL"; // simple statement unless you have a lot of joins.
-    let sql = 'SELECT * FROM movies';
+    let sql = 'SELECT * FROM tickets';
     // let sql = `SELECT m.id, m.title, m.year, d.fname, d.lname, g.genre, m.rating, m.format, m.runtime, m.tagline,m.picture, m.description
     // from movies m
     // join directors d ON m.director_id = d.id
@@ -35,5 +35,38 @@ class TicketDao {
       res.json(rows[0]);
     });
   }
+//   create(req, res) {
+//     // let sql = "SELECT * FROM movies where id= ?";
+//     let fields = Object.keys(req.body);
+//     // fields[ fields.indexOf('condition')] = 'condition'; //if i were using my cars database
+//     let values = Object.values(req.body);
+//     //Required Min Data
+//     if (!req.body.fname || !req.body.lname || !req.body.email) {
+//         res.json({
+//             error: true,
+//             message: "ERROR! There is missing data in this form!",
+//         });
+//     }
+//     // res.json({ "here": "yo" });
+//     //dynamically. dont send in NULLS using this!
+//     let sql = `INSERT INTO contact_info(${fields.join(",")})VALUES(${Array(
+//   values.length
+// )
+//   .fill("?")
+//   .join(",")});`;
+//     this.pool.query(
+//         sql,
+//         values, //req.body.title, req.body.year, req.body.director_id, req.body.genre_id
+//         (err, rows) => {
+//             if (err) {
+//                 res.json({
+//                     error: true,
+//                     message: err,
+//                 });
+//             }
+//             res.json(rows);
+//         }
+//     );
+// }
 }
-module.exports = MovieDao;
+module.exports = TicketDao;

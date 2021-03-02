@@ -1,12 +1,12 @@
 const pool = require('../config/dbconfig');
 
-class ServiceDao {
+class ServiceDetailsDao {
   //sometimes you have a parent dao class so its best to give the classes more define names.
   constructor() {
     this.pool = pool;
   }
   findAll(req, res) {
-    let sql = 'SELECT * FROM service';
+    let sql = 'SELECT * FROM details';
     this.pool.query(sql, function (err, rows) {
       if (err) {
         res.json({
@@ -19,7 +19,7 @@ class ServiceDao {
     });
   }
   findbyID(req, res, id) {
-    let sql = 'SELECT * FROM service where id= ?';
+    let sql = 'SELECT * FROM details where id= ?';
     this.pool.query(sql, [id], function (err, rows) {
       if (err) {
         res.json({
@@ -31,4 +31,4 @@ class ServiceDao {
     });
   }
 }
-module.exports = ServiceDao;
+module.exports = ServiceDetailsDao;

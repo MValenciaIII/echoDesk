@@ -1,4 +1,4 @@
-const daoClass = require('../../dao/statusDao'); //dao needs to be in APP FOLDER
+const daoClass = require('../../dao/serviceDetailsDao'); //dao needs to be in APP FOLDER
 const dao = new daoClass();
 
 const express = require('express');
