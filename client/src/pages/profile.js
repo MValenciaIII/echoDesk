@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth0 } from '@auth0/auth0-react';
-
-import useUserMetadata from '../auth/getUserMeta';
+// import getDbUser from '../auth/getDbUser';
+import { UserContext } from '../context/dbUserContext';
 import { WarningIcon } from '../components/Icons';
+import Loading from '../components/Loading';
 
 export default function ProfileSetttings() {
-  //   const { user_metadata } = useUserMetadata();
-  let [mysqlUser, setmysqlUser] = useState(null);
-
-  // useEffect(() => {
-  //   async function sqlDbCall() {
-  //     let  apiRoute = `http://10.195.103.107:3075/api/users/${user.sub}`
-  //     let response = await fetch(apiRoute);
-  //     let sqlUser = await response.json();
-  //     setmysqlUser(mysqlUser)
-  //   }
-  // } , [user])
-
   //   user return from useAuth
   const { user } = useAuth0();
+  debugger;
+  //grab sql user from context;
+  //destructured from userContext values;
+
+  //todo: BROKEN; FIX CONTEXT API LATER let { getDbUser } = useContext(UserContext);
+
+  let mysqluser = '';
 
   // todo: get user referencing sub of user from auth0
   //if(user_metadata_admin) {
@@ -30,16 +26,17 @@ export default function ProfileSetttings() {
   //   const userFromSQL = fetch(user.sub)
 
   //   ?@@ SAMPLE USER HERE TO AVOID AUTH API
-  //   const user = {
-  //     firstName: 'Will',
-  //     lastName: 'Kelly',
-  //     department: 'InformationTechnology',
-  //     location: 'Warehouse',
+  //   const mysqluser = {
+  //   id: "auth0|90029387987"
+  //     fname: 'Will',
+  //     lname: 'Kelly',
+  //     email: 'wkelly@mema.ms.gov',
+  //     mobile_phone: 'Warehouse',
   //     phone: '555-555-5555',
   //   };
   //   default values from this package explained here:
   // https://react-hook-form.com/api/
-  const { register, handleSubmit, errors, getValues } = useForm();
+  const { register, handleSubmit, errors } = useForm();
 
   const [isEditing, setisEditing] = useState(false);
   const [formFieldOriginalState, setFormFieldOriginalState] = useState(null);
@@ -47,22 +44,23 @@ export default function ProfileSetttings() {
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
   function onSubmit(data, event) {
     event.preventDefault();
-    console.log(data);
-    let values = getValues();
-    console.log(values);
+    // console.log(data);
+    // let values = getValues();
+    // console.log(values);
 
     let valueToSubmit = { ...data, id: user.sub };
+    // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
     console.log(valueToSubmit);
 
     // todo: POST IF NEW (IE; DON'T ALREADY HAVE THIS INFO;  PATCH IF INFO ALREADY PRESENT)
-    // let apimethod = user.fname ? "PATCH" : 'POST'
+    let apimethod = mysqlUser.fname ? 'PATCH' : 'POST';
 
     fetch('http://10.195.103.107:3075/api/users/create', {
       method: 'POST', //POST And PUT are the http methods. Usually we use GET
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(valueToSubmit),
     })
       .then((response) => response.json())
       .then((message) => console.log(message))
@@ -104,6 +102,10 @@ export default function ProfileSetttings() {
     }
   }
 
+  if (!user) {
+    return <Loading />;
+  }
+
   return (
     <form
       className="bg-gray-800 p-4 mx-auto flex-grow w-full"
@@ -125,7 +127,7 @@ export default function ProfileSetttings() {
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="fname"
             type="text"
-            defaultValue={user ? user.firstName : ''}
+            defaultValue={mysqlUser ? mysqlUser.fname : ''}
             readOnly
             ref={register({ required: true })}
           />
@@ -141,7 +143,7 @@ export default function ProfileSetttings() {
             name="lname"
             type="text"
             readOnly
-            defaultValue={user ? user.lastName : ''}
+            defaultValue={mysqlUser ? mysqlUser.lname : ''}
             ref={register({ required: true })}
           />
         </label>
@@ -156,7 +158,7 @@ export default function ProfileSetttings() {
             name="title"
             type="text"
             readOnly
-            defaultValue={user ? user.jobTitle : ''}
+            defaultValue={mysqlUser ? mysqlUser.title : ''}
             ref={register({ required: true })}
           />
         </label>
@@ -171,7 +173,7 @@ export default function ProfileSetttings() {
             name="email"
             type="text"
             readOnly
-            defaultValue={user ? user.email : ''}
+            defaultValue={mysqlUser ? mysqlUser.email : ''}
             ref={register({ required: true })}
           />
         </label>
@@ -182,11 +184,11 @@ export default function ProfileSetttings() {
           Your Department
           <select
             data-role="profileSetting"
-            data-defaultvalue={user ? user.department : ''}
+            data-defaultvalue={mysqlUser ? mysqlUser.department_id : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="department_id"
             disabled
-            defaultValue={user ? user.department : ''}
+            defaultValue={mysqlUser ? mysqlUser.department_id : ''}
             ref={register({ required: true })}
           >
             <option value="1">Executive Branch</option>
@@ -212,11 +214,11 @@ export default function ProfileSetttings() {
           Your Location
           <select
             data-role="profileSetting"
-            data-defaultvalue={user ? user.location : ''}
+            data-defaultvalue={mysqlUser ? mysqlUser.location_id : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="location"
+            name="location_id"
             disabled
-            defaultValue={user ? user.location : ''}
+            defaultValue={mysqlUser ? mysqlUser.location_id : ''}
             ref={register({ required: true })}
           >
             <option value="1">HQ(Pearl)</option>
@@ -235,7 +237,7 @@ export default function ProfileSetttings() {
             name="mobile_phone"
             type="tel"
             readOnly
-            defaultValue={user ? user.phone : ''}
+            defaultValue={mysqlUser ? mysqlUser.mobile_phone : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             ref={register({ required: true })}
           />
@@ -251,7 +253,7 @@ export default function ProfileSetttings() {
             name="office_phone"
             type="tel"
             readOnly
-            defaultValue={user ? user.phone : ''}
+            defaultValue={mysqlUser ? mysqlUser.office_phone : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             ref={register({})}
           />
