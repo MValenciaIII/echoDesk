@@ -18,6 +18,8 @@ router.use('/details', require('./api/serviceDetailsRoutes'));
 router.use('/service', require('./api/serviceRoutes'));
 
 router.use('/location', require('./api/locationRoutes'));
+
+router.use('/users', require('./api/userRoutes'));
 //it allows us to add in additional routes on the api. We created a system in which all routes will be pre-fixed with /api. We have the ability to create additional endpoints.
 
 module.exports = router;

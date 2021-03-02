@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   dao.findAll(req, res);
 });
-//FIND BY ID ROUTES ->> /api/tickets/:id
+//FIND BY ID ROUTES ->> /api/tickeats/:id
 router.get('/:id', (req, res) => {
   dao.findbyID(req, res, req.params.id);
 });

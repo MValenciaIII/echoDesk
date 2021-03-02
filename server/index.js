@@ -7,7 +7,7 @@ const router = require('./app/routes/router');
 
 // as an api gets bigger (Scales), do you have a file system that can scale instead of a 1000 lines in one index.js. Router is a way to make the api more flexiable without people 1000 lines of code in one file.
 
-const PORT = 3070; //? Any connection to the react port of 3000 for local hos
+const PORT = 3090; //? Any connection to the react port of 3000 for local hos
 app.listen(PORT, () => {
   console.log(`Server on PORT: ${PORT}`);
 });
@@ -19,13 +19,13 @@ app.use(bodyParser.json()); //parse json package that is sent back to our api.
 //ALL ROUTES
 app.get('/', (req, res) => {
   res.json({
-    'All tickets': 'http://localhost:3070/api/tickets',
-    'Find by priority': 'http://localhost:3070/api/priority',
-    'Find by status': 'http://localhost:3070/api/status',
-    'Find by departments': 'http://localhost:3070/api/departments',
-    'Find by details': 'http://localhost:3070/api/details',
-    'Find by service': 'http://localhost:3070/api/service',
-    'Find by location': 'http://localhost:3070/api/location',
+    'All tickets': 'http://localhost:3090/api/tickets',
+    'Find by priority': 'http://localhost:3090/api/priority',
+    'Find by status': 'http://localhost:3090/api/status',
+    'Find by departments': 'http://localhost:3090/api/departments',
+    'Find by details': 'http://localhost:3090/api/details',
+    'Find by service': 'http://localhost:3090/api/service',
+    'Find by location': 'http://localhost:3090/api/location',
   });
 });
 
