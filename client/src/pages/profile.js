@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth0 } from '@auth0/auth0-react';
 
-import useUserMetadata from '../hooks/useGetUserMeta';
-import { WarningIcon } from './Icons';
+import useUserMetadata from '../auth/getUserMeta';
+import { WarningIcon } from '../components/Icons';
 
 export default function ProfileSetttings() {
   //   const { user_metadata } = useUserMetadata();
+  let [mysqlUser, setmysqlUser] = useState(null);
+
+  // useEffect(() => {
+  //   async function sqlDbCall() {
+  //     let  apiRoute = `http://10.195.103.107:3075/api/users/${user.sub}`
+  //     let response = await fetch(apiRoute);
+  //     let sqlUser = await response.json();
+  //     setmysqlUser(mysqlUser)
+  //   }
+  // } , [user])
 
   //   user return from useAuth
   const { user } = useAuth0();
@@ -29,13 +39,35 @@ export default function ProfileSetttings() {
   //   };
   //   default values from this package explained here:
   // https://react-hook-form.com/api/
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, getValues } = useForm();
 
   const [isEditing, setisEditing] = useState(false);
   const [formFieldOriginalState, setFormFieldOriginalState] = useState(null);
 
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
-  const onSubmit = (data) => console.log(data);
+  function onSubmit(data, event) {
+    event.preventDefault();
+    console.log(data);
+    let values = getValues();
+    console.log(values);
+
+    let valueToSubmit = { ...data, id: user.sub };
+    console.log(valueToSubmit);
+
+    // todo: POST IF NEW (IE; DON'T ALREADY HAVE THIS INFO;  PATCH IF INFO ALREADY PRESENT)
+    // let apimethod = user.fname ? "PATCH" : 'POST'
+
+    fetch('http://10.195.103.107:3075/api/users/create', {
+      method: 'POST', //POST And PUT are the http methods. Usually we use GET
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((message) => console.log(message))
+      .catch((error) => console.log({ error }));
+  }
 
   function ErrorMessage(prop) {
     if (errors[prop]) {
@@ -91,7 +123,7 @@ export default function ProfileSetttings() {
           <input
             data-role="profileSetting"
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="First Name"
+            name="fname"
             type="text"
             defaultValue={user ? user.firstName : ''}
             readOnly
@@ -106,14 +138,44 @@ export default function ProfileSetttings() {
           <input
             data-role="profileSetting"
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="Last Name"
+            name="lname"
             type="text"
             readOnly
             defaultValue={user ? user.lastName : ''}
             ref={register({ required: true })}
           />
         </label>
-        {ErrorMessage('fullName')}
+        {ErrorMessage('Last Name')}
+
+        {/* //@@ Job title */}
+        <label className="block ">
+          Job Title
+          <input
+            data-role="profileSetting"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            name="title"
+            type="text"
+            readOnly
+            defaultValue={user ? user.jobTitle : ''}
+            ref={register({ required: true })}
+          />
+        </label>
+        {ErrorMessage('Job Title')}
+
+        {/* //@@EMAIL */}
+        <label className="block ">
+          Email
+          <input
+            data-role="profileSetting"
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            name="email"
+            type="text"
+            readOnly
+            defaultValue={user ? user.email : ''}
+            ref={register({ required: true })}
+          />
+        </label>
+        {ErrorMessage('Email')}
 
         {/* //@@ DEPARTMENT */}
         <label className="block mt-3">
@@ -122,33 +184,32 @@ export default function ProfileSetttings() {
             data-role="profileSetting"
             data-defaultvalue={user ? user.department : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="department"
+            name="department_id"
             disabled
             defaultValue={user ? user.department : ''}
             ref={register({ required: true })}
           >
-            <option value="Executive">Executive Branch</option>
-            <option value="Executive">External Affairs Branch</option>
-            <option value="Preparedness">Preparedness Branch</option>
-            <option value="SupportServices">Support Services Branch</option>
-            <option value="HumanResources">Human Resources Branch</option>
-            <option value="Maintenance">Maintenance Branch</option>
-            <option value="FieldServices">Field Services Branch</option>
-            <option value="ExternalAffairs">External Affairs</option>
-            <option value="Logistics">Logistics Branch</option>
-            <option value="Operations">Operations</option>
-            <option value="Recovery">Recovery Branch</option>
-            <option value="Mitigation">Mitigation Branch</option>
-            <option value="InformationTechnology">
-              Information Technology
-            </option>
-            <option value="Warehouse">Warehouse Branch</option>
+            <option value="1">Executive Branch</option>
+            <option value="2">Preparedness Branch</option>
+            <option value="3">Mitigation Branch</option>
+            <option value="4">Warehouse Branch</option>
+            <option value="5">Support Services Branch</option>
+            <option value="6">Human Resources Branch</option>
+            <option value="7">Maintenance Branch</option>
+            <option value="8">Recovery Branch</option>
+            <option value="9">Field Services Branch</option>
+            <option value="10">External Affairs Branch</option>
+            <option value="11">Logistics Branch</option>
+            <option value="12">Operations Branch</option>
+            <option value="13">Individual Assistance</option>
+            <option value="14">Information Technology</option>
           </select>
         </label>
+        {ErrorMessage('Department')}
 
         {/* //@@ Location/ */}
         <label className="block mt-3">
-          Your Average Location
+          Your Location
           <select
             data-role="profileSetting"
             data-defaultvalue={user ? user.location : ''}
@@ -158,19 +219,20 @@ export default function ProfileSetttings() {
             defaultValue={user ? user.location : ''}
             ref={register({ required: true })}
           >
-            <option value="Pearl">HQ(Pearl)</option>
-            <option value="Warehouse">Warehouse(Byram)</option>
-            <option value="BoltonBuilding">Bolton Building (Biloxi)</option>
+            <option value="1">HQ(Pearl)</option>
+            <option value="2">Warehouse(Byram)</option>
+            <option value="3">Bolton Building (Biloxi)</option>
           </select>
         </label>
+        {ErrorMessage('Location')}
 
         {/* //@@ Phone */}
         <label className="block mt-3">
-          Phone Number
+          Mobile Phone Number
           {/* //todo add validation here? */}
           <input
             data-role="profileSetting"
-            name="phone"
+            name="mobile_phone"
             type="tel"
             readOnly
             defaultValue={user ? user.phone : ''}
@@ -178,6 +240,23 @@ export default function ProfileSetttings() {
             ref={register({ required: true })}
           />
         </label>
+        {ErrorMessage('Mobile Phone')}
+
+        {/* //@@ Phone */}
+        <label className="block mt-3">
+          Office Phone Number
+          {/* //todo add validation here? */}
+          <input
+            data-role="profileSetting"
+            name="office_phone"
+            type="tel"
+            readOnly
+            defaultValue={user ? user.phone : ''}
+            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            ref={register({})}
+          />
+        </label>
+        {ErrorMessage('Office')}
 
         {/* errors will return when field validation fails  */}
 

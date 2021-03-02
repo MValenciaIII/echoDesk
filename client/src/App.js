@@ -3,11 +3,11 @@ import { Switch } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import ProtectedRoute from './auth/protected-route';
 import ClientDashboard from './pages/clientHome';
+import ProfileSettings from './pages/profile';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Loading from './components/Loading';
 // import Ticket from './components/Ticket';
-import ProfileSettings from './components/ProfileSettings.jsx';
 
 function App() {
   const { isLoading } = useAuth0();
