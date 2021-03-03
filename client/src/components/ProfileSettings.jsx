@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth0 } from '@auth0/auth0-react';
 
-import useUserMetadata from '../auth/getUserMeta';
+import useUserMetadata from '../auth/getAuth0UserMeta';
 import { WarningIcon } from './Icons';
 
 export default function ProfileSetttings() {
