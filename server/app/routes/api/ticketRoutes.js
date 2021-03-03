@@ -27,7 +27,7 @@ router.post('/create', (req, res) => {
   console.log(req.body);
 
   //res.json(req.body);
-  dao.createById(req, res);
+  dao.create(req, res);
 });
 
 router.get('/delete/:id', (req, res) => {
