@@ -8,8 +8,9 @@ class TicketDao {
   findAll(req, res) {
     // let sql = "SELECT * FROM movies where deleted_at is NULL"; // simple statement unless you have a lot of joins.
     // let sql = 'SELECT * FROM clients';
-    let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    from clients c
+    let sql = `SELECT t.id, t.client_full_name, t.client_phone_number, t.client_email, c.description, c.client_id, c.title, d.department, l.location
+    from tickets t
+    join clients c ON t
     join departments d ON c.department_id = d.id
     join location l ON c.location_id = l.id ORDER BY c.id;`
     this.pool.query(sql, function (err, rows) {
