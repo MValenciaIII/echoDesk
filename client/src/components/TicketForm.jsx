@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth0 } from '@auth0/auth0-react';
+import { UserContext } from '../context/dbUserContext';
 import SubServiceType from '../utils/ticketCategories';
 import { WarningIcon } from './Icons';
+import Loading from '../components/Loading';
 
 export default function InputTicketForm() {
   const { register, handleSubmit, watch, errors } = useForm();
+  const { mysqlUser } = useContext(UserContext);
 
   //todo: const { user } = useAuth0();
   // todo: get user referencing sub of user from auth0
   //   const userFromSQL = fetch(user.sub)
 
-  const user = {
-    firstName: 'Will',
-    lastName: 'Kelly',
-    department: 'InformationTechnology',
-    location: 'Warehouse',
-    phone: '555-555-5555',
-    email: 'will@email.com',
-  };
+  // const user = {
+  //   firstName: 'Will',
+  //   lastName: 'Kelly',
+  //   department: 'InformationTechnology',
+  //   location: 'Warehouse',
+  //   phone: '555-555-5555',
+  //   email: 'will@email.com',
+  // };
 
   //   todo: push to DB;   May need to move ticket state up into a context provider?
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -55,7 +58,9 @@ export default function InputTicketForm() {
         <label className="block ">
           Full Name
           <input
-            defaultValue={user ? user.firstName + ' ' + user.lastName : ''}
+            defaultValue={
+              mysqlUser ? mysqlUser.fname + ' ' + mysqlUser.lname : ''
+            }
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="fullName"
             type="text"
@@ -69,25 +74,25 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Department
           <select
-            defaultValue={user && user.department}
+            defaultValue={mysqlUser ? mysqlUser.department : ''}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="department"
             ref={register({ required: true })}
           >
-            <option value="Executive">Executive</option>
-            <option value="Preparedness">Preparedness</option>
-            <option value="Warehouse">Warehouse</option>
-            <option value="SupportServices">Support Services</option>
-            <option value="HumanResources">Human Resources</option>
-            <option value="Maintenance">Maintenance</option>
-            <option value="FieldServices">Field Services</option>
-            <option value="ExternalAffairs">External Affairs</option>
-            <option value="Logistics">Logistics</option>
-            <option value="Operations">Operations</option>
-            <option value="InidividualAssistance">
-              Inidividual Assistance
-            </option>
-            <option value="InformationTechnology">
+            <option value="1">Executive </option>
+            <option value="2">Preparedness </option>
+            <option value="3">Mitigation </option>
+            <option value="4">Warehouse </option>
+            <option value="5">Support Services </option>
+            <option value="6">Human Resources </option>
+            <option value="7">Maintenance </option>
+            <option value="8">Recovery </option>
+            <option value="9">Field Services </option>
+            <option value="10">External Affairs </option>
+            <option value="11">Logistics </option>
+            <option value="12">Operations </option>
+            <option value="13">Individual Assistance</option>
+            <option value="Information Technology">
               Information Technology
             </option>
           </select>
@@ -98,7 +103,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Location
           <select
-            defaultValue={user && user.location}
+            defaultValue={mysqlUser && mysqlUser.location}
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
             name="location"
             ref={register({ required: true })}
@@ -115,7 +120,7 @@ export default function InputTicketForm() {
           Phone Number
           {/* //todo add validation here? */}
           <input
-            defaultValue={user && user.phone}
+            defaultValue={mysqlUser && mysqlUser.mobile_phone}
             name="phone"
             type="tel"
             className="block w-52 lg:w-72 text-black py-0.5 px-1"
@@ -129,7 +134,7 @@ export default function InputTicketForm() {
           Email
           {/* //todo add validation here? */}
           <input
-            defaultValue={user && user.email}
+            defaultValue={mysqlUser && mysqlUser.email}
             name="email"
             type="text"
             className="block w-52 lg:w-72 text-black py-0.5 px-1"

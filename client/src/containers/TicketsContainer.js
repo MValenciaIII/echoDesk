@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+// import { useAuth0 } from '@auth0/auth0-react';
+
 import fakeTickets from '../fakeTickets';
 import Ticket from '../components/Ticket';
 
 export default function TicketsContainer(props) {
   const [tickets, setTickets] = useState(fakeTickets);
-  const { user } = useAuth0();
+  // const { user } = useAuth0();
 
   function handleChange(id, prop, value) {
     let index = tickets.findIndex((ticket) => ticket.id === id);
