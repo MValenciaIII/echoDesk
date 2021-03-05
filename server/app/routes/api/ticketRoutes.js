@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 
 //FIND BY ID ROUTES ->> /api/tickets/:id
 router.get('/:id', (req, res) => {
+  console.log(req.body);
   dao.findbyID(req, res, req.params.id);
 });
 
@@ -31,6 +32,14 @@ router.post('/create', (req, res) => {
   dao.create(req, res);
 });
 
+router.get('/:id/addFile', (req, res) => {
+  console.log(req.body);
+  dao.addFile(req, res, req.params.id);
+});
+router.get('/:id/getFiles', (req, res) => {
+  console.log(req.body);
+  dao.getFiles(req, res, req.params.id);
+});
 router.get('/delete/:id', (req, res) => {
   console.log(req.body);
 

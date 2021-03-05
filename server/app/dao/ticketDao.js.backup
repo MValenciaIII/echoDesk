@@ -1,17 +1,18 @@
 const pool = require('../config/dbconfig');
 
-class AgentDao {
+class TicketDao {
   //sometimes you have a parent dao class so its best to give the classes more define names.
   constructor() {
     this.pool = pool;
   }
   findAll(req, res) {
     // let sql = "SELECT * FROM movies where deleted_at is NULL"; // simple statement unless you have a lot of joins.
-    let sql = 'SELECT * FROM agents';
-    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    // from clients c
-    // join departments d ON c.department_id = d.id
-    // join location l ON c.location_id = l.id ORDER BY c.id;`
+    // let sql = 'SELECT * FROM clients';
+    let sql = `SELECT t.id, t.client_full_name, t.client_phone_number, t.client_email, c.description, c.client_id, c.title, d.department, l.location
+    from tickets t
+    join clients c ON t
+    join departments d ON c.department_id = d.id
+    join location l ON c.location_id = l.id ORDER BY c.id;`
     this.pool.query(sql, function (err, rows) {
       if (err) {
         res.json({
@@ -24,12 +25,12 @@ class AgentDao {
     });
   }
   findbyID(req, res, id) {
-    let sql = 'SELECT * FROM agents where id= ?';
-    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    // from clients c
-    // join departments d ON c.department_id = d.id
-    // join location l ON c.location_id = l.id
-    // where c.id = ?;`;
+    // let sql = 'SELECT * FROM clients where id= ?';
+    let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
+    from clients c
+    join departments d ON c.department_id = d.id
+    join location l ON c.location_id = l.id
+    where c.id = ?;`;
     this.pool.query(sql, [id], function (err, rows) {
       if (err) {
         res.json({
@@ -46,41 +47,31 @@ class AgentDao {
     // fields[ fields.indexOf('condition')] = 'condition'; //if i were using my cars database
     let values = Object.values(req.body);
     //Required Min Data
-    if (
-      !req.body.fname ||
-      !req.body.lname ||
-      !req.body.email ||
-      !req.body.mobile_phone ||
-      !req.body.office_phone ||
-      !req.body.location ||
-      !req.body.title ||
-      !req.body.department_id ||
-      !req.body.id
-    ) {
-      res.json({
-        error: true,
-        message: 'ERROR! There is missing data in this form!',
-      });
+    if ( !req.body.fname || !req.body.lname || !req.body.email || !req.body.mobile_phone || !req.body.office_phone || !req.body.title || !req.body.department_id) {
+        res.json({
+            error: true,
+            message: "ERROR! There is missing data in this form!",
+        });
     }
     // res.json({ "here": "yo" });
     //dynamically. dont send in NULLS using this!
-    let sql = `INSERT INTO agents(${fields.join(',')})VALUES(${Array(
-      values.length
-    )
-      .fill('?')
-      .join(',')});`;
+    let sql = `INSERT INTO tickets(${fields.join(",")})VALUES(${Array(
+  values.length
+)
+  .fill("?")
+  .join(",")});`;
     this.pool.query(
-      sql,
-      values, //req.body.title, req.body.year, req.body.director_id, req.body.genre_id
-      (err, rows) => {
-        if (err) {
-          res.json({
-            error: true,
-            message: err,
-          });
+        sql,
+        values, //req.body.title, req.body.year, req.body.director_id, req.body.genre_id
+        (err, rows) => {
+            if (err) {
+                res.json({
+                    error: true,
+                    message: err,
+                });
+            }
+            res.json(rows);
         }
-        res.json(rows);
-      }
     );
   }
 
@@ -101,7 +92,7 @@ class AgentDao {
         });
     }
   
-    let sql = `UPDATE clients set ${fields.join("=?,")}=? WHERE id =?`; //update the data!
+    let sql = `UPDATE tickets set ${fields.join("=?,")}=? WHERE id =?`; //update the data!
     //have to put =? at the end of the join because join only add between things!
     console.log(sql);
   
@@ -119,4 +110,4 @@ class AgentDao {
     });
   } 
 }
-module.exports = AgentDao;
+module.exports = TicketDao;
