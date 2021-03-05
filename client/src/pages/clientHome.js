@@ -11,15 +11,26 @@ import { UserContext } from '../context/dbUserContext';
 
 function ClientDashboard(props) {
   const { user } = useAuth0();
-  let { mysqlUser, getDbUser } = useContext(UserContext);
+  let {
+    mysqlUser,
+    getDbUser,
+    mysqlUserTickets,
+    getDbUsersTickets,
+  } = useContext(UserContext);
+
+  console.log(mysqlUserTickets);
+
+  let barIndex = user.sub.indexOf('|') + 1;
+  let userId = user.sub.substring(barIndex);
 
   useEffect(() => {
     if (!mysqlUser) {
-      getDbUser(user.sub);
+      getDbUser(userId);
     }
   }, [user]);
 
-  if (!mysqlUser) {
+  // ||mysqlUserTickets
+  if (!mysqlUser || !mysqlUserTickets) {
     return <Loading />;
   } else return <Dashboard />;
 }

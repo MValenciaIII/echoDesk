@@ -7,7 +7,15 @@ function UserContextProvider(props) {
   //   user return from useAuth
   const { user } = useAuth0();
 
+  let barIndex;
+  let defaultuserId; //i.e. the current auth0 user with pipe removed
+  if (user) {
+    barIndex = user.sub.indexOf('|') + 1;
+    defaultuserId = user.sub.substring(barIndex);
+  }
+
   const [mysqlUser, setmysqlUser] = useState();
+  const [mysqlUserTickets, setmysqlUserTickets] = useState();
   // const [usersTickets, setUsersTickets] = useState(null);
 
   // useEffect(() => {
@@ -31,22 +39,45 @@ function UserContextProvider(props) {
   // }, [user]);
 
   //? May not be needed since useEffect changes when user does;
-  async function getDbUser(userId = user.sub) {
+  async function getDbUser(userId = defaultuserId) {
     let url = `http://10.195.103.107:3075/api/users/${userId}`;
+
     let response = await fetch(url);
     let sqlUser = await response.json();
+    // todo: SOMETHING IS AMISS HERE; UNEXPECTED END OF JOSN INPUT;
     if (response.ok) {
       setmysqlUser(sqlUser);
+      getDbUsersTickets(userId);
     } else {
       setmysqlUser({});
+      getDbUsersTickets({});
     }
-    // setmysqlUser(sqlUser);
     return sqlUser;
+  }
+
+  async function getDbUsersTickets(userId = defaultuserId) {
+    debugger;
+    let ticketsUrl = `http://10.195.103.107:3075/api/tickets/${userId}/`;
+    let response = await fetch(ticketsUrl);
+    let sqlUsersTickets = await response.json();
+    if (response.ok) {
+      setmysqlUserTickets(sqlUsersTickets);
+    } else {
+      setmysqlUserTickets({});
+    }
   }
 
   // Could also destructure props to just have children;  Some people do that
   return (
-    <UserContext.Provider value={{ mysqlUser, setmysqlUser, getDbUser }}>
+    <UserContext.Provider
+      value={{
+        mysqlUser,
+        setmysqlUser,
+        getDbUser,
+        mysqlUserTickets,
+        getDbUsersTickets,
+      }}
+    >
       {props.children}
     </UserContext.Provider>
   );

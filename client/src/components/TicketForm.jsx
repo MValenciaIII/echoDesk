@@ -4,31 +4,50 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from '../context/dbUserContext';
 import SubServiceType from '../utils/ticketCategories';
 import { WarningIcon } from './Icons';
-import Loading from '../components/Loading';
+import {
+  departIdToWord,
+  locationWordToValue,
+  priorityWordToNumID,
+  serviceDetailsWordToNumId,
+} from '../utils/sqlFormHelpers';
 
 export default function InputTicketForm() {
   const { register, handleSubmit, watch, errors } = useForm();
   const { mysqlUser } = useContext(UserContext);
 
-  //todo: const { user } = useAuth0();
-  // todo: get user referencing sub of user from auth0
-  //   const userFromSQL = fetch(user.sub)
-
-  // const user = {
-  //   firstName: 'Will',
-  //   lastName: 'Kelly',
-  //   department: 'InformationTechnology',
-  //   location: 'Warehouse',
-  //   phone: '555-555-5555',
-  //   email: 'will@email.com',
-  // };
+  // watch input value by passing the name of it, second param is default
+  const mainServicetype = watch('service_id', '1');
 
   //   todo: push to DB;   May need to move ticket state up into a context provider?
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-  const onSubmit = (data) => console.log(data);
+  function onSubmit(data, event) {
+    event.preventDefault();
 
-  // watch input value by passing the name of it, second param is default
-  const mainServicetype = watch('serviceType', 'Building');
+    // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
+    // body.location_id = locationWordToValue(data.location_id);
+    // body.priority_id = priorityWordToNumID(data.priority_id);
+    data.status_id = '1'; //default of open; not from form;gned....
+    data.client_id = mysqlUser.id;
+    console.log(data);
+
+    // ! SUPPLMENTING DATA WITH AUTH INFO;
+
+    debugger;
+
+    // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
+
+    // Posting new TICKETS
+    fetch('http://10.195.103.107:3075/api/tickets/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((message) => console.log(message))
+      .catch((error) => console.log({ error }));
+  }
 
   function ErrorMessage(prop) {
     if (errors[prop]) {
@@ -61,8 +80,8 @@ export default function InputTicketForm() {
             defaultValue={
               mysqlUser ? mysqlUser.fname + ' ' + mysqlUser.lname : ''
             }
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="fullName"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="client_full_name"
             type="text"
             placeholder="Your name"
             ref={register({ required: true })}
@@ -75,8 +94,8 @@ export default function InputTicketForm() {
           Department
           <select
             defaultValue={mysqlUser ? mysqlUser.department : ''}
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="department"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="department_id"
             ref={register({ required: true })}
           >
             <option value="1">Executive </option>
@@ -92,9 +111,7 @@ export default function InputTicketForm() {
             <option value="11">Logistics </option>
             <option value="12">Operations </option>
             <option value="13">Individual Assistance</option>
-            <option value="Information Technology">
-              Information Technology
-            </option>
+            <option value="14">Information Technology</option>
           </select>
         </label>
         {ErrorMessage('Department')}
@@ -104,13 +121,13 @@ export default function InputTicketForm() {
           Location
           <select
             defaultValue={mysqlUser && mysqlUser.location}
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="location"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="location_id"
             ref={register({ required: true })}
           >
-            <option value="Pearl">HQ(Pearl)</option>
-            <option value="Warehouse">Warehouse(Byram)</option>
-            <option value="BoltonBuilding">Bolton Building (Biloxi)</option>
+            <option value="1">HQ(Pearl)</option>
+            <option value="2">Warehouse(Byram)</option>
+            <option value="3">Bolton Building (Biloxi)</option>
           </select>
         </label>
         {ErrorMessage('Location')}
@@ -121,9 +138,9 @@ export default function InputTicketForm() {
           {/* //todo add validation here? */}
           <input
             defaultValue={mysqlUser && mysqlUser.mobile_phone}
-            name="phone"
+            name="client_phone_number"
             type="tel"
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
             ref={register({ required: true })}
           />
         </label>
@@ -137,7 +154,7 @@ export default function InputTicketForm() {
             defaultValue={mysqlUser && mysqlUser.email}
             name="email"
             type="text"
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
             ref={register({ required: true })}
           />
         </label>
@@ -147,7 +164,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Subject
           <input
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
             name="subject"
             type="text"
             ref={register({ required: true })}
@@ -159,15 +176,19 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Service Type
           <select
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="serviceType"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="service_id"
             ref={register({ required: true })}
           >
-            <option value="Building">Building</option>
-            <option value="IT">IT</option>
-            <option value="Communications">Communications</option>
-            <option value="GIS">GIS</option>
-            <option value="Employee Setup">Employee Setup</option>
+            <option value="1">Building</option>
+            <option value="2">IT</option>
+            <option value="3">Communications</option>
+            <option value="4">GIS</option>
+            <option value="5">Employee Setup</option>
+            <option value="6">Wasp Inventory System</option>
+            <option value="7">Surveilance Camera System</option>
+            <option value="8">Training</option>
+            <option value="9">Thermoscan Account</option>
           </select>
         </label>
         {ErrorMessage('Service Type')}
@@ -176,8 +197,8 @@ export default function InputTicketForm() {
         <label className="block mt-3 w-52 lg:w-72">
           Detail:
           <select
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="subServiceType"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="service_details_id"
             ref={register({ required: true })}
           >
             {SubServiceType(mainServicetype)}
@@ -189,14 +210,14 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Priority
           <select
-            className="block w-52 lg:w-72 text-black py-0.5 px-1"
-            name="priority"
+            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            name="priority_id"
             ref={register({ required: true })}
           >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-            <option value="Urgent">Urgent</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+            <option value="4">Urgent</option>
           </select>
         </label>
 
@@ -213,12 +234,11 @@ export default function InputTicketForm() {
           />
         </label>
         {ErrorMessage('Service Description')}
-
-        <label className="block mt-3">
+        {/* <label className="block mt-3" htmlFor="fileUpload">
           Please attach any relevant files here;
-          <input type="file" />
         </label>
-        {/* errors will return when field validation fails  */}
+        <input type="file" name="fileUpload" ref={register} />
+        errors will return when field validation fails  */}
 
         <input
           className="block mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black "
