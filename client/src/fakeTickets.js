@@ -36,6 +36,14 @@ let fakeData = [
     delete_at: '0000-00-00 00:00:00',
     updated_at: '2021-03-08T15:58:18.000Z',
     file_id: null,
+    comments: [
+      {
+        id: 1,
+        user: 'Will',
+        message: 'message message message message',
+        timestamp: '11-20-19',
+      },
+    ],
   },
 ];
 

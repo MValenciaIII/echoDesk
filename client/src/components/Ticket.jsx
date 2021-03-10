@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useReducer,
+  useRef,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
 // import { TicketContext } from '../ticketContext.js';
@@ -16,37 +22,25 @@ import {
 export default function Ticket({
   children,
   id,
-  tickets,
-  setTickets,
-  handleChange,
+  activityLogShown,
+  toggleActivityLog,
   ...restProps
 }) {
-  const [activityLogShown, setActivityLogShown] = useState(false);
+  // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
   const [isEditingTicket, setisEditingTicket] = useState(false);
   const { register, handleSubmit, watch, errors, reset } = useForm();
-  const {
-    mysqlUser,
-    mysqlUserTickets,
-    setmysqlUserTickets,
-    getDbUsersTickets,
-  } = useContext(UserContext);
-
-  console.log({ isEditingTicket });
+  const { getDbUsersTickets } = useContext(UserContext);
 
   let childrenWithProps = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
-      activityLogShown: activityLogShown,
-      id: id,
-      handleChange: handleChange,
-      tickets: tickets,
-      setTickets: setTickets,
+      id,
+      activityLogShown,
+      toggleActivityLog,
       isEditingTicket,
       setisEditingTicket,
       register: register,
       watch: watch,
       reset,
-      onClick: () =>
-        setActivityLogShown((activityLogShown) => !activityLogShown),
     });
   });
 
@@ -72,12 +66,35 @@ export default function Ticket({
     <form
       onSubmit={handleSubmit(onSubmit)}
       onChange={() => setisEditingTicket(true)}
-      className="relative grid w-full max-w-screen-xl grid-cols-6 my-4 truncate bg-gray-200 border border-gray-800 divide-x divide-y divide-gray-300 divide-gray-800 rounded-md shadow lg:grid-cols-10 lg:divide-y-0"
+      className="relative grid w-full grid-cols-6 truncate divide-y divide-gray-300 lg:grid-cols-10 lg:divide-y-0"
     >
       {childrenWithProps}
     </form>
   );
 }
+
+Ticket.Container = function TicketContainer({ children, ...restprops }) {
+  const [activityLogShown, setActivityLogShown] = useState(false);
+  //for activyt LOG AND TICKET;  SHARED STATE FOR EACH TICKET CONTAINER;
+  function toggleActivityLog() {
+    setActivityLogShown(!activityLogShown);
+  }
+  let childrenWithProps = React.Children.map(children, (child) => {
+    return React.cloneElement(child, {
+      activityLogShown,
+      toggleActivityLog,
+    });
+  });
+
+  return (
+    <div
+      data-name="TicketContainer"
+      className="max-w-screen-xl mt-4 overflow-hidden bg-gray-200 rounded-md shadow"
+    >
+      {childrenWithProps}
+    </div>
+  );
+};
 
 Ticket.Status = function TicketStatus({
   children,
@@ -151,7 +168,7 @@ Ticket.Status = function TicketStatus({
         ref={register()}
         name="status_id"
         defaultValue={status}
-        className={`${statusClasses()} text-white w-full md:h-1/2 
+        className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
          `}
         onChange={(event) => changeStylingStatus(event)}
       >
@@ -168,7 +185,7 @@ Ticket.Status = function TicketStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          className={`bg-transparent inline-block align-middle text-white w-full font-bold `}
+          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
@@ -201,7 +218,7 @@ Ticket.Description = function TicketDescription({
   raisedBy,
   timeSubmitted,
   ticketNotes,
-  onClick, //drilled from topRow, then from ticket;
+  toggleActivityLog,
   ...restProps
 }) {
   let wordDepartment = departmentIdToValue(String(department));
@@ -221,13 +238,13 @@ Ticket.Description = function TicketDescription({
           name="metaTicketInfo"
           className="mt-1 text-xs break-words whitespace-normal sm:mt-auto md:text-sm sm:w-auto"
         >
-          submitted by
+          By
           <span className="font-bold">{` ${raisedBy} `} </span>
-          <span className="text-xs font-italic"> ({wordDepartment}) </span>
+          <span className="text-xs font-light"> ({wordDepartment}) </span>
           on
-          <span className="text-gray-500">{` ${getTimeFxn(
+          <span className="text-xs text-gray-500">{` (${getTimeFxn(
             timeSubmitted
-          )} `}</span>
+          )})`}</span>
           <span className="inline-block text-xs ml1">
             (Click to view or manage notes below) (
             {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
@@ -236,7 +253,7 @@ Ticket.Description = function TicketDescription({
             src="/media/icons/arrow-down.svg"
             alt="arrow-down"
             className={`${arrowClasses()} inline-block w-6 p-1 duration-150`}
-            onClick={onClick}
+            onClick={toggleActivityLog}
           />
         </p>
       </div>
@@ -370,7 +387,7 @@ Ticket.MakeChangesButtons = function SubmitChangesButton({
 }) {
   if (isEditingTicket) {
     return (
-      <div className="absolute top-0 right-0 flex flex-col border-none">
+      <div className="absolute bottom-0 right-0 flex flex-col border-none md:top-0">
         <button
           type="submit"
           className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-white"
@@ -402,42 +419,102 @@ Ticket.ActivityLogContainer = function ActivityLogContainer({
   //todo: see if this use of flex works for a smoother height animation; https://css-tricks.com/using-css-transitions-auto-dimensions/
   if (activityLogShown) {
     return (
-      <div className="p-4 border border-yellow-700 col-span-full ">
+      <div className="p-4 transition-all duration-200 ease-in-out bg-gray-400 rounded-md col-span-full">
         {children}
       </div>
     );
   } else {
-    return null;
+    return (
+      <div className="h-0 p-0 duration-200 transform pointer-events-none ">
+        {children}
+      </div>
+    );
   }
 };
 
 Ticket.ActivityLogEntry = function ActivityLogEntry({
   children,
-  user,
-  message,
-  timeStamp,
   activityLogShown,
+  fname,
+  lname,
+  currentuserId,
+  noteById,
+  message,
+  timestamp,
   ...restProps
 }) {
+  let person;
+  function alignSide() {
+    if (currentuserId === noteById) {
+      return 'text-right';
+    }
+  }
+  function whoSaidit() {
+    if (currentuserId === noteById) {
+      return 'You';
+    } else {
+      return `${fname} ${lname}`;
+    }
+  }
   return (
-    <p className="mb-3 border-b border-gray-900">
-      {user}: {message} on {timeStamp}
+    <p className={`mb-1 ${alignSide()}`}>
+      <span className="text-base font-bold text-black">{whoSaidit()}</span>{' '}
+      said:
+      <span className="text-gray-900"> {message} </span>
+      <span className="text-xs text-gray-600"> ( {timestamp} ) </span>
     </p>
   );
 };
 
-Ticket.InputNote = function inputNote({ children, ...restProps }) {
+Ticket.InputNote = function InputNote({
+  children,
+  ticket_id,
+  client_id,
+
+  ...restProps
+}) {
+  const { register, handleSubmit, reset } = useForm();
+  const { getDbUsersTickets } = useContext(UserContext);
+
+  function onSubmit(data, event) {
+    event.preventDefault();
+
+    if (!data.note_text) {
+      return;
+    }
+    data.ticket_id = ticket_id;
+    data.client_id = client_id;
+    // PATCHING EXISTING TICKETS
+    fetch(`http://10.195.103.107:3075/api/notes/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((message) => console.log(message))
+      .then(() => getDbUsersTickets())
+      .then(() => reset())
+      .catch((error) => console.log({ error }));
+  }
+
   return (
-    <form action="">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full p-2 mx-auto mt-1 bg-gray-200 rounded-md shadow-lg md:w-4/5 lg:w-3/5"
+    >
       <textarea
-        name="ticketNote"
+        name="note_text"
+        ref={register()}
         id=""
         cols="30"
         rows="2"
-        className="w-full p-4 text-sm md:w-4/5 lg:w-3/5"
+        className="w-full p-2 text-sm "
+        placeholder="leave a note here"
       ></textarea>
-      <button className="block px-2 py-1 text-sm text-white rounded-md bg-blue hover:bg-green-900">
-        Submit Notes
+      <button className="block px-2 py-1 mx-auto text-sm text-white rounded-md bg-blue hover:bg-green-900">
+        Submit Note
       </button>
     </form>
   );

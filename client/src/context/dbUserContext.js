@@ -65,8 +65,14 @@ function UserContextProvider(props) {
       let ticketsUrl = `http://10.195.103.107:3075/api/tickets/${userId}/`;
       let response = await fetch(ticketsUrl);
       let sqlUsersTickets = await response.json();
+
+      // todo:sort based on NOT CLOSED THEN timestamps
+      let defaultSorted = sqlUsersTickets.sort((one, two) => {
+        return two.id - one.id;
+      });
+      console.log(defaultSorted);
       if (response.ok) {
-        setmysqlUserTickets([...sqlUsersTickets]);
+        setmysqlUserTickets([...defaultSorted]);
       }
     } catch (error) {
       console.error({ error });

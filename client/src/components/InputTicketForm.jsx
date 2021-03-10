@@ -1,52 +1,56 @@
+// !NOTE: copied and pasted from here to make forms modular;
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useAuth0 } from '@auth0/auth0-react';
-import { UserContext } from '../context/dbUserContext';
-import SubServiceType from '../utils/ticketCategories';
-import { WarningIcon } from './Icons';
-import {
-  departmentWordToValue,
-  locationWordToValue,
-  priorityWordToNumID,
-  serviceDetailsWordToNumId,
-} from '../utils/sqlFormHelpers';
 
-export default function TicketForm({
-  children,
-  handleSubmit,
-  onSubmit,
-  ...restProps
-}) {
-  return <form className="classnames" onSubmit={handleSubmit(onSubmit)}></form>;
+// todo: example top level Form from components:  REVISIT LATER WK - 3/10
+
+// export default function App() {
+//   const onSubmit = data => console.log(data);
+
+//   return (
+//     <Form onSubmit={onSubmit}>
+//       <Input name="firstName" />
+//       <Input name="lastName" />
+//       <Select name="gender" options={["female", "male", "other"]} />
+
+//       <Input type="submit" value="Submit" />
+//     </Form>
+//   );
+// }
+
+export function Form({ defaultValues, children, onSubmit }) {
+  const methods = useForm({ defaultValues });
+  const { handleSubmit } = methods;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {React.Children.map(children, (child) => {
+        return child.props.name
+          ? React.createElement(child.type, {
+              ...{
+                ...child.props,
+                register: methods.register,
+                key: child.props.name,
+              },
+            })
+          : child;
+      })}
+    </form>
+  );
 }
 
-TicketForm.Header = function TicketFormHeader({ children, ...restProps }) {
+export function Input({ register, name, ...rest }) {
+  return <input name={name} ref={register} {...rest} />;
+}
+
+export function Select({ register, options, name, ...rest }) {
   return (
-    <h2
-      {...restProps}
-      className="mx-auto mb-2 text-2xl font-bold text-white max-w-max"
-    >
-      {children}
-    </h2>
+    <select name={name} ref={register} {...rest}>
+      {options.map((value) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
+    </select>
   );
-};
-
-TicketForm.Header = function TicketFormHeader({ children, ...restProps }) {
-  return (
-    <h2
-      {...restProps}
-      className="mx-auto mb-2 text-2xl font-bold text-white max-w-max"
-    >
-      {children}
-    </h2>
-  );
-};
-
-// TicketForm.Input = function TicketFormInput({...restProps }) {
-// 	return (
-// 	  <label>
-// 		  {labelText}
-// 		  <input type={type} defaultValue={defaultValue} name={name} placeholder={placeholder} ref={register(registerOptions)} className='mx-auto mb-2 text-2xl font-bold text-white max-w-max'/>
-// 	  </label>
-
-// 	);
-//   };
+}

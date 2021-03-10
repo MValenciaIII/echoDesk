@@ -24,7 +24,7 @@ export default function InputTicketForm() {
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
   function onSubmit(data, event) {
     event.preventDefault();
-
+    debugger;
     // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
     // body.location_id = locationWordToValue(data.location_id);
     // body.priority_id = priorityWordToNumID(data.priority_id);
@@ -92,7 +92,6 @@ export default function InputTicketForm() {
           />
           {ErrorMessage('client_full_name', 'Your name')}
         </label>
-
         {/* //@@ DEPARTMENT */}
         <label className="block mt-3">
           Department
@@ -121,7 +120,6 @@ export default function InputTicketForm() {
           </select>
         </label>
         {ErrorMessage('Department')}
-
         {/* //@@ Location/ */}
         <label className="block mt-3">
           Location
@@ -137,7 +135,6 @@ export default function InputTicketForm() {
           </select>
         </label>
         {ErrorMessage('Location')}
-
         {/* //@@ Phone */}
         <label className="block mt-3">
           Phone Number
@@ -151,7 +148,6 @@ export default function InputTicketForm() {
           />
         </label>
         {ErrorMessage('Phone Number')}
-
         {/* //@@ Email */}
         <label className="block mt-3">
           Email
@@ -165,7 +161,6 @@ export default function InputTicketForm() {
           />
         </label>
         {ErrorMessage('Email')}
-
         {/* //@@ Subject */}
         <label className="block mt-3">
           Subject
@@ -177,7 +172,6 @@ export default function InputTicketForm() {
           />
         </label>
         {ErrorMessage('Subject')}
-
         {/* //@@Service type */}
         <label className="block mt-3">
           Service Type
@@ -199,7 +193,6 @@ export default function InputTicketForm() {
           </select>
         </label>
         {ErrorMessage('Service Type')}
-
         {/* //@@Sub-Service type */}
         <label className="block mt-3 w-52 lg:w-72">
           Detail:
@@ -212,7 +205,6 @@ export default function InputTicketForm() {
           </select>
         </label>
         {ErrorMessage('Service Detail')}
-
         {/* //@@ Priority/ */}
         <label className="block mt-3">
           Priority
@@ -227,7 +219,6 @@ export default function InputTicketForm() {
             <option value="4">Urgent</option>
           </select>
         </label>
-
         {/* //@@ Description */}
         <label className="block mt-3">
           Description
@@ -244,8 +235,7 @@ export default function InputTicketForm() {
         {/* <label className="block mt-3" htmlFor="fileUpload">
           Please attach any relevant files here;
         </label>
-        <input type="file" name="fileUpload" ref={register} />
-        errors will return when field validation fails  */}
+        <input type="file" name="fileUpload" ref={register} multiple /> */}
 
         <input
           className="block px-2 py-1 mx-auto mt-3 font-bold text-black bg-gray-200 rounded-md hover:bg-green-900 hover:text-white "

@@ -35,65 +35,53 @@ export default function TicketsContainer(props) {
     UserContext
   );
 
-  const [tickets, setTickets] = useState(fakeTickets);
-  // const { user } = useAuth0();
-
-  function handleChange(id, prop, value) {
-    let index = tickets.findIndex((ticket) => ticket.id === id);
-    let newState = [...tickets];
-    newState[index][prop] = value;
-    setTickets(newState);
-  }
-
   // fakeTickets for when api is down;
   // mysqlUserTickets
   return (
     <div id="TicketsContainer" className="">
       {mysqlUserTickets.map((ticket, idx) => (
-        <Ticket
-          key={ticket.id}
-          id={ticket.id}
-          setTickets={setTickets}
-          tickets={mysqlUserTickets}
-          handleChange={handleChange}
-        >
-          <Ticket.Status
-            status={ticket.status_id}
-            priority={ticket.priority_id}
-          />
-          <Ticket.Description
-            title={ticket.subject}
-            description={ticket.description}
-            raisedBy={ticket.client_full_name}
-            department={ticket.department_id}
-            timeSubmitted={ticket.created_at}
-            ticketNotes={ticket.updates}
-          />
-          <Ticket.AssignedTo assignedTo={ticket.assignedTo} />
-          <Ticket.Location mainLocation={ticket.location_id} />
+        <Ticket.Container key={ticket.id}>
+          <Ticket id={ticket.id} tickets={mysqlUserTickets}>
+            <Ticket.Status
+              status={ticket.status_id}
+              priority={ticket.priority_id}
+            />
+            <Ticket.Description
+              title={ticket.subject}
+              description={ticket.description}
+              raisedBy={ticket.client_full_name}
+              department={ticket.department_id}
+              timeSubmitted={ticket.created_at}
+              ticketNotes={ticket.notes}
+            />
+            <Ticket.AssignedTo assignedTo={ticket.assignedTo} />
+            <Ticket.Location mainLocation={ticket.location_id} />
 
-          <Ticket.Category
-            category={ticket.service_id}
-            subcategory={ticket.service_details_id}
-          />
-          <Ticket.ContactInfo
-            contactPhone={ticket.client_phone_number}
-            contactEmail={ticket.email}
-          />
-          <Ticket.MakeChangesButtons />
-
-          {/* <Ticket.ActivityLogContainer>
-            {ticket.updates?.map((update) => (
+            <Ticket.Category
+              category={ticket.service_id}
+              subcategory={ticket.service_details_id}
+            />
+            <Ticket.ContactInfo
+              contactPhone={ticket.client_phone_number}
+              contactEmail={ticket.email}
+            />
+            <Ticket.MakeChangesButtons />
+          </Ticket>
+          <Ticket.ActivityLogContainer>
+            {ticket.notes?.map((note) => (
               <Ticket.ActivityLogEntry
-                key={ticket.id}
-                user={update.user}
-                message={update.message}
-                timeStamp={update.timeStamp}
+                key={note.id}
+                fname={note.fname}
+                lname={note.lname}
+                currentuserId={mysqlUser.id}
+                noteById={note.client_id}
+                message={note.note_text}
+                timestamp={note.created_at}
               />
             ))}
-            <Ticket.InputNote />
-          </Ticket.ActivityLogContainer> */}
-        </Ticket>
+            <Ticket.InputNote ticket_id={ticket.id} client_id={mysqlUser.id} />
+          </Ticket.ActivityLogContainer>
+        </Ticket.Container>
       ))}
     </div>
   );

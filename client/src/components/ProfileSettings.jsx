@@ -5,10 +5,12 @@ import { UserContext } from '../context/dbUserContext';
 // import Select from 'react-select';  //? NOT going to use I think; hard to use in conjuction with REACT hook form to me;  WK 3/3/21
 import { WarningIcon } from '../components/Icons';
 import { locationIdToWord, departmentIdToValue } from '../utils/sqlFormHelpers';
+import UseAuth0UserMeta from '../auth/useAuth0UserMeta';
 
 export default function ProfileSetttings({ userSub }) {
   //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
   let { mysqlUser, setmysqlUser } = useContext(UserContext);
+  let auth0UserMeta = UseAuth0UserMeta();
 
   console.log(mysqlUser); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
 
@@ -19,8 +21,15 @@ export default function ProfileSetttings({ userSub }) {
 
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
   //TODO:ADD VALIDATION;
-  function onSubmit(data, event) {
+  async function onSubmit(data, event) {
     event.preventDefault();
+
+    // todo: NEED AUTH HOOK TO CHECK THIS DATA:
+    // if auth0UserMeta.app_metadata.admin {
+    // data.agent_group = auth0UserMeta.app_metadata.agent_group;
+    // POST TO AN ADDITIONAL AGENTS TABLE;
+    // }
+
     console.log(data);
     data.id = userSub;
 
@@ -29,7 +38,7 @@ export default function ProfileSetttings({ userSub }) {
     // Posting new Users
     if (!mysqlUser.fname) {
       let valueToSubmit = { ...data };
-      fetch('http://10.195.103.107:3075/api/users/create', {
+      await fetch('http://10.195.103.107:3075/api/users/create', {
         method: 'POST', //POST And PUT are the http methods. Usually we use GET
         headers: {
           'Content-Type': 'application/json',
