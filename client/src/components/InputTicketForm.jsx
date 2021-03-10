@@ -41,14 +41,12 @@ TicketForm.Header = function TicketFormHeader({ children, ...restProps }) {
   );
 };
 
-TicketForm.Input = function TicketFormInput({...restProps }) {
-	return (
-	  <label>
-		  {labelText}
-		  <input type={type} defaultValue={defaultValue} name={name} placeholder={placeholder} ref={register(registerOptions)} className='mx-auto mb-2 text-2xl font-bold text-white max-w-max'/>
-	  </label>
-	  >
-		
-	
-	);
-  };
+// TicketForm.Input = function TicketFormInput({...restProps }) {
+// 	return (
+// 	  <label>
+// 		  {labelText}
+// 		  <input type={type} defaultValue={defaultValue} name={name} placeholder={placeholder} ref={register(registerOptions)} className='mx-auto mb-2 text-2xl font-bold text-white max-w-max'/>
+// 	  </label>
+
+// 	);
+//   };
