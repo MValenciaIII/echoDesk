@@ -18,7 +18,8 @@ function ClientDashboard(props) {
     getDbUsersTickets,
   } = useContext(UserContext);
 
-  console.log(mysqlUserTickets);
+  console.log({ mysqlUserTickets });
+  console.log({ mysqlUser });
 
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
@@ -26,13 +27,17 @@ function ClientDashboard(props) {
   useEffect(() => {
     if (!mysqlUser) {
       getDbUser(userId);
+      getDbUsersTickets(userId);
     }
-  }, [user]);
+  }, [user, mysqlUser, mysqlUserTickets]);
 
   // ||mysqlUserTickets
   if (!mysqlUser || !mysqlUserTickets) {
     return <Loading />;
   } else return <Dashboard />;
+
+  // !; only for when I want to take auth fetch off or server is down;
+  // return <Dashboard />;
 }
 
 export default ClientDashboard;

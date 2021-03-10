@@ -251,6 +251,21 @@ export function priorityIDtoWord(word) {
   }
 }
 
+export function statusIdToWord(id) {
+  switch (id) {
+    case '1':
+      return 'Open';
+    case '2':
+      return 'Pending';
+    case '3':
+      return 'Resolved';
+    case '4':
+      return 'Closed';
+    default:
+      break;
+  }
+}
+
 // export function getAgentGroup(word) {
 //   switch (word) {
 //     case 'Low':

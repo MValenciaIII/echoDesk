@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ticketCategories(mainCategoryId) {
+export default function subServiceTypes(mainCategoryId) {
   switch (mainCategoryId) {
     case '1':
       return <Building />;

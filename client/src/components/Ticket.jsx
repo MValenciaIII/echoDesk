@@ -1,7 +1,17 @@
-import React, { useState, useContext, useReducer } from 'react';
+import React, { useState, useEffect, useContext, useReducer } from 'react';
+import { useForm } from 'react-hook-form';
+import { UserContext } from '../context/dbUserContext';
 // import { TicketContext } from '../ticketContext.js';
 import getTimeFxn from '../utils/timeConverter.js';
-import ticketCategories from '../utils/ticketCategories.js';
+import subServiceTypes from '../utils/ticketCategories.js';
+import {
+  departmentIdToValue,
+  locationIdToWord,
+  serviceIDToWord,
+  subserviceIDToWord,
+  statusIdToWord,
+  priorityIDtoWord,
+} from '../utils/sqlFormHelpers';
 
 export default function Ticket({
   children,
@@ -12,6 +22,16 @@ export default function Ticket({
   ...restProps
 }) {
   const [activityLogShown, setActivityLogShown] = useState(false);
+  const [isEditingTicket, setisEditingTicket] = useState(false);
+  const { register, handleSubmit, watch, errors, reset } = useForm();
+  const {
+    mysqlUser,
+    mysqlUserTickets,
+    setmysqlUserTickets,
+    getDbUsersTickets,
+  } = useContext(UserContext);
+
+  console.log({ isEditingTicket });
 
   let childrenWithProps = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
@@ -20,18 +40,42 @@ export default function Ticket({
       handleChange: handleChange,
       tickets: tickets,
       setTickets: setTickets,
+      isEditingTicket,
+      setisEditingTicket,
+      register: register,
+      watch: watch,
+      reset,
       onClick: () =>
         setActivityLogShown((activityLogShown) => !activityLogShown),
     });
   });
 
+  function onSubmit(data, event) {
+    event.preventDefault();
+
+    // PATCHING EXISTING TICKETS
+    fetch(`http://10.195.103.107:3075/api/tickets/update/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((message) => console.log(message))
+      .then(() => getDbUsersTickets())
+      .then(() => setisEditingTicket(false))
+      .catch((error) => console.log({ error }));
+  }
+
   return (
-    <div
-      {...restProps}
-      className="grid grid-cols-6 lg:grid-cols-10 my-4 w-full border rounded-md border-gray-800 shadow divide-x divide-gray-800 divide-y divide-gray-300 lg:divide-y-0 truncate bg-gray-200 max-w-screen-xl"
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      onChange={() => setisEditingTicket(true)}
+      className="relative grid w-full max-w-screen-xl grid-cols-6 my-4 truncate bg-gray-200 border border-gray-800 divide-x divide-y divide-gray-300 divide-gray-800 rounded-md shadow lg:grid-cols-10 lg:divide-y-0"
     >
       {childrenWithProps}
-    </div>
+    </form>
   );
 }
 
@@ -43,18 +87,27 @@ Ticket.Status = function TicketStatus({
   setTickets,
   handleChange,
   status,
+  register,
   ...restProps
 }) {
+  let wordStatus = statusIdToWord(String(status));
+  let [stylingStatus, setStylingStatus] = useState(wordStatus);
+
+  let wordPriority = priorityIDtoWord(String(priority));
+  let [stylingPriority, setstylingPriority] = useState(wordPriority);
+
+  console.log(stylingPriority);
+
   function statusClasses() {
-    switch (status) {
+    switch (stylingStatus) {
       case 'Open':
-        return 'bg-blue-900 text-white';
+        return 'bg-blue-900 ';
       case 'Pending':
-        return 'bg-green-700 text-white';
+        return 'bg-green-700 ';
       case 'Resolved':
-        return 'text-gray-600 text-white';
+        return 'text-gray-600 ';
       case 'Closed':
-        return 'text-gray-600 text-white';
+        return 'bg-gray-600 text-gray-200';
       default:
         return;
     }
@@ -67,58 +120,70 @@ Ticket.Status = function TicketStatus({
     let bgYellow = 'bg-yellow-800';
     let bgGreen = 'bg-green-800';
 
-    switch (priority) {
+    switch (stylingPriority) {
       case 'Low':
-        return `${bgGreen} text-white`;
+        return `${bgGreen} `;
       case 'Medium':
-        return `${bgBlue} text-white`;
+        return `${bgBlue} `;
       case 'High':
-        return `${bgYellow} text-white`;
+        return `${bgYellow} `;
       case 'Urgent':
-        return `${bgRed} text-white`;
+        return `${bgRed} `;
       default:
         return;
     }
   }
 
-  // todo: State updates in handle change, DB updates with put request here; could extract to custom hook to extract DB logic from component presentation logic;
-  // useEffect(() => {
-  // PUT/POST TO API with stateful tickets in dependency array
-  // }, [tickets]);
+  function changeStylingStatus(event) {
+    console.log(event);
+    console.log(event.target.value);
+    setStylingStatus(statusIdToWord(String(event.target.value)));
+  }
+  function changePriorityStatus(event) {
+    setstylingPriority(priorityIDtoWord(event.target.value));
+  }
 
-  // const [showPriority, setshowPriority] = useState(false);
   return (
     <div
       className={`col-span-6 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
-      <p className="w-full md:h-1/2 ">
-        <span className={`${statusClasses()} inline-block p-1 h-full w-full`}>
-          {status}
-        </span>
-      </p>
+      <select
+        ref={register()}
+        name="status_id"
+        defaultValue={status}
+        className={`${statusClasses()} text-white w-full md:h-1/2 
+         `}
+        onChange={(event) => changeStylingStatus(event)}
+      >
+        <option value="1" className="bg-gray-800">
+          Open
+        </option>
+        <option value="4" className="bg-gray-800">
+          Closed
+        </option>
+      </select>
+      {/* //! PRIORITY */}
       <div
-        name="SelectContainer"
-        className={`${priorityClasses()} text-black w-full md:h-1/2`}
+        name="PriorityContainer"
+        className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          className={`bg-transparent text-white inline-block align-middle`}
-          name="priority"
+          className={`bg-transparent inline-block align-middle text-white w-full font-bold `}
+          name="priority_id"
           title="Priority"
-          value={priority}
-          onChange={(event) => {
-            handleChange(id, 'priority', event.target.value);
-          }}
+          defaultValue={priority}
+          onChange={(event) => changePriorityStatus(event)}
         >
-          <option className={`uppercase text-black`} value="Low">
+          <option className="bg-gray-800" value="1">
             Low
           </option>
-          <option className={`uppercase text-black`} value="Medium">
+          <option className="bg-gray-800" value="2">
             Medium
           </option>
-          <option className={`uppercase text-black`} value="High">
+          <option className="bg-gray-800" value="3">
             High
           </option>
-          <option className={`uppercase text-black`} alue="Urgent">
+          <option className="bg-gray-800" value="4">
             Urgent
           </option>
         </select>
@@ -139,30 +204,31 @@ Ticket.Description = function TicketDescription({
   onClick, //drilled from topRow, then from ticket;
   ...restProps
 }) {
+  let wordDepartment = departmentIdToValue(String(department));
   function arrowClasses() {
     return activityLogShown && 'transform rotate-180';
   }
 
   return (
-    <div className="col-span-6 md:col-span-5 lg:col-span-9 p-1 bg-gray-100 border border-red-500 flex-grow">
+    <div className="flex-grow col-span-6 p-1 bg-gray-100 border border-red-500 md:col-span-5 lg:col-span-9">
       <div className="">
-        <h2 className="inline-block text-black font-bold text-md">{title}</h2>
+        <h2 className="inline-block font-bold text-black text-md">{title}</h2>
         {/*// todo: relocate this img to a better place */}
-        <h3 className=" text-gray-600 text-xs md:text-sm break-words w-11/12 md:w-5/6 whitespace-normal">
+        <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
           {description}
         </h3>
         <p
           name="metaTicketInfo"
-          className="mt-1 sm:mt-auto text-xs md:text-sm sm:w-auto break-words whitespace-normal"
+          className="mt-1 text-xs break-words whitespace-normal sm:mt-auto md:text-sm sm:w-auto"
         >
           submitted by
           <span className="font-bold">{` ${raisedBy} `} </span>
-          <span className="font-italic text-xs"> ({department}) </span>
+          <span className="text-xs font-italic"> ({wordDepartment}) </span>
           on
-          <span className="text-gray-500">
-            {` ${getTimeFxn(timeSubmitted)} `}
-          </span>
-          <span className="inline-block ml1 text-xs">
+          <span className="text-gray-500">{` ${getTimeFxn(
+            timeSubmitted
+          )} `}</span>
+          <span className="inline-block text-xs ml1">
             (Click to view or manage notes below) (
             {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
           </span>
@@ -186,9 +252,9 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 md:col-span-1 md:text-sm lg:col-span-2 text-center  bg-gray-200">
-      <span className="text-sm mr-px inline-block">
-        Assigned To: <br /> {assignedTo}
+    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-sm lg:col-span-2">
+      <span className="inline-block mr-px text-sm">
+        Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
       </span>
     </div>
   );
@@ -201,9 +267,9 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 md:col-span-1 lg:col-span-2 bg-gray-200 text-center">
-      <span className="text-sm mr-px inline-block text-center">
-        Location: <br /> {mainLocation}
+    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 lg:col-span-2">
+      <span className="inline-block mr-px text-sm text-center">
+        Location: <br /> {locationIdToWord(String(mainLocation))}
       </span>
     </div>
   );
@@ -215,36 +281,44 @@ Ticket.Category = function TicketCategory({
   category,
   subcategory,
   handleChange,
+  watch,
+  register,
   ...restProps
 }) {
+  const mainServicetype = watch('service_id', '1');
+
+  // todo:change to form and watch values using technique on ticket input;
+
   return (
-    <div className="col-span-6 md:col-span-2 lg:col-span-3 flex justify-center flex-wrap text-center">
-      <h3 className="w-full text-center text-sm">Category:</h3>
+    <div className="flex flex-wrap justify-center col-span-6 text-center md:col-span-2 lg:col-span-3">
+      <h3 className="w-full text-sm text-center">Category:</h3>
       <select
-        className="m-2 p-1 w-32 md:w-24 lg:m-1 bg-gray-700 text-white block text-xs"
-        name="category"
+        ref={register()}
+        className="block w-32 p-1 m-2 text-xs text-white bg-gray-700 md:w-24 lg:w-28 lg:m-1"
+        name="service_id"
         id=""
-        value={category}
-        onChange={(event) => {
-          handleChange(id, 'category', event.target.value);
-        }}
+        defaultValue={category}
       >
-        <option value="Building">Building</option>
-        <option value="IT">IT</option>
-        <option value="Communications">Communications</option>
-        <option value="GIS">GIS</option>
-        <option value="Employee Setup">Employee Setup</option>
+        <option value="1">Building</option>
+        <option value="2">IT</option>
+        <option value="3">Communications</option>
+        <option value="4">GIS</option>
+        <option value="5">Employee Setup</option>
+        <option value="6">Wasp Inventory System</option>
+        <option value="7">Surveilance Camera System</option>
+        <option value="8">Training</option>
+        <option value="9">Thermoscan Account</option>
       </select>
+      {/* //! SUBCATEGORY DIVIDER */}
       <select
-        className="m-2 p-1 w-32 md:w-24  lg:m-1 bg-gray-100 text-black dark:bg-gray-700 dark:text-white block text-xs"
-        name="subcategory"
+        ref={register()}
+        className="block w-32 p-1 m-2 text-xs text-black bg-gray-100 md:w-24 lg:m-1 dark:bg-gray-700 dark:text-white"
+        name="service_details_id"
         id=""
-        value={subcategory}
-        onChange={(event) => {
-          handleChange(id, 'subcategory', event.target.value);
-        }}
+        defaultValue={subcategory}
       >
-        {ticketCategories(category)}
+        {/* //@ REACT HOOK FORM IS PUTTING IN OTHER OPTIONS VIA UTIL PLUS WATCH */}
+        {subServiceTypes(mainServicetype)}
       </select>
     </div>
   );
@@ -259,7 +333,7 @@ Ticket.ContactInfo = function TicketContactInfo({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 md:col-span-2 lg:col-span-3 lg:text-sm p-2">
+    <div className="col-span-6 p-2 md:col-span-2 lg:col-span-3 lg:text-sm">
       <p>
         Phone:{' '}
         <a className="text-blue-500 underline" href={`tel:${contactPhone}`}>
@@ -281,11 +355,43 @@ Ticket.ContactInfo = function TicketContactInfo({
 
 Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   return (
-    <div className="w-1/3 md:w-auto flex-grow p-2  md:border-0   md:text-lg lg:text-2xl xl:text-3xl">
+    <div className="flex-grow w-1/3 p-2 md:w-auto md:border-0 md:text-lg lg:text-2xl xl:text-3xl">
       <h3>Due in:</h3>
       <h4>{dueIn}</h4>
     </div>
   );
+};
+
+Ticket.MakeChangesButtons = function SubmitChangesButton({
+  isEditingTicket,
+  setisEditingTicket,
+  reset,
+  ...restProps
+}) {
+  if (isEditingTicket) {
+    return (
+      <div className="absolute top-0 right-0 flex flex-col border-none">
+        <button
+          type="submit"
+          className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-white"
+        >
+          Submit Changes
+        </button>
+        <button
+          type="button"
+          className="block px-2 py-1 text-xs text-red-700 bg-gray-300 border-none hover:bg-red-900 hover:text-white"
+          onClick={(event) => {
+            reset();
+            setisEditingTicket(false);
+          }}
+        >
+          Cancel Changes
+        </button>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };
 
 Ticket.ActivityLogContainer = function ActivityLogContainer({
@@ -296,7 +402,7 @@ Ticket.ActivityLogContainer = function ActivityLogContainer({
   //todo: see if this use of flex works for a smoother height animation; https://css-tricks.com/using-css-transitions-auto-dimensions/
   if (activityLogShown) {
     return (
-      <div className="col-span-full border border-yellow-700 p-4 ">
+      <div className="p-4 border border-yellow-700 col-span-full ">
         {children}
       </div>
     );
@@ -314,7 +420,7 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
   ...restProps
 }) {
   return (
-    <p className="border-b border-gray-900 mb-3">
+    <p className="mb-3 border-b border-gray-900">
       {user}: {message} on {timeStamp}
     </p>
   );
@@ -328,9 +434,9 @@ Ticket.InputNote = function inputNote({ children, ...restProps }) {
         id=""
         cols="30"
         rows="2"
-        className="w-full md:w-4/5 lg:w-3/5 p-4 text-sm"
+        className="w-full p-4 text-sm md:w-4/5 lg:w-3/5"
       ></textarea>
-      <button className="block bg-blue text-white hover:bg-green-900 px-2 py-1 rounded-md text-sm">
+      <button className="block px-2 py-1 text-sm text-white rounded-md bg-blue hover:bg-green-900">
         Submit Notes
       </button>
     </form>

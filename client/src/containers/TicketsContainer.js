@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // import { useAuth0 } from '@auth0/auth0-react';
 import {
   priorityIDtoWord,
@@ -9,26 +9,31 @@ import {
 import fakeTickets from '../fakeTickets';
 import Ticket from '../components/Ticket';
 
+import { UserContext } from '../context/dbUserContext';
+
 export default function TicketsContainer(props) {
-  // "id": 3,
-  // "client_id": "auth0|603d06a199dbeb0068b68f68",
-  // "client_full_name": " Will  Kelly",
-  // "department_id": 1,
-  // "location_id": 1,
-  // "email": "wkelly@mema.ms.gov   ",
-  // "client_phone_number": "555565  ",
-  // "subject": "kjlkhj",
+  //   "id": 10,
+  // "client_id": "6046476c0d9f710070ee8814",
+  // "client_full_name": "George Washington",
+  // "department_id": 3,
+  // "location_id": 3,
+  // "email": "president@email.com",
+  // "client_phone_number": "888",
+  // "subject": "George's Important Ticket",
   // "service_id": 1,
   // "service_details_id": 1,
   // "status_id": 1,
-  // "priority_id": 1,
-  // "description": "kjnkjhg",
-  // "created_at": "2021-03-05T18:54:11.000Z",
+  // "priority_id": 4,
+  // "description": "The country is at war with Britain;  Need reinforcements plz;",
+  // "created_at": "2021-03-08T15:58:18.000Z",
   // "delete_at": "0000-00-00 00:00:00",
-  // "updated_at": "2021-03-05T18:54:11.000Z",
+  // "updated_at": "2021-03-08T15:58:18.000Z",
   // "file_id": null
 
   // todo: ID'S NEEDING CONVERTING TO WORDS ON DISPLAY
+  let { mysqlUser, mysqlUserTickets, setmysqlUserTickets } = useContext(
+    UserContext
+  );
 
   const [tickets, setTickets] = useState(fakeTickets);
   // const { user } = useAuth0();
@@ -40,39 +45,44 @@ export default function TicketsContainer(props) {
     setTickets(newState);
   }
 
+  // fakeTickets for when api is down;
+  // mysqlUserTickets
   return (
     <div id="TicketsContainer" className="">
-      {tickets.map((ticket, idx) => (
+      {mysqlUserTickets.map((ticket, idx) => (
         <Ticket
           key={ticket.id}
           id={ticket.id}
           setTickets={setTickets}
-          tickets={tickets}
+          tickets={mysqlUserTickets}
           handleChange={handleChange}
         >
-          <Ticket.Status status={ticket.status} priority={ticket.priority} />
+          <Ticket.Status
+            status={ticket.status_id}
+            priority={ticket.priority_id}
+          />
           <Ticket.Description
-            title={ticket.title}
+            title={ticket.subject}
             description={ticket.description}
-            raisedBy={ticket.raisedBy}
-            department={ticket.department}
-            timeSubmitted={ticket.timeSubmitted}
+            raisedBy={ticket.client_full_name}
+            department={ticket.department_id}
+            timeSubmitted={ticket.created_at}
             ticketNotes={ticket.updates}
           />
           <Ticket.AssignedTo assignedTo={ticket.assignedTo} />
-          <Ticket.Location mainLocation={ticket.mainLocation} />
+          <Ticket.Location mainLocation={ticket.location_id} />
 
           <Ticket.Category
-            category={ticket.category}
-            subcategory={ticket.subcategory}
+            category={ticket.service_id}
+            subcategory={ticket.service_details_id}
           />
           <Ticket.ContactInfo
-            contactPhone={ticket.contactPhone}
-            contactEmail={ticket.contactEmail}
-            title={ticket.title}
+            contactPhone={ticket.client_phone_number}
+            contactEmail={ticket.email}
           />
+          <Ticket.MakeChangesButtons />
 
-          <Ticket.ActivityLogContainer>
+          {/* <Ticket.ActivityLogContainer>
             {ticket.updates?.map((update) => (
               <Ticket.ActivityLogEntry
                 key={ticket.id}
@@ -82,7 +92,7 @@ export default function TicketsContainer(props) {
               />
             ))}
             <Ticket.InputNote />
-          </Ticket.ActivityLogContainer>
+          </Ticket.ActivityLogContainer> */}
         </Ticket>
       ))}
     </div>

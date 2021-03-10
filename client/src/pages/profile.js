@@ -17,7 +17,6 @@ export default function ProfileSetttings() {
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
   console.log(userId);
-  debugger;
 
   console.log(mysqlUser);
   // console.log(Object.entries(mysqlUser || ''));

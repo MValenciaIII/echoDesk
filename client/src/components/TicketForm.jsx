@@ -5,15 +5,17 @@ import { UserContext } from '../context/dbUserContext';
 import SubServiceType from '../utils/ticketCategories';
 import { WarningIcon } from './Icons';
 import {
-  departIdToWord,
+  departmentWordToValue,
   locationWordToValue,
   priorityWordToNumID,
   serviceDetailsWordToNumId,
 } from '../utils/sqlFormHelpers';
 
 export default function InputTicketForm() {
-  const { register, handleSubmit, watch, errors } = useForm();
-  const { mysqlUser } = useContext(UserContext);
+  const { register, handleSubmit, watch, errors, reset } = useForm();
+  const { mysqlUser, mysqlUserTickets, getDbUsersTickets } = useContext(
+    UserContext
+  );
 
   // watch input value by passing the name of it, second param is default
   const mainServicetype = watch('service_id', '1');
@@ -26,7 +28,7 @@ export default function InputTicketForm() {
     // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
     // body.location_id = locationWordToValue(data.location_id);
     // body.priority_id = priorityWordToNumID(data.priority_id);
-    data.status_id = '1'; //default of open; not from form;gned....
+    data.status_id = '1'; //default of open; not from form;send....
     data.client_id = mysqlUser.id;
     console.log(data);
 
@@ -46,15 +48,17 @@ export default function InputTicketForm() {
     })
       .then((response) => response.json())
       .then((message) => console.log(message))
+      .then(() => getDbUsersTickets())
+      .then(() => reset())
       .catch((error) => console.log({ error }));
   }
 
-  function ErrorMessage(prop) {
+  function ErrorMessage(prop, subject) {
     if (errors[prop]) {
       return (
         <p className="text-red-700">
           <WarningIcon />
-          {prop} is required
+          {subject} is required
         </p>
       );
     }
@@ -62,16 +66,16 @@ export default function InputTicketForm() {
 
   return (
     <form
-      className="bg-gray-800 p-4 mx-auto "
+      className="p-4 mx-auto bg-gray-800 "
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* YOU MUST register your input into the hook by invoking the "register" function */}
-      <h2 className="mx-auto max-w-max text-2xl font-bold mb-2 text-white">
+      <h2 className="mx-auto mb-2 text-2xl font-bold text-white max-w-max">
         Submit a New Ticket
       </h2>
       <div
         id="formInputsContainer"
-        className="max-w-max sm:max-w-lg mx-auto bg-gray-700 rounded-lg p-8 text-white"
+        className="p-8 mx-auto text-white bg-gray-700 rounded-lg max-w-max sm:max-w-lg"
       >
         {/* //@@ Full Name */}
         <label className="block ">
@@ -80,21 +84,23 @@ export default function InputTicketForm() {
             defaultValue={
               mysqlUser ? mysqlUser.fname + ' ' + mysqlUser.lname : ''
             }
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="client_full_name"
             type="text"
             placeholder="Your name"
             ref={register({ required: true })}
           />
+          {ErrorMessage('client_full_name', 'Your name')}
         </label>
-        {ErrorMessage('fullName')}
 
         {/* //@@ DEPARTMENT */}
         <label className="block mt-3">
           Department
           <select
-            defaultValue={mysqlUser ? mysqlUser.department : ''}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            defaultValue={
+              mysqlUser ? departmentWordToValue(mysqlUser.department) : ''
+            }
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="department_id"
             ref={register({ required: true })}
           >
@@ -120,8 +126,8 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Location
           <select
-            defaultValue={mysqlUser && mysqlUser.location}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            defaultValue={mysqlUser && locationWordToValue(mysqlUser.location)}
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="location_id"
             ref={register({ required: true })}
           >
@@ -140,7 +146,7 @@ export default function InputTicketForm() {
             defaultValue={mysqlUser && mysqlUser.mobile_phone}
             name="client_phone_number"
             type="tel"
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             ref={register({ required: true })}
           />
         </label>
@@ -154,7 +160,7 @@ export default function InputTicketForm() {
             defaultValue={mysqlUser && mysqlUser.email}
             name="email"
             type="text"
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             ref={register({ required: true })}
           />
         </label>
@@ -164,7 +170,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Subject
           <input
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="subject"
             type="text"
             ref={register({ required: true })}
@@ -176,10 +182,11 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Service Type
           <select
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="service_id"
             ref={register({ required: true })}
           >
+            {/* // todo:refactor to external component;  ALSO located in ticket.jsx */}
             <option value="1">Building</option>
             <option value="2">IT</option>
             <option value="3">Communications</option>
@@ -197,7 +204,7 @@ export default function InputTicketForm() {
         <label className="block mt-3 w-52 lg:w-72">
           Detail:
           <select
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="service_details_id"
             ref={register({ required: true })}
           >
@@ -210,7 +217,7 @@ export default function InputTicketForm() {
         <label className="block mt-3">
           Priority
           <select
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="priority_id"
             ref={register({ required: true })}
           >
@@ -241,7 +248,7 @@ export default function InputTicketForm() {
         errors will return when field validation fails  */}
 
         <input
-          className="block mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black "
+          className="block px-2 py-1 mx-auto mt-3 font-bold text-black bg-gray-200 rounded-md hover:bg-green-900 hover:text-white "
           name="Submit"
           type="submit"
         />

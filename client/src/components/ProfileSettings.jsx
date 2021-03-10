@@ -8,26 +8,27 @@ import { locationIdToWord, departmentIdToValue } from '../utils/sqlFormHelpers';
 
 export default function ProfileSetttings({ userSub }) {
   //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
-  let { mysqlUser } = useContext(UserContext);
+  let { mysqlUser, setmysqlUser } = useContext(UserContext);
 
   console.log(mysqlUser); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
 
   const [isEditing, setisEditing] = useState(false);
   const [formFieldOriginalState, setFormFieldOriginalState] = useState(null);
 
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, reset } = useForm();
 
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
   //TODO:ADD VALIDATION;
   function onSubmit(data, event) {
     event.preventDefault();
     console.log(data);
+    data.id = userSub;
 
     // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
-
+    debugger;
     // Posting new Users
     if (!mysqlUser.fname) {
-      let valueToSubmit = { ...data, id: userSub };
+      let valueToSubmit = { ...data };
       fetch('http://10.195.103.107:3075/api/users/create', {
         method: 'POST', //POST And PUT are the http methods. Usually we use GET
         headers: {
@@ -37,12 +38,13 @@ export default function ProfileSetttings({ userSub }) {
       })
         .then((response) => response.json())
         .then((message) => console.log(message))
+        .then(() => setmysqlUser(data))
         .catch((error) => console.log({ error }));
     }
     // PATCHING EXISTING USERS
     else {
       let valueToSubmit = { ...data };
-      fetch(`http://10.195.103.107:3075/api/users/update/${mysqlUser.id}`, {
+      fetch(`http://10.195.103.107:3075/api/users/update/${userSub}}`, {
         method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
         headers: {
           'Content-Type': 'application/json',
@@ -51,8 +53,11 @@ export default function ProfileSetttings({ userSub }) {
       })
         .then((response) => response.json())
         .then((message) => console.log(message))
+        .then(() => setmysqlUser(data))
+        .then(() => reset())
         .catch((error) => console.log({ error }));
     }
+    setisEditing(false);
   }
 
   function ErrorMessage(prop) {
@@ -87,23 +92,23 @@ export default function ProfileSetttings({ userSub }) {
 
   return (
     <form
-      className="bg-gray-800 p-4 mx-auto flex-grow w-full"
+      className="flex-grow w-full p-4 mx-auto bg-gray-800"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* register your input into the hook by invoking the "register" function */}
-      <h2 className="mx-auto max-w-max text-2xl font-bold mb-2 text-white">
+      <h2 className="mx-auto mb-2 text-2xl font-bold text-white max-w-max">
         Update your profile settings
       </h2>
       <div
         id="formInputsContainer"
-        className="max-w-max sm:max-w-lg mx-auto bg-gray-700 rounded-lg p-8 text-white"
+        className="p-8 mx-auto text-white bg-gray-700 rounded-lg max-w-max sm:max-w-lg"
       >
         {/* //@@ Full Name */}
-        <label className="block mt-3  ">
+        <label className="block mt-3 ">
           First Name
           <input
             data-role="profileSetting"
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="fname"
             type="text"
             defaultValue={mysqlUser ? mysqlUser.fname : ''}
@@ -114,11 +119,11 @@ export default function ProfileSetttings({ userSub }) {
         {ErrorMessage('First name')}
 
         {/* //@@ Last Name */}
-        <label className="block mt-3  ">
+        <label className="block mt-3 ">
           Last Name
           <input
             data-role="profileSetting"
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="lname"
             type="text"
             readOnly={isEditing ? false : true}
@@ -129,11 +134,11 @@ export default function ProfileSetttings({ userSub }) {
         {ErrorMessage('Last Name')}
 
         {/* //@@ Job title */}
-        <label className="block mt-3  ">
+        <label className="block mt-3 ">
           Job Title
           <input
             data-role="profileSetting"
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="title"
             type="text"
             readOnly={isEditing ? false : true}
@@ -144,12 +149,12 @@ export default function ProfileSetttings({ userSub }) {
         {ErrorMessage('Job Title')}
 
         {/* //@@EMAIL */}
-        <label className="block mt-3  ">
+        <label className="block mt-3 ">
           Email
           <input
             data-role="profileSetting"
             data-defaultvalue={mysqlUser ? mysqlUser.email : ''}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="email"
             type="text"
             readOnly={isEditing ? false : true}
@@ -166,7 +171,7 @@ export default function ProfileSetttings({ userSub }) {
           <select
             data-role="profileSetting"
             data-defaultvalue={mysqlUser ? mysqlUser.department : ''}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="department_id"
             disabled={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.department : ''}
@@ -195,19 +200,17 @@ export default function ProfileSetttings({ userSub }) {
           Your Location
           <select
             data-role="profileSetting"
-            data-defaultvalue={mysqlUser.location}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            data-defaultvalue={mysqlUser && mysqlUser.location}
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="location_id"
             disabled={isEditing ? false : true}
-            defaultValue={mysqlUser.location}
+            defaultValue={mysqlUser && mysqlUser.location}
             ref={register({ required: true })}
           >
             {/* todo:see about changing these back to number values; */}
-            <option value="HQ(Pearl)">HQ(Pearl)</option>
-            <option value="Warehouse(Byram)">Warehouse(Byram)</option>
-            <option value="Bolton Building (Biloxi)">
-              Bolton Building (Biloxi)
-            </option>
+            <option value="1">HQ(Pearl)</option>
+            <option value="2">Warehouse(Byram)</option>
+            <option value="3">Bolton Building (Biloxi)</option>
           </select>
         </label>
         {ErrorMessage('Location')}
@@ -222,7 +225,7 @@ export default function ProfileSetttings({ userSub }) {
             type="tel"
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.mobile_phone : ''}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             ref={register({ required: true })}
           />
         </label>
@@ -238,7 +241,7 @@ export default function ProfileSetttings({ userSub }) {
             type="tel"
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.office_phone : ''}
-            className="block w-52 lg:w-72 text-black px-2 py-1 rounded"
+            className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             ref={register({})}
           />
         </label>

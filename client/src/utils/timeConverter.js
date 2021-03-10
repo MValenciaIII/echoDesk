@@ -1,9 +1,15 @@
-export default function convertUnix(unixTimestamp) {
+export default function convertUnix(mySqlTimestamp) {
   // Create a new JavaScript Date object based on the timestamp
   // multiplied by 1000 so that the argument is in milliseconds, not seconds.
-  let date = new Date(unixTimestamp * 1000);
-  let formattedTime =
-    date.toDateString() + ' ' + date.toLocaleTimeString('en-US');
+  let time = new Date(mySqlTimestamp);
+
+  let dateString = time.toDateString();
+  let dateArray = dateString.split(' ');
+  let timeString = time.toLocaleTimeString('en-US');
+
+  let formattedTime = `${dateArray[0]}, ${dateArray[2]} ${dateArray[1]}, ${dateArray[3]} at ${timeString}`;
+
+  // Wed, 10 Feb at 9:11 AM
 
   return formattedTime;
 }

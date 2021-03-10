@@ -18,16 +18,16 @@ function Dashboard(props) {
 
   return (
     // @% OUTER CONTAINER FOR BACKGROUND COLOR
-    <div className="bg-gray-800 box-border py-4">
+    <div className="box-border py-4 bg-gray-800">
       {/* //@% INNER FLEX CONTAINER FOR TICKETS AND INPUT FORM */}
       <div className="flex flex-col lg:flex-row">
         {/* //@% HOLDS THE TICKETS */}
         <div
           id="dashboardTicketsContainer"
-          className="md:w-full order-4 lg:order-none lg:w-2/3 ticketPanel p-4 h-full lg:mx-2 "
+          className="order-4 h-full p-4 md:w-full lg:order-none lg:w-2/3 ticketPanel lg:mx-2 "
         >
           {/*//! render tickets here */}
-          <h2 className="mx-auto my-2 text-2xl font-bold mb-2 text-white text-center">
+          <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
             {user
               ? `Welcome ${user.firstName} ${user.lastName}.  Here are your tickets`
               : 'Welcome, here are your current tickets'}

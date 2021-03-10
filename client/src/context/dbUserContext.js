@@ -9,13 +9,19 @@ function UserContextProvider(props) {
 
   let barIndex;
   let defaultuserId; //i.e. the current auth0 user with pipe removed
-  if (user) {
+  // if (user) {
+  //   barIndex = user.sub.indexOf('|') + 1;
+  //   defaultuserId = user.sub.substring(barIndex);
+  // }
+  function reduceAuthSubToNumbers(sub) {
     barIndex = user.sub.indexOf('|') + 1;
     defaultuserId = user.sub.substring(barIndex);
+    return defaultuserId;
   }
 
   const [mysqlUser, setmysqlUser] = useState();
-  const [mysqlUserTickets, setmysqlUserTickets] = useState();
+  const [mysqlUserTickets, setmysqlUserTickets] = useState([]);
+
   // const [usersTickets, setUsersTickets] = useState(null);
 
   // useEffect(() => {
@@ -40,30 +46,31 @@ function UserContextProvider(props) {
 
   //? May not be needed since useEffect changes when user does;
   async function getDbUser(userId = defaultuserId) {
-    let url = `http://10.195.103.107:3075/api/users/${userId}`;
-
-    let response = await fetch(url);
-    let sqlUser = await response.json();
-    // todo: SOMETHING IS AMISS HERE; UNEXPECTED END OF JOSN INPUT;
-    if (response.ok) {
-      setmysqlUser(sqlUser);
-      getDbUsersTickets(userId);
-    } else {
+    try {
+      let url = `http://10.195.103.107:3075/api/users/${userId}`;
+      let response = await fetch(url);
+      let sqlUser = await response.json();
+      if (response.ok) {
+        setmysqlUser(sqlUser);
+      }
+    } catch (error) {
+      console.log(error);
       setmysqlUser({});
-      getDbUsersTickets({});
     }
-    return sqlUser;
+    // todo: SOMETHING IS AMISS HERE; UNEXPECTED END OF JOSN INPUT;
   }
 
-  async function getDbUsersTickets(userId = defaultuserId) {
-    debugger;
-    let ticketsUrl = `http://10.195.103.107:3075/api/tickets/${userId}/`;
-    let response = await fetch(ticketsUrl);
-    let sqlUsersTickets = await response.json();
-    if (response.ok) {
-      setmysqlUserTickets(sqlUsersTickets);
-    } else {
-      setmysqlUserTickets({});
+  async function getDbUsersTickets(userId = reduceAuthSubToNumbers(user.sub)) {
+    try {
+      let ticketsUrl = `http://10.195.103.107:3075/api/tickets/${userId}/`;
+      let response = await fetch(ticketsUrl);
+      let sqlUsersTickets = await response.json();
+      if (response.ok) {
+        setmysqlUserTickets([...sqlUsersTickets]);
+      }
+    } catch (error) {
+      console.error({ error });
+      setmysqlUserTickets([]);
     }
   }
 
@@ -75,6 +82,7 @@ function UserContextProvider(props) {
         setmysqlUser,
         getDbUser,
         mysqlUserTickets,
+        setmysqlUserTickets,
         getDbUsersTickets,
       }}
     >
