@@ -1,24 +1,24 @@
 import React, { useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import DashboardContainer from '../containers/ClientDashboardContainer';
+import AgentDashboardContainer from '../containers/AgentDashBoard';
 import Loading from '../components/Loading';
 import { UserContext } from '../context/dbUserContext';
 import HeaderFooter from '../containers/HeaderFooter';
 
-// Header
-// Footer
-// Tickets
-// Form?
+function AgentDashboard(props) {
+  let history = useHistory();
 
-function ClientDashboard(props) {
   const { user } = useAuth0();
+  console.log(user);
+  debugger;
+
   let {
     mysqlUser,
     getDbUser,
-    mysqlUserTickets,
-    getDbUsersTickets,
     auth0UserMeta,
     getAuth0UserMeta,
+    allTickets,
   } = useContext(UserContext);
 
   // console.log({ mysqlUserTickets });
@@ -29,23 +29,19 @@ function ClientDashboard(props) {
 
   useEffect(() => {
     if (!mysqlUser) {
-      Promise.all([
-        getDbUser(userId),
-        getDbUsersTickets(userId),
-        getAuth0UserMeta(),
-      ])
+      Promise.all([getDbUser(userId), getAuth0UserMeta()])
         .then((values) => console.log(values))
         .catch((err) => console.log(err));
     }
-  }, [user, mysqlUser, mysqlUserTickets, getAuth0UserMeta]);
+  }, [user, mysqlUser, getAuth0UserMeta]);
 
   // ||mysqlUserTickets
-  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta) {
+  if (!mysqlUser || !allTickets || !auth0UserMeta) {
     return <Loading />;
   } else {
     return (
       <HeaderFooter>
-        <DashboardContainer mysqlUser={mysqlUser} />
+        <AgentDashboardContainer mysqlUser={mysqlUser} />
       </HeaderFooter>
     );
   }
@@ -54,4 +50,4 @@ function ClientDashboard(props) {
   // return <Dashboard />;
 }
 
-export default ClientDashboard;
+export default AgentDashboard;

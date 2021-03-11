@@ -7,10 +7,13 @@ import { WarningIcon } from '../components/Icons';
 import { locationIdToWord, departmentIdToValue } from '../utils/sqlFormHelpers';
 import UseAuth0UserMeta from '../auth/useAuth0UserMeta';
 
-export default function ProfileSetttings({ userSub }) {
+export default function ProfileSetttings({
+  userSub,
+  auth0UserWithMeta,
+  setmysqlUser,
+  mysqlUser,
+}) {
   //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
-  let { mysqlUser, setmysqlUser } = useContext(UserContext);
-  let auth0UserMeta = UseAuth0UserMeta();
 
   console.log(mysqlUser); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
 

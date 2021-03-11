@@ -12,34 +12,22 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  //   "id": 10,
-  // "client_id": "6046476c0d9f710070ee8814",
-  // "client_full_name": "George Washington",
-  // "department_id": 3,
-  // "location_id": 3,
-  // "email": "president@email.com",
-  // "client_phone_number": "888",
-  // "subject": "George's Important Ticket",
-  // "service_id": 1,
-  // "service_details_id": 1,
-  // "status_id": 1,
-  // "priority_id": 4,
-  // "description": "The country is at war with Britain;  Need reinforcements plz;",
-  // "created_at": "2021-03-08T15:58:18.000Z",
-  // "delete_at": "0000-00-00 00:00:00",
-  // "updated_at": "2021-03-08T15:58:18.000Z",
-  // "file_id": null
-
   // todo: ID'S NEEDING CONVERTING TO WORDS ON DISPLAY
-  let { mysqlUser, mysqlUserTickets, setmysqlUserTickets } = useContext(
-    UserContext
-  );
+  let {
+    mysqlUser,
+    mysqlUserTickets,
+    setmysqlUserTickets,
+    allTickets,
+  } = useContext(UserContext);
+
+  // todo: fix based on auth redirect;
+  let chosenTickets = mysqlUser.admin ? mysqlUserTickets : allTickets;
 
   // fakeTickets for when api is down;
   // mysqlUserTickets
   return (
     <div id="TicketsContainer" className="">
-      {mysqlUserTickets.map((ticket, idx) => (
+      {chosenTickets.map((ticket, idx) => (
         <Ticket.Container key={ticket.id}>
           <Ticket id={ticket.id} tickets={mysqlUserTickets}>
             <Ticket.Status
@@ -86,3 +74,21 @@ export default function TicketsContainer(props) {
     </div>
   );
 }
+
+//   "id": 10,
+// "client_id": "6046476c0d9f710070ee8814",
+// "client_full_name": "George Washington",
+// "department_id": 3,
+// "location_id": 3,
+// "email": "president@email.com",
+// "client_phone_number": "888",
+// "subject": "George's Important Ticket",
+// "service_id": 1,
+// "service_details_id": 1,
+// "status_id": 1,
+// "priority_id": 4,
+// "description": "The country is at war with Britain;  Need reinforcements plz;",
+// "created_at": "2021-03-08T15:58:18.000Z",
+// "delete_at": "0000-00-00 00:00:00",
+// "updated_at": "2021-03-08T15:58:18.000Z",
+// "file_id": null

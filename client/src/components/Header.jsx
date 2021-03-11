@@ -1,39 +1,49 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import SettingsDropdown from './SettingsDropdown';
+import { UserContext } from '../context/dbUserContext';
+import useAuth0UserMeta from '../auth/useAuth0UserMeta';
 
 function Header(props) {
   const { loginWithRedirect, logout, user } = useAuth0();
+  let { auth0UserMeta } = useContext(UserContext);
+  let [auth0MetaPresent, setauth0MetaPresent] = useState(false);
 
-  console.log(user);
-  function showLogout() {
-    if (!user) {
-      return 'hidden';
+  console.log(auth0UserMeta);
+
+  function clientOrAgentLink() {
+    if (auth0UserMeta?.app_metadata?.admin) {
+      return '/agentHome.js';
     } else {
-      return 'block';
+      return '/';
     }
   }
 
-  return (
-    <nav className="w-full bg-blue p-4 flex items-center justify-between">
-      {/* todo:higher quality image for this size and not shrunk so much */}
-      <header>
-        <Link to="/">
-          <img
-            src="/media/mema-seal.png"
-            alt="Mema Seal"
-            className="w-16 md:w-20 lg:w-24 inline-block"
-          />
-          <h1 className="m-2 font-logo text-white text-3xl md:text-4xl lg:text-5xl logo inline-block">
-            EchoDesk
-          </h1>
-        </Link>
-      </header>
-      <div className="flex">
-        <SettingsDropdown />
-      </div>
-    </nav>
-  );
+  if (!auth0UserMeta) {
+    return null;
+  } else {
+    return (
+      <nav className="flex items-center justify-between w-full p-4 bg-blue">
+        {/* todo:higher quality image for this size and not shrunk so much */}
+        <header>
+          <Link to={clientOrAgentLink()}>
+            <img
+              src="/media/mema-seal.png"
+              alt="Mema Seal"
+              className="inline-block w-16 md:w-20 lg:w-24"
+            />
+            <h1 className="inline-block m-2 text-3xl text-white font-logo md:text-4xl lg:text-5xl logo">
+              EchoDesk
+            </h1>
+          </Link>
+        </header>
+        <div className="flex">
+          <SettingsDropdown />
+        </div>
+      </nav>
+    );
+  }
 }
+
 export default Header;
