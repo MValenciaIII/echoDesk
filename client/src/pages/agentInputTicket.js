@@ -1,28 +1,19 @@
 import React, { useContext, useEffect } from 'react';
+import TicketForm from '../components/TicketForm';
 import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import AgentDashboardContainer from '../containers/AgentDashBoard';
-import AgentTicketFilter from '../containers/TicketFilter';
 import Loading from '../components/Loading';
 import { UserContext } from '../context/dbUserContext';
 import HeaderFooter from '../containers/HeaderFooter';
 
-function AgentDashboard(props) {
+export default function AgentInputTicket(props) {
   let history = useHistory();
 
   const { user } = useAuth0();
-  console.log(user);
 
-  const {
-    mysqlUser,
-    getDbUser,
-    auth0UserMeta,
-    getAuth0UserMeta,
-    allTickets,
-  } = useContext(UserContext);
-
-  // console.log({ mysqlUserTickets });
-  // console.log({ mysqlUser });
+  const { mysqlUser, getDbUser, auth0UserMeta, getAuth0UserMeta } = useContext(
+    UserContext
+  );
 
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
@@ -49,12 +40,12 @@ function AgentDashboard(props) {
   }, [user, auth0UserMeta]);
 
   // ||mysqlUserTickets
-  if (!mysqlUser || !allTickets || !auth0UserMeta) {
+  if (!mysqlUser || !auth0UserMeta) {
     return <Loading />;
   } else {
     return (
       <HeaderFooter>
-        <AgentDashboardContainer mysqlUser={mysqlUser} />
+        <TicketForm />
       </HeaderFooter>
     );
   }
@@ -62,5 +53,3 @@ function AgentDashboard(props) {
   // !; only for when I want to take auth fetch off or server is down;
   // return <Dashboard />;
 }
-
-export default AgentDashboard;

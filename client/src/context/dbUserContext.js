@@ -116,7 +116,7 @@ function UserContextProvider(props) {
       // API LINK WITH USER SUB
       const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
 
-      // PATCH METADATA
+      // get METADATA
       let metadataResponse = await fetch(userDetailsByIdUrl, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -128,6 +128,28 @@ function UserContextProvider(props) {
       setAuth0UserMeta(user_metadata);
     } catch (error) {
       console.log(error);
+      try {
+        const accessToken = await getAccessTokenWithPopup({
+          audience: `https://${domain}/api/v2/`,
+          scope: 'read:current_user ',
+        });
+
+        // API LINK WITH USER SUB
+        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
+
+        // get METADATA
+        let metadataResponse = await fetch(userDetailsByIdUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-type': 'application/json',
+          },
+        });
+
+        let user_metadata = await metadataResponse.json();
+        setAuth0UserMeta(user_metadata);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 

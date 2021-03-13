@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { UserContext } from '../context/dbUserContext';
@@ -9,21 +9,28 @@ import UseAuth0UserMeta from '../auth/useAuth0UserMeta';
 
 export default function ProfileSetttings({
   userSub,
-  auth0UserWithMeta,
   setmysqlUser,
   mysqlUser,
+  auth0UserMeta,
+  getAuth0UserMeta,
 }) {
   //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
 
-  console.log(mysqlUser); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
+  console.log({ mysqlUser }); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
 
   const [isEditing, setisEditing] = useState(false);
   const [formFieldOriginalState, setFormFieldOriginalState] = useState(null);
 
   const { register, handleSubmit, errors, reset } = useForm();
 
+  // useEffect(() => {
+  //   if (!auth0UserMeta) {
+  //     getAuth0UserMeta();
+  //   }
+  // });
+
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
-  //TODO:ADD VALIDATION;
+  //TODO:ADD VALIDATION
   async function onSubmit(data, event) {
     event.preventDefault();
 

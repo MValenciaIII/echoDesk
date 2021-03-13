@@ -7,27 +7,41 @@ import {
 } from '../utils/sqlFormHelpers';
 
 import fakeTickets from '../fakeTickets';
+import ReactPaginate from 'react-paginate';
 import Ticket from '../components/Ticket';
 
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  // todo: ID'S NEEDING CONVERTING TO WORDS ON DISPLAY
+  const [currentPage, setCurrentPage] = useState(0);
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+
   let {
     mysqlUser,
     mysqlUserTickets,
     setmysqlUserTickets,
+    auth0UserMeta,
     allTickets,
   } = useContext(UserContext);
 
   // todo: fix based on auth redirect;
-  let chosenTickets = mysqlUser.admin ? mysqlUserTickets : allTickets;
+
+  let chosenTickets = auth0UserMeta?.app_metadata?.isAdmin
+    ? allTickets
+    : mysqlUserTickets;
+
+  const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
+
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   // fakeTickets for when api is down;
   // mysqlUserTickets
   return (
     <div id="TicketsContainer" className="">
-      {chosenTickets.map((ticket, idx) => (
+      {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
         <Ticket.Container key={ticket.id}>
           <Ticket id={ticket.id} tickets={mysqlUserTickets}>
             <Ticket.Status
@@ -71,6 +85,23 @@ export default function TicketsContainer(props) {
           </Ticket.ActivityLogContainer>
         </Ticket.Container>
       ))}
+      {chosenTickets.length > PER_PAGE && (
+        <ReactPaginate
+          previousLabel={'← Previous'}
+          nextLabel={'Next →'}
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={6}
+          breakLabel={'...'}
+          containerClassName={'pagination'}
+          pageLinkClassName={'pagination__link'} //a tag in li
+          activeLinkClassName={'pagination__link--active'} //active a tag
+          disabledClassName={'pagination__link--disabled'} //disabled next or prev button
+          previousLinkClassName={'pagination__word'} //previous li
+          nextLinkClassName={'pagination__word'} //next li
+          // activeClassName={'pagination__link--active'}
+        />
+      )}
     </div>
   );
 }

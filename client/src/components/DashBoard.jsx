@@ -1,7 +1,9 @@
 import React from 'react';
 
 export default function Dashboard({ children }) {
-  return <div className="box-border py-4 bg-gray-800">{children}</div>;
+  return (
+    <div className="box-border flex-grow py-4 bg-gray-800">{children}</div>
+  );
 }
 
 Dashboard.InnerContainer = function DashboardInnerContainer({ children }) {
@@ -31,7 +33,7 @@ Dashboard.Header = function DashboardHeader({ children, mysqlUser }) {
 
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   return (
-    <div id="formContainer" className="flex-grow order-1 md:order-none ">
+    <div id="formContainer" className="order-1  md:order-none">
       {children}
     </div>
   );

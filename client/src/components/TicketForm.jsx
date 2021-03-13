@@ -22,7 +22,7 @@ export default function InputTicketForm() {
 
   //   todo: push to DB;   May need to move ticket state up into a context provider?
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-  function onSubmit(data, event) {
+  async function onSubmit(data, event) {
     event.preventDefault();
     debugger;
     // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
@@ -34,23 +34,34 @@ export default function InputTicketForm() {
 
     // ! SUPPLMENTING DATA WITH AUTH INFO;
 
+    // todo: REMOVE DEBUGGER WHEN NEEDED;
     debugger;
 
     // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
 
     // Posting new TICKETS
-    fetch('http://10.195.103.107:3075/api/tickets/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((message) => console.log(message))
-      .then(() => getDbUsersTickets())
-      .then(() => reset())
-      .catch((error) => console.log({ error }));
+    let response = await fetch(
+      'http://10.195.103.107:3075/api/tickets/create',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    console.log(response);
+    let resJson = await response.json();
+    console.log(resJson);
+    // todo: get INSERTID to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
+    await getDbUsersTickets();
+    reset();
+
+    // .then((response) => response.json())
+    // .then((message) => console.log(message))
+    // .then(() => getDbUsersTickets())
+    // .then(() => reset())
+    // .catch((error) => console.log({ error }));
   }
 
   function ErrorMessage(prop, subject) {
@@ -65,10 +76,7 @@ export default function InputTicketForm() {
   }
 
   return (
-    <form
-      className="p-4 mx-auto bg-gray-800 "
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form className="p-4 bg-gray-800 " onSubmit={handleSubmit(onSubmit)}>
       {/* YOU MUST register your input into the hook by invoking the "register" function */}
       <h2 className="mx-auto mb-2 text-2xl font-bold text-white max-w-max">
         Submit a New Ticket

@@ -1,5 +1,6 @@
 import { React, useContext } from 'react';
 import Ticketcontainer from '../containers/TicketsContainer';
+import TicketFilter from '../containers/TicketFilter';
 import InputTicketForm from '../components/TicketForm';
 import { UserContext } from '../context/dbUserContext';
 import Dashboard from '../components/DashBoard';
@@ -12,7 +13,7 @@ function DashboardContainer({ mysqlUser, ...restProps }) {
           <Ticketcontainer />
         </Dashboard.TicketsContainer>
         <Dashboard.FormContainer>
-          <InputTicketForm />
+          <TicketFilter />
         </Dashboard.FormContainer>
       </Dashboard.InnerContainer>
     </Dashboard>

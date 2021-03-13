@@ -29,15 +29,13 @@ export default function ProfileSetttings() {
   // console.log(Object.entries(mysqlUser || ''));
   useEffect(() => {
     if (!mysqlUser) {
-      Promise.all([getDbUser(userId), getAuth0UserMeta()])
-        .then((values) => console.log(values))
-        .catch((err) => console.log(err));
+      getDbUser(userId);
     }
-  }, [user, mysqlUser, getAuth0UserMeta]);
+  }, []);
 
   //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
 
-  if (!mysqlUser || !auth0UserMeta) {
+  if (!mysqlUser) {
     return <Loading />;
   } else {
     return (
@@ -47,6 +45,7 @@ export default function ProfileSetttings() {
           mysqlUser={mysqlUser}
           setmysqlUser={setmysqlUser}
           userSub={userId}
+          getAuth0UserMeta={getAuth0UserMeta}
         />
       </HeaderFooter>
     );

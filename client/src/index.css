@@ -26,3 +26,27 @@
 .dashboard-mobilenav {
   background-color: #f1edee;
 }
+
+/* ! pagination abstraction (class names in that file are ugly) */
+
+@layer components {
+  .pagination {
+    @apply flex py-3 mt-5 list-none bg-gray-200 cursor-pointer;
+  }
+  .pagination__link:not(.pagination__link--active) {
+    @apply px-3 py-2 mx-2 font-bold text-black rounded-sm hover:bg-green-600 hover:opacity-75;
+  }
+
+  .pagination__link--active {
+    @apply px-3 py-2 mx-2 font-bold text-white bg-green-800 rounded-sm;
+  }
+  .pagination__link--disabled a {
+    @apply text-gray-500 cursor-not-allowed;
+  }
+  .pagination__word {
+    @apply px-3 py-2 mx-2;
+  }
+  .pagination__word:not(.pagination__link--disabled a) {
+    @apply hover:bg-gray-400;
+  }
+}
