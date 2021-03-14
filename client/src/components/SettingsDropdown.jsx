@@ -1,13 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from '../context/dbUserContext';
 
 export default function SettingsDropdown(props) {
-  const [listHovered, setlistHovered] = useState(false);
   const { logout } = useAuth0();
-
-  let { auth0UserMeta } = useContext(UserContext);
+  let { auth0UserMeta } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
 
   function clientOrAgentLink() {
     if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
@@ -26,7 +24,7 @@ export default function SettingsDropdown(props) {
         <Link to="/profilesettings">Profile Settings</Link>
       </li>
 
-      {auth0UserMeta.app_metadata?.isAdmin && (
+      {auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin && (
         <li className={`text-gray-100 text-sm underline m-1 inline-block`}>
           <Link to="/agentInputTicket">Input a ticket</Link>
         </li>

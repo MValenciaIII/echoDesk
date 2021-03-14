@@ -1,5 +1,6 @@
 import React from 'react';
 
+// @# SET OF COMPOUND COMPONENTS THAT ARE MOSTLY CONTAINERS FOR RENDERING TICKET PARTS AND FORMS ON SIDE OF PAGE;
 export default function Dashboard({ children }) {
   return (
     <div className="box-border flex-grow py-4 bg-gray-800">{children}</div>
@@ -14,7 +15,7 @@ Dashboard.TicketsContainer = function DashboardTicketsContainer({ children }) {
   return (
     <div
       id="dashboardTicketsContainer"
-      className="order-2 h-full p-4 md:w-full lg:order-none lg:w-2/3 ticketPanel lg:mx-2"
+      className="order-2 h-full p-4 md:w-full lg:order-none lg:w-3/4 ticketPanel lg:mx-2"
     >
       {children}
     </div>
@@ -33,7 +34,7 @@ Dashboard.Header = function DashboardHeader({ children, mysqlUser }) {
 
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   return (
-    <div id="formContainer" className="order-1  md:order-none">
+    <div id="formContainer" className="order-1 md:order-none">
       {children}
     </div>
   );

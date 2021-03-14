@@ -1,13 +1,13 @@
 import React from 'react';
 import Loader from 'react-loader-spinner';
 
-// npm details here:
+// npm details and props options here:
 // https://www.npmjs.com/package/react-loader-spinner
 export default function LoaderIcon(props) {
   return (
     <div
       id="loader"
-      className="min-h-screen w-max mx-auto flex flex-col content-center justify-center"
+      className="flex flex-col content-center justify-center min-h-screen mx-auto w-max"
     >
       <Loader
         type="BallTriangle"

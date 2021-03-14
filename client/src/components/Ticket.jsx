@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useReducer,
-  useRef,
-} from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
 // import { TicketContext } from '../ticketContext.js';
@@ -13,12 +7,13 @@ import subServiceTypes from '../utils/ticketCategories.js';
 import {
   departmentIdToValue,
   locationIdToWord,
-  serviceIDToWord,
-  subserviceIDToWord,
   statusIdToWord,
   priorityIDtoWord,
+  AssignToAgentSelect,
+  TicketLocationsOptions,
 } from '../utils/sqlFormHelpers';
 
+// @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
 export default function Ticket({
   children,
   id,
@@ -44,27 +39,33 @@ export default function Ticket({
     });
   });
 
-  function onSubmit(data, event) {
+  async function onSubmit(data, event) {
     event.preventDefault();
 
-    // PATCHING EXISTING TICKETS
-    fetch(`http://10.195.103.107:3075/api/tickets/update/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((message) => console.log(message))
-      .then(() => getDbUsersTickets())
-      .then(() => setisEditingTicket(false))
-      .catch((error) => console.log({ error }));
+    try {
+      let response = await fetch(
+        `http://10.195.103.107:3075/api/tickets/update/${id}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      let result = await response.json();
+      console.log(result);
+      await getDbUsersTickets();
+      setisEditingTicket(false);
+    } catch (error) {
+      console.error({ error });
+    }
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
+      // todo: see about setting onChange to be the handleSubmit trigger if you do no want a submit button or a confirm/cancel changed button;  ~wk 3-15
       onChange={() => setisEditingTicket(true)}
       className="relative grid w-full grid-cols-6 truncate divide-y divide-gray-300 lg:grid-cols-10 lg:divide-y-0"
     >
@@ -74,11 +75,12 @@ export default function Ticket({
 }
 
 Ticket.Container = function TicketContainer({ children, ...restprops }) {
+  //The activity or notes log state will be accessed by the activity log form and by a ticket component below;  The state will be consumed to either display the log or hide, and to rotate an svg;
   const [activityLogShown, setActivityLogShown] = useState(false);
-  //for activyt LOG AND TICKET;  SHARED STATE FOR EACH TICKET CONTAINER;
   function toggleActivityLog() {
     setActivityLogShown(!activityLogShown);
   }
+  // mapping with clone Element again to pass along these additional props to children;
   let childrenWithProps = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
       activityLogShown,
@@ -88,8 +90,8 @@ Ticket.Container = function TicketContainer({ children, ...restprops }) {
 
   return (
     <div
-      data-name="TicketContainer"
-      className="max-w-screen-xl mt-4 overflow-hidden bg-gray-200 rounded-md shadow"
+      data-name="SingleTicketContainer" //for easier ID'ING in devtools instead of a long list of classnames; ~wk 3-15-2021
+      className="mt-4 overflow-hidden bg-gray-200 rounded-md shadow-md max-w-screen-2x"
     >
       {childrenWithProps}
     </div>
@@ -209,6 +211,125 @@ Ticket.Status = function TicketStatus({
   );
 };
 
+Ticket.AgentStatus = function TicketAgentStatus({
+  children,
+  id,
+  priority,
+  tickets,
+  setTickets,
+  handleChange,
+  status,
+  register,
+  ...restProps
+}) {
+  let wordStatus = statusIdToWord(String(status));
+  let [stylingStatus, setStylingStatus] = useState(wordStatus);
+
+  let wordPriority = priorityIDtoWord(String(priority));
+  let [stylingPriority, setstylingPriority] = useState(wordPriority);
+
+  console.log(stylingPriority);
+
+  function statusClasses() {
+    switch (stylingStatus) {
+      case 'Open':
+        return 'bg-blue-900 ';
+      case 'Pending':
+        return 'bg-green-700 ';
+      case 'Resolved':
+        return 'text-gray-600 ';
+      case 'Closed':
+        return 'bg-gray-600 text-gray-200';
+      default:
+        return;
+    }
+  }
+
+  // COLORS DIV HOLDING PRIORITY SEMANTICALLY
+  function priorityClasses(el) {
+    let bgRed = 'bg-red-800';
+    let bgBlue = 'bg-blue-800';
+    let bgYellow = 'bg-yellow-800';
+    let bgGreen = 'bg-green-800';
+
+    switch (stylingPriority) {
+      case 'Low':
+        return `${bgGreen} `;
+      case 'Medium':
+        return `${bgBlue} `;
+      case 'High':
+        return `${bgYellow} `;
+      case 'Urgent':
+        return `${bgRed} `;
+      default:
+        return;
+    }
+  }
+
+  function changeStylingStatus(event) {
+    console.log(event);
+    console.log(event.target.value);
+    setStylingStatus(statusIdToWord(String(event.target.value)));
+  }
+  function changePriorityStatus(event) {
+    setstylingPriority(priorityIDtoWord(event.target.value));
+  }
+
+  return (
+    <div
+      className={`col-span-6 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
+    >
+      <select
+        ref={register()}
+        name="status_id"
+        defaultValue={status}
+        className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
+         `}
+        onChange={(event) => changeStylingStatus(event)}
+      >
+        <option value="1" className="bg-gray-800">
+          Open
+        </option>
+        <option value="2" className="bg-gray-800">
+          Pending
+        </option>
+        <option value="3" className="bg-gray-800">
+          Resolved
+        </option>
+        <option value="4" className="bg-gray-800">
+          Closed
+        </option>
+      </select>
+      {/* //! PRIORITY */}
+      <div
+        name="PriorityContainer"
+        className={`${priorityClasses()}  w-full md:h-1/2`}
+      >
+        <select
+          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
+          name="priority_id"
+          title="Priority"
+          defaultValue={priority}
+          onChange={(event) => changePriorityStatus(event)}
+        >
+          <option className="bg-gray-800" value="1">
+            Low
+          </option>
+          <option className="bg-gray-800" value="2">
+            Medium
+          </option>
+          <option className="bg-gray-800" value="3">
+            High
+          </option>
+          <option className="bg-gray-800" value="4">
+            Urgent
+          </option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
 Ticket.Description = function TicketDescription({
   children,
   title,
@@ -230,7 +351,7 @@ Ticket.Description = function TicketDescription({
     <div className="flex-grow col-span-6 p-1 bg-gray-100 border border-red-500 md:col-span-5 lg:col-span-9">
       <div className="">
         <h2 className="inline-block font-bold text-black text-md">{title}</h2>
-        {/*// todo: relocate this img to a better place */}
+        {/*// todo: relocate this img to a better place ?? */}
         <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
           {description}
         </h3>
@@ -242,9 +363,9 @@ Ticket.Description = function TicketDescription({
           <span className="font-bold">{` ${raisedBy} `} </span>
           <span className="text-xs font-light"> ({wordDepartment}) </span>
           on
-          <span className="text-xs text-gray-500">{` (${getTimeFxn(
+          <span className="text-xs font-light">{` (${getTimeFxn(
             timeSubmitted
-          )})`}</span>
+          )}) `}</span>
           <span className="inline-block text-xs ml1">
             (Click to view or manage notes below) (
             {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
@@ -261,6 +382,35 @@ Ticket.Description = function TicketDescription({
   );
 };
 
+Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
+  children,
+  assignedTo,
+  handleChange,
+  id,
+  status,
+  register,
+  agentAssignedTo,
+  ...restProps
+}) {
+  return (
+    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-xs lg:col-span-2">
+      <label className="mx-auto text-center w-max">
+        Assigned To: <br />
+        <select
+          ref={register()}
+          name="status_id"
+          defaultValue={status}
+          className={`block w-max p-1 mx-auto mt-1  text-white bg-gray-700
+         `}
+          // onChange={(event) => }
+        >
+          {AssignToAgentSelect()}
+        </select>
+      </label>
+    </div>
+  );
+};
+
 Ticket.AssignedTo = function TicketAssignedTo({
   children,
   assignedTo,
@@ -269,8 +419,8 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-sm lg:col-span-2">
-      <span className="inline-block mr-px text-sm">
+    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-xs lg:col-span-2 ">
+      <span className="inline-block mr-px ">
         Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
       </span>
     </div>
@@ -284,10 +434,33 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 lg:col-span-2">
-      <span className="inline-block mr-px text-sm text-center">
+    <div className="col-span-3 text-center bg-gray-200 md:text-xs md:col-span-1 lg:col-span-2">
+      <span className="inline-block mr-px text-center">
         Location: <br /> {locationIdToWord(String(mainLocation))}
       </span>
+    </div>
+  );
+};
+
+Ticket.AgentLocation = function TicketAgentLocation({
+  children,
+  mainLocation,
+  office,
+  ...restProps
+}) {
+  return (
+    <div className="col-span-3 text-center bg-gray-200 md:text-xs md:col-span-1 lg:col-span-2">
+      <label className="mx-auto mr-px text-center w-max">
+        Location: <br />
+        <select
+          name="Location"
+          id=""
+          defaultValue={locationIdToWord(String(mainLocation))}
+          className={`block w-max p-1 mx-auto mt-1 text-xs text-white bg-gray-700`}
+        >
+          {TicketLocationsOptions()}
+        </select>
+      </label>
     </div>
   );
 };
@@ -307,11 +480,13 @@ Ticket.Category = function TicketCategory({
   // todo:change to form and watch values using technique on ticket input;
 
   return (
-    <div className="flex flex-wrap justify-center col-span-6 text-center md:col-span-2 lg:col-span-3">
-      <h3 className="w-full text-sm text-center">Category:</h3>
+    <div className="flex flex-wrap content-start justify-center col-span-6 text-xs text-center md:col-span-2 lg:col-span-3">
+      <label htmlFor="service_id" className="w-full text-center">
+        Category:
+      </label>
       <select
         ref={register()}
-        className="block w-32 p-1 m-2 text-xs text-white bg-gray-700 md:w-24 lg:w-28 lg:m-1"
+        className="w-32 p-1 mt-1 mr-px text-white bg-gray-700 md:w-24 lg:w-28"
         name="service_id"
         id=""
         defaultValue={category}
@@ -327,9 +502,12 @@ Ticket.Category = function TicketCategory({
         <option value="9">Thermoscan Account</option>
       </select>
       {/* //! SUBCATEGORY DIVIDER */}
+      <label htmlFor="service_details_id" className="sr-only">
+        Subservice Type
+      </label>
       <select
         ref={register()}
-        className="block w-32 p-1 m-2 text-xs text-black bg-gray-100 md:w-24 lg:m-1 dark:bg-gray-700 dark:text-white"
+        className="w-32 mt-1 text-white bg-gray-700 md:w-24 lg:w-28"
         name="service_details_id"
         id=""
         defaultValue={subcategory}
@@ -443,7 +621,6 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
   timestamp,
   ...restProps
 }) {
-  let person;
   function alignSide() {
     if (currentuserId === noteById) {
       return 'text-right';
@@ -457,11 +634,13 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
     }
   }
   return (
-    <p className={`mb-1 ${alignSide()}`}>
-      <span className="text-base font-bold text-black">{whoSaidit()}</span>{' '}
+    <p className={`mb-1 ${alignSide()} shadow-sm p-1 m-1`}>
+      <span className="text-base font-bold text-black">{whoSaidit()}</span>
       said:
       <span className="text-gray-900"> {message} </span>
-      <span className="text-xs text-gray-600"> ( {timestamp} ) </span>
+      <span className="text-xs text-gray-600">
+        ( {getTimeFxn(timestamp)} ){' '}
+      </span>
     </p>
   );
 };

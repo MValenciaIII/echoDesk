@@ -6,12 +6,13 @@ import { UserContext } from '../context/dbUserContext';
 import ProfileSettingsForm from '../components/ProfileSettings';
 import Loading from '../components/Loading';
 import HeaderFooter from '../containers/HeaderFooter';
+import Auth0subConverter from '../utils/Auth0subConverter';
 
-export default function ProfileSetttings() {
+export default function ProfileSettings() {
   //   user return from useAuth
   const { user } = useAuth0();
 
-  //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
+  //sat
   let {
     mysqlUser,
     setmysqlUser,
@@ -20,21 +21,17 @@ export default function ProfileSetttings() {
     getAuth0UserMeta,
   } = useContext(UserContext);
 
-  //! the | get's converted in a query string to a code; Thus, avoiding storing the |;
-  let barIndex = user.sub.indexOf('|') + 1;
-  let userId = user.sub.substring(barIndex);
-  console.log(userId);
+  //! the | get's converted in a query string to a code symbol; Thus, avoiding storing the | and just stoiring the num;
+  let userId = Auth0subConverter(user);
 
-  console.log(mysqlUser);
   // console.log(Object.entries(mysqlUser || ''));
   useEffect(() => {
     if (!mysqlUser) {
       getDbUser(userId);
     }
-  }, []);
+  }, [user]);
 
-  //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
-
+  //! MYSQLuser will be initialized to an empty object if it's the first time for a user;  Otherwise, pull their data and pass it to the profile settings;   META info doesn't exist on the first login, THUS, it CAN'T prevent us from rending the profile seetings page.  May see about pulling it in from an effect on the settings page though for posting admin status to our db.  Right now, all our admin stuff is connect to the auth0.app_metadata.isAdmin
   if (!mysqlUser) {
     return <Loading />;
   } else {

@@ -3,29 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.main-background {
-  margin-top: 2%;
-  min-height: 750px;
-}
 .font-logo {
   font-family: 'Exo', sans-serif;
 }
 
 /*///////////////////////// DASHBOARD STYLING ///////////////////////////////////*/
-
-.dashboard-background {
-  background-color: #4e4e4e;
-  /* opacity: 30%; */
-}
-
-.dashboard-nav {
-  /*height: 81.3vh; */
-  background-color: #f1edee;
-}
-
-.dashboard-mobilenav {
-  background-color: #f1edee;
-}
 
 /* ! pagination abstraction (class names in that file are ugly) */
 

@@ -1,3 +1,5 @@
+// find info on this component here:https://auth0.com/blog/complete-guide-to-react-user-authentication/
+
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';

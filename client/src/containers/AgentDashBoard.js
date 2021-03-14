@@ -1,11 +1,10 @@
-import { React, useContext } from 'react';
+import { React } from 'react';
 import Ticketcontainer from '../containers/TicketsContainer';
 import TicketFilter from '../containers/TicketFilter';
-import InputTicketForm from '../components/TicketForm';
-import { UserContext } from '../context/dbUserContext';
 import Dashboard from '../components/DashBoard';
 
-function DashboardContainer({ mysqlUser, ...restProps }) {
+//called by agentHome.js PAGE;
+function DashboardContainer(props) {
   return (
     <Dashboard>
       <Dashboard.InnerContainer>

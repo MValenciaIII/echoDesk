@@ -23,21 +23,21 @@ export default function AgentInputTicket(props) {
     if (!auth0UserMeta) {
       getAuth0UserMeta();
     }
-  }, [user, getAuth0UserMeta]);
+  }, [user, getAuth0UserMeta, auth0UserMeta]);
 
   // get user from mysql db fetch
   useEffect(() => {
     if (!mysqlUser) {
       getDbUser(userId);
     }
-  }, [user, mysqlUser]);
+  }, [user, mysqlUser, getDbUser, userId]);
 
   //Redirect if not an admin;
   useEffect(() => {
     if (auth0UserMeta && !auth0UserMeta.app_metadata?.isAdmin) {
       history.push('/');
     }
-  }, [user, auth0UserMeta]);
+  }, [user, auth0UserMeta, history]);
 
   // ||mysqlUserTickets
   if (!mysqlUser || !auth0UserMeta) {

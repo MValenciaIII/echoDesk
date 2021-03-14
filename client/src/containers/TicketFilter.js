@@ -10,42 +10,37 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
 
   const labelClassNames = 'block mt-3';
 
-  const inputClassNames = 'block p-1 rounded-sm text-black w-56';
+  const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
 
   return (
     <AgentTicketFilterForm onSubmit={onSubmit} classNames={formClassname}>
       <AgentTicketFilterForm.Heading />
-      <AgentTicketFilterForm.Input
-        type="text"
-        name="firstName"
+
+      <AgentTicketFilterForm.Select
+        name="Agents"
         labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
+        options={['', 'Bob', 'Casey', 'Alisha']}
       />
-      <AgentTicketFilterForm.Input
-        type="text"
-        name="lastName"
+      <AgentTicketFilterForm.Select
+        name="Groups"
         labelClassNames={labelClassNames}
-        inputClassNames={inputClassNames}
-      />
-      <AgentTicketFilterForm.Select
-        name="gender"
-        inputClassNames={inputClassNames}
-        options={['female', 'male', 'other']}
-      />
-      <AgentTicketFilterForm.Select
-        name="agents"
-        inputClassNames={inputClassNames}
-        options={['Bob', 'Casey', 'Alisha']}
-      />
-      <AgentTicketFilterForm.Select
-        name="groups"
-        inputClassNames={inputClassNames}
-        options={['Maintenance', 'Communications', 'GIS', 'IT', 'Unassigned']}
-      />
-      <AgentTicketFilterForm.Select
-        name="created"
         inputClassNames={inputClassNames}
         options={[
+          '',
+          'Maintenance',
+          'Communications',
+          'GIS',
+          'IT',
+          'Unassigned',
+        ]}
+      />
+      <AgentTicketFilterForm.Select
+        name="Created"
+        labelClassNames={labelClassNames}
+        inputClassNames={inputClassNames}
+        options={[
+          '',
           'Within 15 minutes',
           'Within 30 minutes',
           'Within 1 hour',
@@ -63,8 +58,10 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
       />
       <AgentTicketFilterForm.Select
         name="Resolution due by"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
         options={[
+          '',
           'Overdue',
           'Today',
           'Tomorrow',
@@ -77,8 +74,10 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
       />
       <AgentTicketFilterForm.Select
         name="First Response due by"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
         options={[
+          '',
           'Overdue',
           'Today',
           'Tomorrow',
@@ -91,18 +90,29 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
       />
       <AgentTicketFilterForm.Select
         name="Status"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
-        options={['All unresolved', 'Open', 'Pending', 'Resolved', 'Closed']}
+        options={[
+          '',
+          'All unresolved',
+          'Open',
+          'Pending',
+          'Resolved',
+          'Closed',
+        ]}
       />
       <AgentTicketFilterForm.Select
         name="Priority"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
-        options={['Low', 'Medium', 'High', 'Urgent']}
+        options={['', 'Low', 'Medium', 'High', 'Urgent']}
       />
       <AgentTicketFilterForm.Select
         name="Type"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
         options={[
+          '',
           'Executive',
           'Preparedness',
           'Mitigation',
@@ -122,8 +132,31 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
       />
       <AgentTicketFilterForm.Select
         name="Location"
+        labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
-        options={['HQ (Pearl)', 'SELOC (Byram)', 'Bolton Building (Biloxi)']}
+        options={[
+          '',
+          'HQ (Pearl)',
+          'SELOC (Byram)',
+          'Bolton Building (Biloxi)',
+        ]}
+      />
+      <AgentTicketFilterForm.Select
+        name="Service Type"
+        labelClassNames={labelClassNames}
+        inputClassNames={inputClassNames}
+        options={[
+          '',
+          'None',
+          'Building Maintenance',
+          'Information Technology (IT)',
+          'Communications',
+          'GIS/Mapping',
+          'Employee Setup',
+          'WASP Inventory System',
+          'Training Requests',
+          'Thermoscan Account',
+        ]}
       />
     </AgentTicketFilterForm>
   );

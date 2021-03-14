@@ -1,10 +1,10 @@
-import { React, useContext } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import { React } from 'react';
+
 import Ticketcontainer from './TicketsContainer';
 import InputTicketForm from '../components/TicketForm';
-import { UserContext } from '../context/dbUserContext';
 import Dashboard from '../components/DashBoard';
 
+// reminder: containers props are coming from pages folder;  I.e. ClientHome would be the caller here;
 function DashboardContainer({ mysqlUser, ...restProps }) {
   return (
     <Dashboard>

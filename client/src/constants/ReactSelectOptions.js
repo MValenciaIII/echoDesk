@@ -50,8 +50,7 @@ export function departmentProfileNamesHelper(num) {
   }
 }
 
-{
-  /* <option value="1">Executive Branch</option>
+/* <option value="1">Executive Branch</option>
 <option value="2">Preparedness Branch</option>
 <option value="3">Mitigation Branch</option>
 <option value="4">Warehouse Branch</option>
@@ -65,7 +64,7 @@ export function departmentProfileNamesHelper(num) {
 <option value="12">Operations Branch</option>
 <option value="13">Individual Assistance</option>
 <option value="14">Information Technology</option> */
-}
+
 // { value: 'chocolate', label: 'Chocolate' },
 //   { value: 'strawberry', label: 'Strawberry' },
 //   { value: 'vanilla', label: 'Vanilla' },

@@ -1,5 +1,7 @@
 import React from 'react';
 
+//@# this utility file is used for creating coordinated select service forms along with the watch method on react hook forms;
+
 export default function subServiceTypes(mainCategoryId) {
   switch (mainCategoryId) {
     case '1':

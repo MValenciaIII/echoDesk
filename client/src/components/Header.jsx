@@ -1,15 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import SettingsDropdown from './SettingsDropdown';
 import { UserContext } from '../context/dbUserContext';
-import useAuth0UserMeta from '../auth/useAuth0UserMeta';
 
+// called by the headerfooter.js container on each page... placed on each page instead of around the app since i am using the auth0 metadata to determine which links to render for admin or client and the data is undefined until authenticated within a page. ~WK 3-15-2021
 function Header(props) {
-  const { loginWithRedirect, logout, user } = useAuth0();
   let { auth0UserMeta } = useContext(UserContext);
-
-  console.log(auth0UserMeta);
 
   function clientOrAgentLink() {
     if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {

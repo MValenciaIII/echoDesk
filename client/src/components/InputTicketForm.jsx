@@ -1,9 +1,8 @@
 // !NOTE: copied and pasted from here to make forms modular;
-// todo: modularize from here;
+// todo: modularize from here;  Tickets filter on the agent side is built like this at the moment:  https://react-hook-form.com/advanced-usage#SmartFormComponent;
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
-// todo: example top level Form from components:  REVISIT LATER WK - 3/10
 
 // export default function App() {
 //   const onSubmit = data => console.log(data);

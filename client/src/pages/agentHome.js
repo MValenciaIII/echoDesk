@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import AgentDashboardContainer from '../containers/AgentDashBoard';
-import AgentTicketFilter from '../containers/TicketFilter';
 import Loading from '../components/Loading';
 import { UserContext } from '../context/dbUserContext';
 import HeaderFooter from '../containers/HeaderFooter';
@@ -16,40 +15,37 @@ function AgentDashboard(props) {
   const {
     mysqlUser,
     getDbUser,
+    mysqlUserTickets,
+    getDbUsersTickets,
     auth0UserMeta,
     getAuth0UserMeta,
     allTickets,
   } = useContext(UserContext);
 
-  // console.log({ mysqlUserTickets });
-  // console.log({ mysqlUser });
-
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
 
-  //   auth0 meta fetch;  Promise all not working like I would expect, so splitting it up: wk-3-15
+  //Not sure if this is right use of Promise.all, but it works;  Is cleaner to read I decided vs multiple individual use effects;  wk 3-16
   useEffect(() => {
-    if (!auth0UserMeta) {
-      getAuth0UserMeta();
-    }
-  }, [user, getAuth0UserMeta]);
-
-  // get user from mysql db fetch
-  useEffect(() => {
-    if (!mysqlUser) {
-      getDbUser(userId);
-    }
-  }, [user, mysqlUser]);
+    if (!mysqlUser || !auth0UserMeta || !mysqlUserTickets)
+      Promise.all([
+        getDbUser(userId),
+        getAuth0UserMeta(userId),
+        getDbUsersTickets(),
+      ])
+        .then((values) => console.log(values))
+        .catch((err) => console.warn(err));
+  }, []);
 
   //Redirect if not an admin;
   useEffect(() => {
     if (auth0UserMeta && !auth0UserMeta.app_metadata?.isAdmin) {
       history.push('/');
     }
-  }, [user, auth0UserMeta]);
+  }, [auth0UserMeta, user]);
 
-  // ||mysqlUserTickets
-  if (!mysqlUser || !allTickets || !auth0UserMeta) {
+  //  Gatekeeping the Components from loading if the necessary data has not yet been fetched here at the page leve;
+  if (!mysqlUser || !allTickets || !auth0UserMeta || !mysqlUserTickets) {
     return <Loading />;
   } else {
     return (
@@ -58,9 +54,6 @@ function AgentDashboard(props) {
       </HeaderFooter>
     );
   }
-
-  // !; only for when I want to take auth fetch off or server is down;
-  // return <Dashboard />;
 }
 
 export default AgentDashboard;

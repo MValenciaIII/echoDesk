@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { UserContext } from '../context/dbUserContext';
-// import { TicketContext } from '../ticketContext.js';
+// import { UserContext } from '../context/dbUserContext';
+
+// @# USED TO COMPOSE FILTER FORM;  NEED TO SEE IF COMPOUND SELECT IS ACTUALLY NEEDED;
 
 export default function AgentTicketFilterForm({
   defaultValues,
@@ -66,7 +67,7 @@ AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
   ...rest
 }) {
   return (
-    <label htmlFor={name}>
+    <label htmlFor={name} className={labelClassNames}>
       {name}
       <select
         defaultValue=""
@@ -90,5 +91,7 @@ AgentTicketFilterForm.Heading = function AgentTicketFilterHeading({
   inputClassNames,
   ...rest
 }) {
-  return <h2 className="mx-auto text-lg text-center">Filter Tickets</h2>;
+  return (
+    <h2 className="mx-auto text-lg font-bold text-center">Filter Tickets</h2>
+  );
 };

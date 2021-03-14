@@ -42,26 +42,16 @@ function ClientDashboard(props) {
   //   }
   // }, [user, mysqlUser, mysqlUserTickets, getAuth0UserMeta, auth0UserMeta]);
 
-  //   auth0 meta fetch;  Promise all not working like I would expect, so splitting it up: wk-3-15
   useEffect(() => {
-    if (!auth0UserMeta) {
-      getAuth0UserMeta();
-    }
-  }, [user, getAuth0UserMeta]);
-
-  // get user from mysql db fetch
-  useEffect(() => {
-    if (!mysqlUser) {
-      getDbUser(userId);
-    }
-  }, []);
-
-  // get user from mysql db fetch
-  useEffect(() => {
-    if (!mysqlUserTickets) {
-      getDbUsersTickets(userId);
-    }
-  }, []);
+    if (!mysqlUser || !auth0UserMeta || !mysqlUserTickets)
+      Promise.all([
+        getDbUser(userId),
+        getAuth0UserMeta(userId),
+        getDbUsersTickets(),
+      ])
+        .then((values) => console.log(values))
+        .catch((err) => console.warn(err));
+  }, [user]);
 
   useEffect(() => {
     if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {

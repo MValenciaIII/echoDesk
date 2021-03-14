@@ -1,3 +1,7 @@
+import React from 'react';
+
+// @#  a collection of helper functions for mySql word and value conversions;
+
 export function departmentWordToValue(word) {
   switch (word) {
     case 'Executive Branch':
@@ -264,6 +268,29 @@ export function statusIdToWord(id) {
     default:
       break;
   }
+}
+
+// todo: move these to the constants folder to use for refactoring forms;
+export function AssignToAgentSelect() {
+  return (
+    <>
+      <option value="1">Not yet Assigned</option>
+      <option value="2">Casey Mott</option>
+      <option value="3">Gray Mccoy</option>
+      <option value="4">Alisha Torrence</option>
+      <option value="5">Michael Valencia</option>
+    </>
+  );
+}
+
+export function TicketLocationsOptions() {
+  return (
+    <>
+      <option value="1">Bolton Building (Biloxi)</option>
+      <option value="2">HQ - Pearl</option>
+      <option value="3">Warehouse (Byram)</option>
+    </>
+  );
 }
 
 // export function getAgentGroup(word) {

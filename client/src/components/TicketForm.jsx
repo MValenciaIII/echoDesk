@@ -1,21 +1,16 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAuth0 } from '@auth0/auth0-react';
 import { UserContext } from '../context/dbUserContext';
 import SubServiceType from '../utils/ticketCategories';
 import { WarningIcon } from './Icons';
 import {
   departmentWordToValue,
   locationWordToValue,
-  priorityWordToNumID,
-  serviceDetailsWordToNumId,
 } from '../utils/sqlFormHelpers';
 
 export default function InputTicketForm() {
   const { register, handleSubmit, watch, errors, reset } = useForm();
-  const { mysqlUser, mysqlUserTickets, getDbUsersTickets } = useContext(
-    UserContext
-  );
+  const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
 
   // watch input value by passing the name of it, second param is default
   const mainServicetype = watch('service_id', '1');
@@ -23,8 +18,11 @@ export default function InputTicketForm() {
   //   todo: push to DB;   May need to move ticket state up into a context provider?
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
   async function onSubmit(data, event) {
+    // todo: REMOVE DEBUGGER WHEN NEEDED;
+    // debugger;
+
     event.preventDefault();
-    debugger;
+
     // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
     // body.location_id = locationWordToValue(data.location_id);
     // body.priority_id = priorityWordToNumID(data.priority_id);
@@ -33,9 +31,6 @@ export default function InputTicketForm() {
     console.log(data);
 
     // ! SUPPLMENTING DATA WITH AUTH INFO;
-
-    // todo: REMOVE DEBUGGER WHEN NEEDED;
-    debugger;
 
     // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
 
@@ -50,20 +45,14 @@ export default function InputTicketForm() {
         body: JSON.stringify(data),
       }
     );
-    console.log(response);
-    let resJson = await response.json();
-    console.log(resJson);
-    // todo: get INSERTID to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
-    await getDbUsersTickets();
-    reset();
+    let result = await response.json();
+    console.log(result);
+    // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
+    await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
 
-    // .then((response) => response.json())
-    // .then((message) => console.log(message))
-    // .then(() => getDbUsersTickets())
-    // .then(() => reset())
-    // .catch((error) => console.log({ error }));
+    reset(); //reset the form
   }
-
+  // todo: extract to a util to import wherever this a reactHook form likely; Don't forget you can search references; ~wk 3-15;
   function ErrorMessage(prop, subject) {
     if (errors[prop]) {
       return (
@@ -188,7 +177,7 @@ export default function InputTicketForm() {
             name="service_id"
             ref={register({ required: true })}
           >
-            {/* // todo:refactor to external component;  ALSO located in ticket.jsx */}
+            {/* // todo:refactor options lists to external components for singularity of data;  ALSO located in ticket.jsx can use the constants folder for such;*/}
             <option value="1">Building</option>
             <option value="2">IT</option>
             <option value="3">Communications</option>
@@ -247,8 +236,9 @@ export default function InputTicketForm() {
 
         <input
           className="block px-2 py-1 mx-auto mt-3 font-bold text-black bg-gray-200 rounded-md hover:bg-green-900 hover:text-white "
-          name="Submit"
           type="submit"
+          name="Submit"
+          value="Submit"
         />
       </div>
     </form>

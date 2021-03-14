@@ -1,84 +1,112 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-
-import { UserContext } from '../context/dbUserContext';
-// import Select from 'react-select';  //? NOT going to use I think; hard to use in conjuction with REACT hook form to me;  WK 3/3/21
 import { WarningIcon } from '../components/Icons';
-import { locationIdToWord, departmentIdToValue } from '../utils/sqlFormHelpers';
-import UseAuth0UserMeta from '../auth/useAuth0UserMeta';
+import { UserContext } from '../context/dbUserContext';
 
-export default function ProfileSetttings({
-  userSub,
-  setmysqlUser,
-  mysqlUser,
-  auth0UserMeta,
-  getAuth0UserMeta,
-}) {
-  //grab sql user from context;  Context updates mysqlUser when auth0 user changes in useEffect dependency array
+//? This is an NPM package that makes some nice select elements, but they are controlled components vs React Hook FORMS uncontrolled.  The CAN be integrated, but it takes a touch of extra work;  Maybe somewhere down the line could look into refactoring to use with react-hook-forms;   For now, NOT going to use for mvp;  WK 3/3/21
+// import Select from 'react-select';
 
-  console.log({ mysqlUser }); //should never return undefined since parent container PROFILE PAGE will fetch user from auth0 and then set it to context first;
-
+export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
+  //state to determine editing form fields or not
   const [isEditing, setisEditing] = useState(false);
-  const [formFieldOriginalState, setFormFieldOriginalState] = useState(null);
 
+  const { auth0UserMeta, getAuth0UserMeta } = useContext(UserContext);
+
+  // Likely I've done this the hard way here;  Pretty sure react hook form has a simple reset function that I could have used, but I didn't thoroughly read the docs at the time.  ~wk 3-15;
+  //todo: refactor later after mvp to see about simplyfying reset logic;
+  const [formFieldOriginalState, setFormFieldOriginalState] = useState(null); //null is the default values obj; Currently being defined on the form fields themselves;
+
+  //Hook form methods
   const { register, handleSubmit, errors, reset } = useForm();
 
-  // useEffect(() => {
-  //   if (!auth0UserMeta) {
-  //     getAuth0UserMeta();
-  //   }
-  // });
+  useEffect(() => {
+    if (!auth0UserMeta)
+      getAuth0UserMeta(userSub)
+        .then((values) => console.log(values))
+        .catch((err) => console.warn(err));
+  }, []);
+  console.log(auth0UserMeta);
 
-  //   todo: onSubmit should patch to our DATABASE TO UPDATE USER INFO WHICH WILL THEN BE CALLED TO GET TICKETS FOR THAT USER;  Or update meta in auth0?
   //TODO:ADD VALIDATION
   async function onSubmit(data, event) {
+    debugger;
     event.preventDefault();
 
-    // todo: NEED AUTH HOOK TO CHECK THIS DATA:
-    // if auth0UserMeta.app_metadata.admin {
-    // data.agent_group = auth0UserMeta.app_metadata.agent_group;
-    // POST TO AN ADDITIONAL AGENTS TABLE;
-    // }
+    // adding the id from auth0;  passed in from props whose parent is a page;
+    data.id = userSub; //passed in through props;  It's auth0 sub minus the auth0| that comes on it; Just the number
 
-    console.log(data);
-    data.id = userSub;
+    // 1 = admin; 0 = normal client
+    data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
 
-    // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
-    debugger;
     // Posting new Users
     if (!mysqlUser.fname) {
-      let valueToSubmit = { ...data };
-      await fetch('http://10.195.103.107:3075/api/users/create', {
-        method: 'POST', //POST And PUT are the http methods. Usually we use GET
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(valueToSubmit),
-      })
-        .then((response) => response.json())
-        .then((message) => console.log(message))
-        .then(() => setmysqlUser(data))
-        .catch((error) => console.log({ error }));
+      try {
+        let valueToSubmit = { ...data };
+        let response = await fetch(
+          'http://10.195.103.107:3075/api/users/create',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(valueToSubmit),
+          }
+        );
+        let result = await response.json();
+        console.log(result);
+        await setmysqlUser(valueToSubmit);
+        if (auth0UserMeta.app_metadata?.isAdmin) {
+          try {
+            // todo: see about putting more agent meta in;
+            let agentData = {
+              client_id: userSub,
+              id: auth0UserMeta.app_metadata?.agent_id,
+            };
+            let agentResponse = await fetch(
+              'http://10.195.103.107:3075/api/agents/create',
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(agentData),
+              }
+            );
+            let agentResult = await agentResponse.json();
+            console.log(agentResult);
+          } catch (error) {
+            console.warn({ error });
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
     // PATCHING EXISTING USERS
     else {
-      let valueToSubmit = { ...data };
-      fetch(`http://10.195.103.107:3075/api/users/update/${userSub}}`, {
-        method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(valueToSubmit),
-      })
-        .then((response) => response.json())
-        .then((message) => console.log(message))
-        .then(() => setmysqlUser(data))
-        .then(() => reset())
-        .catch((error) => console.log({ error }));
+      try {
+        let valueToSubmit = { ...data };
+        let response = await fetch(
+          `http://10.195.103.107:3075/api/users/update/${userSub}}`,
+          {
+            method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(valueToSubmit),
+          }
+        );
+        let result = await response.json();
+        console.log(result);
+        await setmysqlUser(result);
+      } catch (error) {
+        console.error({ error });
+      }
     }
     setisEditing(false);
   }
 
+  // Error message and icon for form validation
   function ErrorMessage(prop) {
     if (errors[prop]) {
       return (
@@ -90,6 +118,7 @@ export default function ProfileSetttings({
     }
   }
 
+  // todo: like above, see about refactoring using reset method from react hook form instead of this.  BUT it does work for now;   ~Wk 3-15
   function handleProfileEdits(event, action) {
     setisEditing(!isEditing);
 
@@ -108,7 +137,7 @@ export default function ProfileSetttings({
       }
     }
   }
-
+  // todo: possibly see about making these from reusable form components instead of the big monolithic structure we have here: ~wk 3-15
   return (
     <form
       className="flex-grow w-full p-4 mx-auto bg-gray-800"
