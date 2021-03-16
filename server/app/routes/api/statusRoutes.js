@@ -17,7 +17,6 @@ router.get('/:id', (req, res) => {
 
 router.post('/update/:id', (req, res) => {
   console.log(req.body);
-
   //res.json(req.body);
   dao.updateById(req, res);
 });
@@ -25,7 +24,6 @@ router.post('/update/:id', (req, res) => {
 // /api/movies/create
 router.post('/create', (req, res) => {
   console.log(req.body);
-
   //res.json(req.body);
   dao.createById(req, res);
 });
