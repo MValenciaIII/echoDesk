@@ -6,12 +6,7 @@ class AgentDao {
     this.pool = pool;
   }
   findAll(req, res) {
-    // let sql = "SELECT * FROM movies where deleted_at is NULL"; // simple statement unless you have a lot of joins.
     let sql = 'SELECT * FROM agents';
-    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    // from clients c
-    // join departments d ON c.department_id = d.id
-    // join location l ON c.location_id = l.id ORDER BY c.id;`
     this.pool.query(sql, function (err, rows) {
       if (err) {
         res.json({
@@ -25,11 +20,6 @@ class AgentDao {
   }
   findbyID(req, res, id) {
     let sql = 'SELECT * FROM agents where id= ?';
-    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    // from clients c
-    // join departments d ON c.department_id = d.id
-    // join location l ON c.location_id = l.id
-    // where c.id = ?;`;
     this.pool.query(sql, [id], function (err, rows) {
       if (err) {
         res.json({
@@ -47,15 +37,8 @@ class AgentDao {
     let values = Object.values(req.body);
     //Required Min Data
     if (
-      !req.body.fname ||
-      !req.body.lname ||
-      !req.body.email ||
-      !req.body.mobile_phone ||
-      !req.body.office_phone ||
-      !req.body.location ||
-      !req.body.title ||
-      !req.body.department_id ||
-      !req.body.id
+      !req.body.client_id ||
+      !req.body.group_id
     ) {
       res.json({
         error: true,
@@ -101,7 +84,7 @@ class AgentDao {
         });
     }
   
-    let sql = `UPDATE clients set ${fields.join("=?,")}=? WHERE id =?`; //update the data!
+    let sql = `UPDATE agents set ${fields.join("=?,")}=? WHERE id =?`; //update the data!
     //have to put =? at the end of the join because join only add between things!
     console.log(sql);
   
