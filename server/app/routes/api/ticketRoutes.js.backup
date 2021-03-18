@@ -1,4 +1,4 @@
-const daoClass = require('../../dao/statusDao'); //dao needs to be in APP FOLDER
+const daoClass = require('../../dao/ticketDao'); //dao needs to be in APP FOLDER
 const dao = new daoClass();
 
 const express = require('express');
@@ -10,6 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   dao.findAll(req, res);
 });
+
 //FIND BY ID ROUTES ->> /api/tickets/:id
 router.get('/:id', (req, res) => {
   dao.findbyID(req, res, req.params.id);
@@ -27,7 +28,7 @@ router.post('/create', (req, res) => {
   console.log(req.body);
 
   //res.json(req.body);
-  dao.createById(req, res);
+  dao.create(req, res);
 });
 
 router.get('/delete/:id', (req, res) => {
