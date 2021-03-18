@@ -8,6 +8,10 @@ import {
   locationWordToValue,
 } from '../utils/sqlFormHelpers';
 
+// docs to package here; https://www.npmjs.com/package/react-toastify
+import { ToastContainer, toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function InputTicketForm() {
   const { register, handleSubmit, watch, errors, reset } = useForm();
   const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
@@ -23,34 +27,41 @@ export default function InputTicketForm() {
 
     event.preventDefault();
 
-    // body.agent_id = null; //unassiepartmentWordToValue(data.department_id);
-    // body.location_id = locationWordToValue(data.location_id);
-    // body.priority_id = priorityWordToNumID(data.priority_id);
+    // ! SUPPLMENTING DATA WITH AUTH INFO;
     data.status_id = '1'; //default of open; not from form;send....
-    data.client_id = mysqlUser.id;
+    data.client_id = mysqlUser.id; // attaching the user's ID to the ticket
     console.log(data);
 
-    // ! SUPPLMENTING DATA WITH AUTH INFO;
-
-    // let valueToSubmit2 = { ...data, id: 'auth0|603d06a199dbeb0068b68f69' };
-
     // Posting new TICKETS
-    let response = await fetch(
-      'http://10.195.103.107:3075/api/tickets/create',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      }
-    );
-    let result = await response.json();
-    console.log(result);
-    // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
-    await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+    try {
+      let response = await fetch(
+        'http://10.195.103.107:3075/api/tickets/create',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      let result = await response.json();
+      console.log(result);
+      // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
+      await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+      reset(); //reset the form
 
-    reset(); //reset the form
+      toast.success('Ticket submitted successfully!', {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
   }
   // todo: extract to a util to import wherever this a reactHook form likely; Don't forget you can search references; ~wk 3-15;
   function ErrorMessage(prop, subject) {
@@ -240,6 +251,7 @@ export default function InputTicketForm() {
           name="Submit"
           value="Submit"
         />
+        <ToastContainer transition={Zoom} />
       </div>
     </form>
   );

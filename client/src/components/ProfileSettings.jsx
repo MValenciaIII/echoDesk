@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { WarningIcon } from '../components/Icons';
 import { UserContext } from '../context/dbUserContext';
+import { ToastContainer, toast, Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //? This is an NPM package that makes some nice select elements, but they are controlled components vs React Hook FORMS uncontrolled.  The CAN be integrated, but it takes a touch of extra work;  Maybe somewhere down the line could look into refactoring to use with react-hook-forms;   For now, NOT going to use for mvp;  WK 3/3/21
 // import Select from 'react-select';
@@ -19,6 +23,20 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
   //Hook form methods
   const { register, handleSubmit, errors, reset } = useForm();
 
+  //TODO: HOOK UP Yup validation;   matches the form "name" attribute
+  //DOCS: https://www.npmjs.com/package/yup, https://www.npmjs.com/package/@hookform/resolvers
+  const schema = yup.object().shape({
+    fname: yup.string().required(),
+    lname: yup.string().required(),
+    title: yup.string().required(),
+    email: yup.string().email().required(),
+    department_id: yup.number().required(),
+    mobile_phone: yup.number().required(), //TODO: FIND REGEX LATER
+    office_phone: yup.number().required(), //TODO: FIND REGEX LATER
+    //https://stackoverflow.com/questions/52483260/validate-phone-number-with-yup
+  });
+
+  //fethcing auth0UserMeta after component Mounts;  Must fetch here instead of at page level since it is not defined until the redirect to profile settings is complete on first login;   There is some conditional logic in submit form in case this fetch fails;  The set state call for the authMeta lives in the Getcall in context.js;
   useEffect(() => {
     if (!auth0UserMeta)
       getAuth0UserMeta(userSub)
@@ -29,14 +47,17 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
 
   //TODO:ADD VALIDATION
   async function onSubmit(data, event) {
-    debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
     data.id = userSub; //passed in through props;  It's auth0 sub minus the auth0| that comes on it; Just the number
 
     // 1 = admin; 0 = normal client
-    data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
+    if (auth0UserMeta) {
+      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
+    } else {
+      data.isAdmin = false;
+    }
 
     // Posting new Users
     if (!mysqlUser.fname) {
@@ -54,14 +75,27 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         );
         let result = await response.json();
         console.log(result);
-        await setmysqlUser(valueToSubmit);
+        if (!result.error) {
+          await setmysqlUser(valueToSubmit);
+          toast.success('Profile Settings Created', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+
         if (auth0UserMeta.app_metadata?.isAdmin) {
+          // !CREATING AGENTS
           try {
             // todo: see about putting more agent meta in;
-            let agentData = {
-              client_id: userSub,
-              id: auth0UserMeta.app_metadata?.agent_id,
-            };
+            let agentData = valueToSubmit;
+            agentData.client_id = userSub;
+            agentData.id = auth0UserMeta.app_metadata?.agent_id;
+
             let agentResponse = await fetch(
               'http://10.195.103.107:3075/api/agents/create',
               {
@@ -73,12 +107,33 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
               }
             );
             let agentResult = await agentResponse.json();
-            console.log(agentResult);
+            console.log({ agentResult });
+            if (!agentResult.error) {
+              await setmysqlUser(agentData);
+              toast.success('Agent Profile Settings Created', {
+                position: 'top-right',
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }
           } catch (error) {
             console.warn({ error });
           }
         }
       } catch (error) {
+        toast.error('Updating Profile Settings Failed', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.error(error);
       }
     }
@@ -98,9 +153,29 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         );
         let result = await response.json();
         console.log(result);
-        await setmysqlUser(result);
+        if (!result.error) {
+          await setmysqlUser(valueToSubmit);
+          toast.success('Profile Settings Updated', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
       } catch (error) {
         console.error({ error });
+        toast.error('Updating Profile Settings Failed', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
     }
     setisEditing(false);
@@ -326,6 +401,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
           name="Submit"
           type="submit"
         />
+        <ToastContainer transition={Zoom} />
       </div>
     </form>
   );

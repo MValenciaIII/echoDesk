@@ -39,7 +39,7 @@ function UserContextProvider(props) {
       }
     }
     fetchTickets();
-  }, []);
+  }, [mysqlUserTickets]);
 
   //  async function getAllTickets() {
   //   try {
