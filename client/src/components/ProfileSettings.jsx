@@ -128,7 +128,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
       try {
         let valueToSubmit = { ...data };
         let response = await fetch(
-          `http://10.195.103.107:3075/api/users/update/${userSub}}`,
+          `http://10.195.103.107:3075/api/users/update/${userSub}`,
           {
             method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
             headers: {
