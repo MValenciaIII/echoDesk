@@ -20,6 +20,7 @@ export default function TicketsContainer(props) {
   const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
 
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
+  console.log(chosenTickets);
 
   const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
 
@@ -52,7 +53,7 @@ export default function TicketsContainer(props) {
                 timeSubmitted={ticket.created_at}
                 ticketNotes={ticket.notes}
               />
-              <Ticket.AgentAssignedTo assignedTo={ticket.assignedTo} />
+              <Ticket.AgentAssignedTo agentAssignedTo={ticket.agent_id} />
               <Ticket.AgentLocation mainLocation={ticket.location_id} />
 
               <Ticket.Category

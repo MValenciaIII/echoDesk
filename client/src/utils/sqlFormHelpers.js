@@ -274,11 +274,11 @@ export function statusIdToWord(id) {
 export function AssignToAgentSelect() {
   return (
     <>
-      <option value="1">Not yet Assigned</option>
-      <option value="2">Casey Mott</option>
-      <option value="3">Gray Mccoy</option>
-      <option value="4">Alisha Torrence</option>
-      <option value="5">Michael Valencia</option>
+      <option value={null}>Not yet Assigned</option>
+      <option value="1">Casey Mott</option>
+      <option value="2">Charlieyya Smith</option>
+      <option value="3">Alisha Torrence</option>
+      <option value="4">Michael Valencia</option>
     </>
   );
 }
@@ -286,8 +286,8 @@ export function AssignToAgentSelect() {
 export function TicketLocationsOptions() {
   return (
     <>
-      <option value="1">Bolton Building (Biloxi)</option>
-      <option value="2">HQ - Pearl</option>
+      <option value="1">HQ - Pearl</option>
+      <option value="2">Bolton Building (Biloxi)</option>
       <option value="3">Warehouse (Byram)</option>
     </>
   );
