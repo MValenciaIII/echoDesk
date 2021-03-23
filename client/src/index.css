@@ -32,3 +32,12 @@
     @apply hover:bg-gray-400;
   }
 }
+
+.closedTicket {
+  color: #888 !important;
+  opacity: 0.6 !important;
+  font-weight: normal !important;
+}
+.flex-grow-2 {
+  flex-grow: 2;
+}

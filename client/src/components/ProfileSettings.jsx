@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { WarningIcon } from '../components/Icons';
 import { UserContext } from '../context/dbUserContext';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorMessage from './ErrorMessage';
+import { profileSchema } from '../constants/formValidationSchemas';
 
 //? This is an NPM package that makes some nice select elements, but they are controlled components vs React Hook FORMS uncontrolled.  The CAN be integrated, but it takes a touch of extra work;  Maybe somewhere down the line could look into refactoring to use with react-hook-forms;   For now, NOT going to use for mvp;  WK 3/3/21
 // import Select from 'react-select';
@@ -16,24 +17,9 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
 
   const { auth0UserMeta, getAuth0UserMeta } = useContext(UserContext);
 
-  // Likely I've done this the hard way here;  Pretty sure react hook form has a simple reset function that I could have used, but I didn't thoroughly read the docs at the time.  ~wk 3-15;
-  //todo: refactor later after mvp to see about simplyfying reset logic;
-  const [formFieldOriginalState, setFormFieldOriginalState] = useState(null); //null is the default values obj; Currently being defined on the form fields themselves;
-
   //Hook form methods
-  const { register, handleSubmit, errors, reset } = useForm();
-
-  //TODO: HOOK UP Yup validation;   matches the form "name" attribute
-  //DOCS: https://www.npmjs.com/package/yup, https://www.npmjs.com/package/@hookform/resolvers
-  const schema = yup.object().shape({
-    fname: yup.string().required(),
-    lname: yup.string().required(),
-    title: yup.string().required(),
-    email: yup.string().email().required(),
-    department_id: yup.number().required(),
-    mobile_phone: yup.number().required(), //TODO: FIND REGEX LATER
-    office_phone: yup.number().required(), //TODO: FIND REGEX LATER
-    //https://stackoverflow.com/questions/52483260/validate-phone-number-with-yup
+  const { register, handleSubmit, errors, reset } = useForm({
+    resolver: yupResolver(profileSchema),
   });
 
   //fethcing auth0UserMeta after component Mounts;  Must fetch here instead of at page level since it is not defined until the redirect to profile settings is complete on first login;   There is some conditional logic in submit form in case this fetch fails;  The set state call for the authMeta lives in the Getcall in context.js;
@@ -43,10 +29,10 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         .then((values) => console.log(values))
         .catch((err) => console.warn(err));
   }, []);
-  console.log(auth0UserMeta);
 
-  //TODO:ADD VALIDATION
   async function onSubmit(data, event) {
+    //todo: remove debugger before prod;
+    // debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
@@ -91,7 +77,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         if (auth0UserMeta.app_metadata?.isAdmin) {
           // !CREATING AGENTS
           try {
-            // todo: see about putting more agent meta in;
+            // todo: see about putting more agent meta in; doubtful for now
             let agentData = valueToSubmit;
             agentData.client_id = userSub;
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
@@ -182,34 +168,19 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
   }
 
   // Error message and icon for form validation
-  function ErrorMessage(prop) {
-    if (errors[prop]) {
-      return (
-        <p className="text-red-700">
-          <WarningIcon />
-          {prop} is required
-        </p>
-      );
-    }
-  }
+  // function ErrorMessage(message) {
+  //   return (
+  //     <p className="text-red-700">
+  //       <WarningIcon />
+  //       {message}
+  //     </p>
+  //   );
+  // }
 
-  // todo: like above, see about refactoring using reset method from react hook form instead of this.  BUT it does work for now;   ~Wk 3-15
-  function handleProfileEdits(event, action) {
-    setisEditing(!isEditing);
-
-    if (action === 'START_UPDATES') {
-      let fieldsToEdit = [
-        ...document.querySelectorAll('[data-role="profileSetting"]'),
-      ];
-      setFormFieldOriginalState(fieldsToEdit);
-    } else if (action === 'CANCEL_UPDATES') {
-      for (let i = 0; i < formFieldOriginalState.length; i++) {
-        const field = formFieldOriginalState[i];
-        field.value =
-          field._wrapperState.initialValue ||
-          field.dataset.defaultvalue ||
-          null; //for select elements that don't have a default value; lower case for dataset
-      }
+  function cancelProfileEdits() {
+    if (isEditing) {
+      reset();
+      setisEditing(!isEditing);
     }
   }
   // todo: possibly see about making these from reusable form components instead of the big monolithic structure we have here: ~wk 3-15
@@ -236,10 +207,13 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             type="text"
             defaultValue={mysqlUser ? mysqlUser.fname : ''}
             readOnly={isEditing ? false : true}
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('First name')}
+
+        {errors.fname?.message && (
+          <ErrorMessage message={errors.fname.message} />
+        )}
 
         {/* //@@ Last Name */}
         <label className="block mt-3 ">
@@ -251,10 +225,12 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             type="text"
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.lname : ''}
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Last Name')}
+        {errors.lname?.message && (
+          <ErrorMessage message={errors.lname.message} />
+        )}
 
         {/* //@@ Job title */}
         <label className="block mt-3 ">
@@ -266,10 +242,12 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             type="text"
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.title : ''}
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Job Title')}
+        {errors.title?.message && (
+          <ErrorMessage message={errors.title.message} />
+        )}
 
         {/* //@@EMAIL */}
         <label className="block mt-3 ">
@@ -282,10 +260,12 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             type="text"
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.email : ''}
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Email')}
+        {errors.title?.message && (
+          <ErrorMessage message={errors.title.message} />
+        )}
 
         {/* //@@ DEPARTMENT */}
         {/* <Controller /> */}
@@ -298,7 +278,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             name="department_id"
             disabled={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.department : ''}
-            ref={register({ required: true })}
+            ref={register()}
           >
             <option value="1">Executive Branch </option>
             <option value="2">Preparedness Branch</option>
@@ -316,7 +296,9 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             <option value="14">Information Technology Branch</option>
           </select>
         </label>
-        {ErrorMessage('Department')}
+        {errors.department_id?.message && (
+          <ErrorMessage message={errors.department_id.message} />
+        )}
 
         {/* //@@ Location/ */}
         <label className="block mt-3">
@@ -328,20 +310,20 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             name="location_id"
             disabled={isEditing ? false : true}
             defaultValue={mysqlUser && mysqlUser.location}
-            ref={register({ required: true })}
+            ref={register()}
           >
-            {/* todo:see about changing these back to number values; */}
             <option value="1">HQ(Pearl)</option>
             <option value="2">Warehouse(Byram)</option>
             <option value="3">Bolton Building (Biloxi)</option>
           </select>
         </label>
-        {ErrorMessage('Location')}
+        {errors.location_id?.message && (
+          <ErrorMessage message={errors.location_id.message} />
+        )}
 
         {/* //@@ Phone */}
         <label className="block mt-3">
           Mobile Phone Number
-          {/* //todo add validation here? */}
           <input
             data-role="profileSetting"
             name="mobile_phone"
@@ -349,15 +331,16 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             readOnly={isEditing ? false : true}
             defaultValue={mysqlUser ? mysqlUser.mobile_phone : ''}
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Mobile Phone')}
+        {errors.mobile_phone?.message && (
+          <ErrorMessage message={errors.mobile_phone.message} />
+        )}
 
         {/* //@@ Phone */}
         <label className="block mt-3">
           Office Phone Number
-          {/* //todo add validation here? */}
           <input
             data-role="profileSetting"
             name="office_phone"
@@ -368,8 +351,9 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             ref={register({})}
           />
         </label>
-        {ErrorMessage('Office')}
-
+        {errors.office_phone?.message && (
+          <ErrorMessage message={errors.office_phone.message} />
+        )}
         {/* errors will return when field validation fails  */}
 
         <button
@@ -378,7 +362,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             isEditing ? 'hidden' : 'block'
           }`}
           onClick={(event) => {
-            handleProfileEdits(event, 'START_UPDATES');
+            setisEditing(!isEditing);
           }}
         >
           Edit
@@ -389,7 +373,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
             isEditing ? 'block' : 'hidden'
           }`}
           onClick={(event) => {
-            handleProfileEdits(event, 'CANCEL_UPDATES');
+            cancelProfileEdits();
           }}
         >
           Cancel Edits

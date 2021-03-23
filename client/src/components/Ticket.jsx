@@ -3,7 +3,10 @@ import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
 // import { TicketContext } from '../ticketContext.js';
 import getTimeFxn from '../utils/timeConverter.js';
-import subServiceTypes from '../utils/ticketCategories.js';
+import {
+  subServiceTypes,
+  PrimaryServiceCategories,
+} from '../utils/ticketCategories';
 import {
   departmentIdToValue,
   locationIdToWord,
@@ -12,13 +15,16 @@ import {
   AssignToAgentSelect,
   TicketLocationsOptions,
 } from '../utils/sqlFormHelpers';
+import { UserIcon, LocationIcon, OfficeIcon } from './Icons';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
+//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow;
 export default function Ticket({
   children,
   id,
   activityLogShown,
   toggleActivityLog,
+  status,
   ...restProps
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
@@ -39,7 +45,14 @@ export default function Ticket({
     });
   });
 
+  function grayOutClosedOrResolvedTicket() {
+    if (status === 3 || status === 4) {
+      return 'closedTicket';
+    }
+  }
+
   async function onSubmit(data, event) {
+    debugger;
     event.preventDefault();
 
     try {
@@ -56,6 +69,7 @@ export default function Ticket({
       let result = await response.json();
       console.log(result);
       await getDbUsersTickets();
+
       setisEditingTicket(false);
     } catch (error) {
       console.error({ error });
@@ -67,7 +81,7 @@ export default function Ticket({
       onSubmit={handleSubmit(onSubmit)}
       // todo: see about setting onChange to be the handleSubmit trigger if you do no want a submit button or a confirm/cancel changed button;  ~wk 3-15
       onChange={() => setisEditingTicket(true)}
-      className="relative grid w-full grid-cols-6 truncate divide-y divide-gray-300 lg:grid-cols-10 lg:divide-y-0"
+      className={`relative grid w-full grid-cols-12 truncate divide-y divide-gray-300 lg:divide-y-0 ${grayOutClosedOrResolvedTicket()}`}
     >
       {childrenWithProps}
     </form>
@@ -91,7 +105,7 @@ Ticket.Container = function TicketContainer({ children, ...restprops }) {
   return (
     <div
       data-name="SingleTicketContainer" //for easier ID'ING in devtools instead of a long list of classnames; ~wk 3-15-2021
-      className="mt-4 overflow-hidden bg-gray-200 rounded-md shadow-md max-w-screen-2x"
+      className={`mt-4 overflow-hidden bg-gray-200 rounded-md shadow-md max-w-screen-2x`}
     >
       {childrenWithProps}
     </div>
@@ -115,8 +129,6 @@ Ticket.Status = function TicketStatus({
   let wordPriority = priorityIDtoWord(String(priority));
   let [stylingPriority, setstylingPriority] = useState(wordPriority);
 
-  console.log(stylingPriority);
-
   function statusClasses() {
     switch (stylingStatus) {
       case 'Open':
@@ -124,7 +136,7 @@ Ticket.Status = function TicketStatus({
       case 'Pending':
         return 'bg-green-700 ';
       case 'Resolved':
-        return 'text-gray-600 ';
+        return 'bg-gray-600 text-gray-200';
       case 'Closed':
         return 'bg-gray-600 text-gray-200';
       default:
@@ -139,18 +151,21 @@ Ticket.Status = function TicketStatus({
     let bgYellow = 'bg-yellow-800';
     let bgGreen = 'bg-green-800';
 
-    switch (stylingPriority) {
-      case 'Low':
-        return `${bgGreen} `;
-      case 'Medium':
-        return `${bgBlue} `;
-      case 'High':
-        return `${bgYellow} `;
-      case 'Urgent':
-        return `${bgRed} `;
-      default:
-        return;
-    }
+    if (wordStatus === 'Resolved' || wordStatus === 'Closed') {
+      return 'bg-gray-600';
+    } else
+      switch (stylingPriority) {
+        case 'Low':
+          return `${bgGreen} `;
+        case 'Medium':
+          return `${bgBlue} `;
+        case 'High':
+          return `${bgYellow} `;
+        case 'Urgent':
+          return `${bgRed} `;
+        default:
+          return;
+      }
   }
 
   function changeStylingStatus(event) {
@@ -164,7 +179,7 @@ Ticket.Status = function TicketStatus({
 
   return (
     <div
-      className={`col-span-6 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
+      className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
       <select
         ref={register()}
@@ -237,7 +252,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
       case 'Pending':
         return 'bg-green-700 ';
       case 'Resolved':
-        return 'text-gray-600 ';
+        return 'bg-gray-600 text-gray-200 ';
       case 'Closed':
         return 'bg-gray-600 text-gray-200';
       default:
@@ -252,6 +267,9 @@ Ticket.AgentStatus = function TicketAgentStatus({
     let bgYellow = 'bg-yellow-800';
     let bgGreen = 'bg-green-800';
 
+    if (wordStatus === 'Resolved' || wordStatus === 'Closed') {
+      return 'bg-gray-600';
+    }
     switch (stylingPriority) {
       case 'Low':
         return `${bgGreen} `;
@@ -277,7 +295,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
 
   return (
     <div
-      className={`col-span-6 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
+      className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
       <select
         ref={register()}
@@ -306,6 +324,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
+          ref={register()}
           className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
@@ -348,7 +367,7 @@ Ticket.Description = function TicketDescription({
   }
 
   return (
-    <div className="flex-grow col-span-6 p-1 bg-gray-100 border border-red-500 md:col-span-5 lg:col-span-9">
+    <div className="flex-grow col-span-12 p-1 bg-gray-100 border border-red-500 md:col-span-11">
       <div className="">
         <h2 className="inline-block font-bold text-black text-md">{title}</h2>
         {/*// todo: relocate this img to a better place ?? */}
@@ -393,14 +412,18 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-xs lg:col-span-2">
+    <div
+      data-id="agentAssignedTo"
+      className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2"
+    >
       <label className="mx-auto text-center w-max">
-        Assigned To: <br />
+        <UserIcon />
         <select
-          ref={register()}
-          name="status_id"
+          // todo: activate this ref when agent assigning gets set up
+          // ref={register()}
+          name="agent_id"
           defaultValue={status}
-          className={`block w-max p-1 mx-auto mt-1  text-white bg-gray-700
+          className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700
          `}
           // onChange={(event) => }
         >
@@ -419,7 +442,7 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:col-span-1 md:text-xs lg:col-span-2 ">
+    <div className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2">
       <span className="inline-block mr-px ">
         Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
       </span>
@@ -434,9 +457,9 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:text-xs md:col-span-1 lg:col-span-2">
+    <div className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-4 xl:col-span-2 md:text-sm ">
       <span className="inline-block mr-px text-center">
-        Location: <br /> {locationIdToWord(String(mainLocation))}
+        <LocationIcon /> {locationIdToWord(String(mainLocation))}
       </span>
     </div>
   );
@@ -446,17 +469,23 @@ Ticket.AgentLocation = function TicketAgentLocation({
   children,
   mainLocation,
   office,
+  register,
   ...restProps
 }) {
   return (
-    <div className="col-span-3 text-center bg-gray-200 md:text-xs md:col-span-1 lg:col-span-2">
+    <div
+      data-id="agentLocation"
+      className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-4 xl:col-span-3"
+    >
       <label className="mx-auto mr-px text-center w-max">
-        Location: <br />
+        <span className="sr-only">Location</span>
+        <LocationIcon />
         <select
-          name="Location"
+          ref={register()}
+          name="location_id"
           id=""
           defaultValue={locationIdToWord(String(mainLocation))}
-          className={`block w-max p-1 mx-auto mt-1 text-xs text-white bg-gray-700`}
+          className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700`}
         >
           {TicketLocationsOptions()}
         </select>
@@ -480,13 +509,17 @@ Ticket.Category = function TicketCategory({
   // todo:change to form and watch values using technique on ticket input;
 
   return (
-    <div className="flex flex-wrap content-start justify-center col-span-6 text-xs text-center md:col-span-2 lg:col-span-3">
-      <label htmlFor="service_id" className="w-full text-center">
+    <div
+      data-id="ticketCategory"
+      className="flex flex-wrap content-start col-span-12 text-xs text-center lg:col-span-5 md:flex-row md:col-span-6 lg: 2xl:col-span-3"
+    >
+      <label htmlFor="service_id" className="w-full text-center sr-only">
         Category:
       </label>
+      <OfficeIcon />
       <select
         ref={register()}
-        className="w-32 p-1 mt-1 mr-px text-white bg-gray-700 md:w-24 lg:w-28"
+        className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-28 "
         name="service_id"
         id=""
         defaultValue={category}
@@ -507,7 +540,7 @@ Ticket.Category = function TicketCategory({
       </label>
       <select
         ref={register()}
-        className="w-32 mt-1 text-white bg-gray-700 md:w-24 lg:w-28"
+        className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-max"
         name="service_details_id"
         id=""
         defaultValue={subcategory}
@@ -528,18 +561,18 @@ Ticket.ContactInfo = function TicketContactInfo({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 p-2 md:col-span-2 lg:col-span-3 lg:text-sm">
-      <p>
+    <div className="col-span-6 p-2 md:flex md:col-span-2 lg:col-span-3 xl:col-span-3 lg:text-sm">
+      <p className="ml-2">
         Phone:{' '}
-        <a className="text-blue-500 underline" href={`tel:${contactPhone}`}>
+        <a className="text-blue-500 underline " href={`tel:${contactPhone}`}>
           {contactPhone}
         </a>
       </p>
-      <p>
+      <p className="ml-2">
         Email:{' '}
         <a
-          className="text-blue-500 underline"
-          href={`mailto:${contactEmail}?subject=${title}`}
+          className="text-blue-500 underline "
+          href={`mailto:${contactEmail}?subject=Your Echodesk Ticket:${title}`}
         >
           {contactEmail}
         </a>
@@ -594,7 +627,6 @@ Ticket.ActivityLogContainer = function ActivityLogContainer({
   activityLogShown,
   ...restProps
 }) {
-  //todo: see if this use of flex works for a smoother height animation; https://css-tricks.com/using-css-transitions-auto-dimensions/
   if (activityLogShown) {
     return (
       <div className="p-4 transition-all duration-200 ease-in-out bg-gray-400 rounded-md col-span-full">
@@ -635,7 +667,7 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
   }
   return (
     <p className={`mb-1 ${alignSide()} shadow-sm p-1 m-1`}>
-      <span className="text-base font-bold text-black">{whoSaidit()}</span>
+      <span className="text-base font-bold text-black">{whoSaidit()} </span>
       said:
       <span className="text-gray-900"> {message} </span>
       <span className="text-xs text-gray-600">

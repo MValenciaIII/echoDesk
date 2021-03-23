@@ -17,20 +17,20 @@ export default function SettingsDropdown(props) {
 
   return (
     <ul className={`flex flex-col md:flex-row`}>
-      <li className={`text-gray-100 text-sm  underline m-1 inline-block`}>
+      <li className={`text-gray-100 text-sm  underline m-2 inline-block`}>
         <Link to={clientOrAgentLink()}>Dashboard</Link>
       </li>
-      <li className={`text-gray-100 text-sm underline m-1 inline-block`}>
+      <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
         <Link to="/profilesettings">Profile Settings</Link>
       </li>
 
       {auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin && (
-        <li className={`text-gray-100 text-sm underline m-1 inline-block`}>
+        <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
           <Link to="/agentInputTicket">Input a ticket</Link>
         </li>
       )}
 
-      <li className={`text-gray-100 text-sm underline m-1 inline-block`}>
+      <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
         <button
           className={`text-gray-100 text-sm underline inline-block`}
           onClick={() => {

@@ -17,7 +17,6 @@ function Header(props) {
 
   return (
     <nav className="flex items-center justify-between w-full p-4 bg-blue">
-      {/* todo:higher quality image for this size and not shrunk so much */}
       <header>
         <Link to={clientOrAgentLink()}>
           <img

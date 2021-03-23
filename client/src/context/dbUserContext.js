@@ -11,13 +11,6 @@ function UserContextProvider(props) {
   const [allTickets, setAllTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
 
-  let barIndex;
-  let defaultuserId; //i.e. the current auth0 user with pipe removed
-  // if (user) {
-  //   barIndex = user.sub.indexOf('|') + 1;
-  //   defaultuserId = user.sub.substring(barIndex);
-  // }
-
   useEffect(() => {
     async function fetchTickets() {
       try {
@@ -25,7 +18,7 @@ function UserContextProvider(props) {
         let response = await fetch(ticketsUrl);
         let allTickets = await response.json();
 
-        // todo:sort based on NOT CLOSED THEN timestamps
+        // todo:sort based on NOT CLOSED THEN timestamps;  Change sorting to server side in SQL statement and limit?
         let defaultSorted = allTickets.sort((one, two) => {
           return two.id - one.id;
         });
@@ -41,24 +34,11 @@ function UserContextProvider(props) {
     fetchTickets();
   }, [mysqlUserTickets]);
 
-  //  async function getAllTickets() {
-  //   try {
-  //     let ticketsUrl = `http://10.195.103.107:3075/api/tickets`;
-  //     let response = await fetch(ticketsUrl);
-  //     let allTickets = await response.json();
-
-  //     // todo:sort based on NOT CLOSED THEN timestamps
-  //     let defaultSorted = allTickets.sort((one, two) => {
-  //       return two.id - one.id;
-  //     });
-  //     console.log(defaultSorted);
-  //     if (response.ok) {
-  //       setmysqlUserTickets([...defaultSorted]);
-  //     }
-  //   } catch (error) {
-  //     console.error({ error });
-  //     setmysqlUserTickets([]);
-  //   }
+  let barIndex;
+  let defaultuserId; //i.e. the current auth0 user with pipe removed
+  // if (user) {
+  //   barIndex = user.sub.indexOf('|') + 1;
+  //   defaultuserId = user.sub.substring(barIndex);
   // }
 
   function reduceAuthSubToNumbers(sub) {
@@ -81,7 +61,6 @@ function UserContextProvider(props) {
       console.log(error);
       setmysqlUser({});
     }
-    // todo: SOMETHING IS AMISS HERE; UNEXPECTED END OF JOSN INPUT;
   }
 
   async function getDbUsersTickets(userId = reduceAuthSubToNumbers(user.sub)) {
@@ -90,7 +69,7 @@ function UserContextProvider(props) {
       let response = await fetch(ticketsUrl);
       let sqlUsersTickets = await response.json();
 
-      // todo:sort based on NOT CLOSED THEN timestamps
+      // todo:change sorting to server side with sql statemnt?
       let defaultSorted = sqlUsersTickets.sort((one, two) => {
         return two.id - one.id;
       });

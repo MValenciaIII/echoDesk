@@ -1,8 +1,13 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '../context/dbUserContext';
-import SubServiceType from '../utils/ticketCategories';
-import { WarningIcon } from './Icons';
+import {
+  subServiceTypes,
+  PrimaryServiceCategories,
+  ThirdLevelServiceDetails,
+} from '../utils/ticketCategories';
+
 import {
   departmentWordToValue,
   locationWordToValue,
@@ -11,15 +16,20 @@ import {
 // docs to package here; https://www.npmjs.com/package/react-toastify
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { inputTicketSchema } from '../constants/formValidationSchemas';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function InputTicketForm() {
-  const { register, handleSubmit, watch, errors, reset } = useForm();
+  const { register, handleSubmit, watch, errors, reset } = useForm({
+    resolver: yupResolver(inputTicketSchema),
+  });
   const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
+  console.log(mysqlUser);
 
   // watch input value by passing the name of it, second param is default
   const mainServicetype = watch('service_id', '1');
+  const secondaryServicetype = watch('service_details_id', '1');
 
-  //   todo: push to DB;   May need to move ticket state up into a context provider?
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
   async function onSubmit(data, event) {
     // todo: REMOVE DEBUGGER WHEN NEEDED;
@@ -63,17 +73,6 @@ export default function InputTicketForm() {
       console.warn(error);
     }
   }
-  // todo: extract to a util to import wherever this a reactHook form likely; Don't forget you can search references; ~wk 3-15;
-  function ErrorMessage(prop, subject) {
-    if (errors[prop]) {
-      return (
-        <p className="text-red-700">
-          <WarningIcon />
-          {subject} is required
-        </p>
-      );
-    }
-  }
 
   return (
     <form className="p-4 bg-gray-800 " onSubmit={handleSubmit(onSubmit)}>
@@ -96,10 +95,13 @@ export default function InputTicketForm() {
             name="client_full_name"
             type="text"
             placeholder="Your name"
-            ref={register({ required: true })}
+            ref={register()}
           />
-          {ErrorMessage('client_full_name', 'Your name')}
+          {errors.client_full_name?.message && (
+            <ErrorMessage message={errors.client_full_name.message} />
+          )}
         </label>
+
         {/* //@@ DEPARTMENT */}
         <label className="block mt-3">
           Department
@@ -109,25 +111,15 @@ export default function InputTicketForm() {
             }
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="department_id"
-            ref={register({ required: true })}
+            ref={register()}
           >
-            <option value="1">Executive </option>
-            <option value="2">Preparedness </option>
-            <option value="3">Mitigation </option>
-            <option value="4">Warehouse </option>
-            <option value="5">Support Services </option>
-            <option value="6">Human Resources </option>
-            <option value="7">Maintenance </option>
-            <option value="8">Recovery </option>
-            <option value="9">Field Services </option>
-            <option value="10">External Affairs </option>
-            <option value="11">Logistics </option>
-            <option value="12">Operations </option>
-            <option value="13">Individual Assistance</option>
-            <option value="14">Information Technology</option>
+            <PrimaryServiceCategories />
           </select>
+          {errors.department_id?.message && (
+            <ErrorMessage message={errors.department_id.message} />
+          )}
         </label>
-        {ErrorMessage('Department')}
+
         {/* //@@ Location/ */}
         <label className="block mt-3">
           Location
@@ -135,40 +127,46 @@ export default function InputTicketForm() {
             defaultValue={mysqlUser && locationWordToValue(mysqlUser.location)}
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="location_id"
-            ref={register({ required: true })}
+            ref={register()}
           >
             <option value="1">HQ(Pearl)</option>
             <option value="2">Warehouse(Byram)</option>
             <option value="3">Bolton Building (Biloxi)</option>
           </select>
+          {errors.location_id?.message && (
+            <ErrorMessage message={errors.location_id.message} />
+          )}
         </label>
-        {ErrorMessage('Location')}
-        {/* //@@ Phone */}
+
+        {/* //@@ PHONE */}
         <label className="block mt-3">
           Phone Number
-          {/* //todo add validation here? */}
           <input
             defaultValue={mysqlUser && mysqlUser.mobile_phone}
             name="client_phone_number"
             type="tel"
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Phone Number')}
+        {errors.client_phone_number?.message && (
+          <ErrorMessage message={errors.client_phone_number.message} />
+        )}
+
         {/* //@@ Email */}
         <label className="block mt-3">
           Email
-          {/* //todo add validation here? */}
           <input
             defaultValue={mysqlUser && mysqlUser.email}
             name="email"
             type="text"
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Email')}
+        {errors.email?.message && (
+          <ErrorMessage message={errors.email.message} />
+        )}
         {/* //@@ Subject */}
         <label className="block mt-3">
           Subject
@@ -176,70 +174,111 @@ export default function InputTicketForm() {
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="subject"
             type="text"
-            ref={register({ required: true })}
+            ref={register()}
           />
         </label>
-        {ErrorMessage('Subject')}
+        {errors.subject?.message && (
+          <ErrorMessage message={errors.subject.message} />
+        )}
         {/* //@@Service type */}
         <label className="block mt-3">
           Service Type
           <select
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="service_id"
-            ref={register({ required: true })}
+            ref={register()}
           >
             {/* // todo:refactor options lists to external components for singularity of data;  ALSO located in ticket.jsx can use the constants folder for such;*/}
-            <option value="1">Building</option>
-            <option value="2">IT</option>
-            <option value="3">Communications</option>
-            <option value="4">GIS</option>
-            <option value="5">Employee Setup</option>
-            <option value="6">Wasp Inventory System</option>
-            <option value="7">Surveilance Camera System</option>
-            <option value="8">Training</option>
-            <option value="9">Thermoscan Account</option>
+            <PrimaryServiceCategories />
           </select>
         </label>
-        {ErrorMessage('Service Type')}
+        {errors.service_id?.message && (
+          <ErrorMessage message={errors.service_id.message} />
+        )}
         {/* //@@Sub-Service type */}
         <label className="block mt-3 w-52 lg:w-72">
           Detail:
           <select
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="service_details_id"
-            ref={register({ required: true })}
+            ref={register()}
           >
-            {SubServiceType(mainServicetype)}
+            {subServiceTypes(mainServicetype)}
           </select>
         </label>
-        {ErrorMessage('Service Detail')}
+        {errors.service_details_id?.message && (
+          <ErrorMessage message={errors.service_details_id.message} />
+        )}
+
+        {/* //todo: try to make coordinated thing later; */}
+        {/* //@@ THIRD LEVEL SERVICE DETAILS */}
+        {/* //@@Sub-Service type */}
+        {/* {ThirdLevelServiceDetails(secondaryServicetype) && (
+          <label className="block mt-3 w-52 lg:w-72">
+            Specific Service;
+            <select
+              className="block px-2 py-1 text-black rounded w-52 lg:w-72"
+              name="specific_service"
+              ref={register()}
+            >
+              {ThirdLevelServiceDetails(secondaryServicetype)}
+            </select>
+          </label>
+        )} */}
+        {/* {errors.specific_service?.message && (
+          <ErrorMessage message={errors.specific_service.message} />
+        )} */}
+
         {/* //@@ Priority/ */}
         <label className="block mt-3">
           Priority
           <select
             className="block px-2 py-1 text-black rounded w-52 lg:w-72"
             name="priority_id"
-            ref={register({ required: true })}
+            ref={register()}
           >
             <option value="1">Low</option>
             <option value="2">Medium</option>
             <option value="3">High</option>
             <option value="4">Urgent</option>
           </select>
+          {errors.priority_id?.message && (
+            <ErrorMessage message={errors.priority_id.message} />
+          )}
         </label>
+
+        {/* //@@ Priority/ */}
+        {mysqlUser.isAdmin && (
+          <label className="block mt-3">
+            Assign To Agent
+            <select
+              className="block px-2 py-1 text-black rounded w-52 lg:w-72"
+              name="agent_id"
+              ref={register()}
+            >
+              {/* //todo: ADD IN AGENTS OPTIONS HERE FROM AN EXTERNAL SOURCE OF TRUTH THAT WILL BE AVAILABLE TO HERE AND THE TICKET ITSELF FOR CHANGING */}
+            </select>
+            {errors.priority_id?.message && (
+              <ErrorMessage message={errors.priority_id.message} />
+            )}
+          </label>
+        )}
+
         {/* //@@ Description */}
         <label className="block mt-3">
           Description
           <textarea
             className="block p-2 text-black py-0.5 px-1"
-            ref={register({ required: true })}
+            ref={register()}
             name="description"
             cols="38"
             rows="5"
             placeholder="Please write a short description here"
           />
         </label>
-        {ErrorMessage('Service Description')}
+        {errors.description?.message && (
+          <ErrorMessage message={errors.description.message} />
+        )}
         {/* <label className="block mt-3" htmlFor="fileUpload">
           Please attach any relevant files here;
         </label>

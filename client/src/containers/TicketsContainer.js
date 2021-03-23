@@ -15,13 +15,11 @@ export default function TicketsContainer(props) {
   let { mysqlUser, mysqlUserTickets, auth0UserMeta, allTickets } = useContext(
     UserContext
   );
+
+  // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0;
   const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
 
-  // todo: fix based on auth redirect;
-
-  let chosenTickets = auth0UserMeta?.app_metadata?.isAdmin
-    ? allTickets
-    : mysqlUserTickets;
+  let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
 
   const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
 
@@ -37,7 +35,11 @@ export default function TicketsContainer(props) {
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
           <Ticket.Container key={ticket.id}>
-            <Ticket id={ticket.id} tickets={mysqlUserTickets}>
+            <Ticket
+              id={ticket.id}
+              tickets={mysqlUserTickets}
+              status={ticket.status_id}
+            >
               <Ticket.AgentStatus
                 status={ticket.status_id}
                 priority={ticket.priority_id}
@@ -60,6 +62,7 @@ export default function TicketsContainer(props) {
               <Ticket.ContactInfo
                 contactPhone={ticket.client_phone_number}
                 contactEmail={ticket.email}
+                title={ticket.subject}
               />
               <Ticket.MakeChangesButtons />
             </Ticket>

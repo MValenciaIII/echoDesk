@@ -2,7 +2,7 @@ import React from 'react';
 
 //@# this utility file is used for creating coordinated select service forms along with the watch method on react hook forms;
 
-export default function subServiceTypes(mainCategoryId) {
+export function subServiceTypes(mainCategoryId) {
   switch (mainCategoryId) {
     case '1':
       return <Building />;
@@ -115,6 +115,146 @@ function Thermoscan(props) {
     <>
       <option value="34">Photo Access</option>
       <option value="35">Account Removal</option>
+    </>
+  );
+}
+
+// todo: finish filling out from freshdesk
+
+export function PrimaryServiceCategories() {
+  return (
+    <>
+      <option value="1">Building</option>
+      <option value="2">IT</option>
+      <option value="3">Communications</option>
+      <option value="4">GIS</option>
+      <option value="5">Employee Setup</option>
+      <option value="6">Wasp Inventory System</option>
+      <option value="7">Surveilance Camera System</option>
+      <option value="8">Training</option>
+      <option value="9">Thermoscan Account</option>
+    </>
+  );
+}
+
+export function ThirdLevelServiceDetails(secondaryCategoryId) {
+  switch (secondaryCategoryId) {
+    case '1':
+      return <BuildingMaintenanceOptions />;
+    case '2':
+      return <BuildingElectricalOptions />;
+    case '3':
+      return <BuildingAirOptions />;
+    case '4':
+      return null;
+    case '5':
+      return <ItEmailOptionsgit />;
+    case '6':
+      return <ItPrinterOptions />;
+    case '7':
+      return <ItZoomOptions />;
+    case '8':
+      return <ItWebsiteOptions />;
+    case '9':
+      return <ItSoftwareOptions />;
+    case '10':
+      return <ItComputerOptions />;
+    default:
+      return null;
+  }
+}
+
+function BuildingMaintenanceOptions() {
+  return (
+    <>
+      {/* Building Maintenance */}
+      <option value="1">Door Hardware Issues</option>
+      <option value="2">Key Request</option>
+      <option value="3">Janitor/Cleaning Request</option>
+    </>
+  );
+}
+
+function BuildingElectricalOptions() {
+  return (
+    <>
+      {/* Electrical Issues */}
+      <option value="">Lighting Problems</option>
+      <option value="">Switch/Outlet Problems</option>
+      <option value="">Power Outage</option>
+    </>
+  );
+}
+
+function BuildingAirOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">Leak/Condensation Problem</option>
+      <option value="">Vent Problem</option>
+      <option value="">No AC</option>
+    </>
+  );
+}
+
+function ItEmailOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">New Account</option>
+      <option value="">Name Change</option>
+      <option value="">Delete Account</option>
+    </>
+  );
+}
+function ItPrinterOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">Need Toner</option>
+      <option value="">Printer Malfunction</option>
+      <option value="">Service Request Indication on Device</option>
+      <option value="">New Device Install</option>
+      <option value="">Scan Folder Install</option>
+    </>
+  );
+}
+function ItZoomOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">Account Problem</option>
+      <option value="">Account Request</option>
+    </>
+  );
+}
+function ItWebsiteOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">(www.msema.org) Problem</option>
+      <option value="">(my.msema.org) MB3 Problem</option>
+      <option value="">(mema.freshdesk.com) Problem</option>
+    </>
+  );
+}
+function ItSoftwareOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">Microsoft O365 Issues</option>
+      <option value="">Microsoft Teams Issues</option>
+      <option value="">Windows Update Problems</option>
+    </>
+  );
+}
+function ItComputerOptions() {
+  return (
+    <>
+      {/* Air Conditioning Issues */}
+      <option value="">Monitor Problems</option>
+      <option value="">Device will not Power On</option>
+      <option value="">Device Compatibility Issue</option>
     </>
   );
 }

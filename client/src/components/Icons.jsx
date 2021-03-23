@@ -20,3 +20,56 @@ export function WarningIcon({ ...restProps }) {
     </svg>
   );
 }
+
+export function UserIcon({ ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="inline-block w-4 m-1 align-middle"
+    >
+      <title>User Icon</title>
+
+      <path d="M18 22.082v-1.649c2.203-1.241 4-4.337 4-7.432 0-4.971 0-9-6-9s-6 4.029-6 9c0 3.096 1.797 6.191 4 7.432v1.649c-6.784 0.555-12 3.888-12 7.918h28c0-4.030-5.216-7.364-12-7.918z"></path>
+    </svg>
+  );
+}
+
+export function LocationIcon({ ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="inline-block w-4 m-1 align-middle"
+    >
+      <title>Location Icon</title>
+
+      <path d="M16 0c-5.523 0-10 4.477-10 10 0 10 10 22 10 22s10-12 10-22c0-5.523-4.477-10-10-10zM16 16c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z"></path>
+    </svg>
+  );
+}
+export function OfficeIcon({ ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className="inline-block w-4 m-1 align-middle"
+    >
+      <title>Office Icon</title>
+
+      <path d="M0 32h16v-32h-16v32zM10 4h4v4h-4v-4zM10 12h4v4h-4v-4zM10 20h4v4h-4v-4zM2 4h4v4h-4v-4zM2 12h4v4h-4v-4zM2 20h4v4h-4v-4zM18 10h14v2h-14zM18 32h4v-8h6v8h4v-18h-14z"></path>
+    </svg>
+  );
+}
