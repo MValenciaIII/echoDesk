@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import TicketForm from '../components/TicketForm';
+import TicketForm from '../containers/TicketFormContainer';
 import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Loading from '../components/Loading';
@@ -45,7 +45,12 @@ export default function AgentInputTicket(props) {
   } else {
     return (
       <HeaderFooter>
-        <TicketForm />
+        <div
+          id="agentTicketInputContainer"
+          className={'bg-gray-800 p-8 w-full'}
+        >
+          <TicketForm />
+        </div>
       </HeaderFooter>
     );
   }

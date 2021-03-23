@@ -137,6 +137,58 @@ export function PrimaryServiceCategories() {
   );
 }
 
+export function DepartmentOptions() {
+  return (
+    <>
+      <option value="1">Executive</option>
+      <option value="2">Preparedness</option>
+      <option value="3">Mitigation</option>
+      <option value="4">Warehouse</option>
+      <option value="5">Support Services</option>
+      <option value="6">Human Resources</option>
+      <option value="7">Maintenance</option>
+      <option value="8">Recovery</option>
+      <option value="9">Field Services</option>
+      <option value="10">External Affairs</option>
+      <option value="11">Logistics</option>
+      <option value="12">Operations</option>
+      <option value="13">Individual Assistance</option>
+      <option value="13">Information Technology</option>
+    </>
+  );
+}
+
+export function LocationOptions() {
+  return (
+    <>
+      <option value="1">HQ(Pearl)</option>
+      <option value="2">Warehouse(Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+    </>
+  );
+}
+export function PriorityOptions() {
+  return (
+    <>
+      <option value="1">Low</option>
+      <option value="2">Medium</option>
+      <option value="3">High</option>
+      <option value="4">Urgent</option>
+    </>
+  );
+}
+
+export function AgentOptions() {
+  return (
+    <>
+      <option value="1">Charlieyya Smith</option>
+      <option value="2">Gray</option>
+      <option value="3">Michael Valencia</option>
+      <option value="4">Will Kelly</option>
+    </>
+  );
+}
+
 export function ThirdLevelServiceDetails(secondaryCategoryId) {
   switch (secondaryCategoryId) {
     case '1':
@@ -148,7 +200,7 @@ export function ThirdLevelServiceDetails(secondaryCategoryId) {
     case '4':
       return null;
     case '5':
-      return <ItEmailOptionsgit />;
+      return <ItEmailOptions />;
     case '6':
       return <ItPrinterOptions />;
     case '7':
