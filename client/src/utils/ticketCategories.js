@@ -148,7 +148,7 @@ export function ThirdLevelServiceDetails(secondaryCategoryId) {
     case '4':
       return null;
     case '5':
-      return <ItEmailOptionsgit />;
+      return <ItEmailOptions />;
     case '6':
       return <ItPrinterOptions />;
     case '7':

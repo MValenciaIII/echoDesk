@@ -32,7 +32,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
 
   async function onSubmit(data, event) {
     //todo: remove debugger before prod;
-    // debugger;
+    debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
@@ -128,7 +128,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
       try {
         let valueToSubmit = { ...data };
         let response = await fetch(
-          `http://10.195.103.107:3075/api/users/update/${userSub}}`,
+          `http://10.195.103.107:3075/api/users/update/${userSub}`,
           {
             method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
             headers: {
