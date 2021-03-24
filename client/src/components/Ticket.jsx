@@ -29,7 +29,7 @@ export default function Ticket({
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
   const [isEditingTicket, setisEditingTicket] = useState(false);
-  const { register, handleSubmit, watch, errors, reset } = useForm();
+  const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
 
   let childrenWithProps = React.Children.map(children, (child) => {

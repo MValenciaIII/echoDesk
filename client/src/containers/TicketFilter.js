@@ -10,7 +10,7 @@ export default function agentTicketFilterContainer({ children, ...restProps }) {
 
   const labelClassNames = 'block mt-3';
 
-  const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
+  const inputClassNames = 'block p-1 rounded-sm text-black w-56  lg:w-72';
 
   return (
     <AgentTicketFilterForm onSubmit={onSubmit} classNames={formClassname}>

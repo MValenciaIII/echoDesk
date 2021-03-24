@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { subServiceTypes } from '../utils/ticketCategories';
 import ErrorMessage from '../components/ErrorMessage';
 export default function ProfileSettingsForm({
   children,
@@ -16,18 +15,24 @@ export default function ProfileSettingsForm({
   });
   const {
     handleSubmit,
-    watch,
     errors,
     reset,
     formState: { isSubmitSuccessful },
   } = methods;
-  const mainServicetype = watch('service_id', '1');
+  const [isEditing, setisEditing] = useState(false);
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ ...defaultValues });
+      setisEditing(false);
     }
-  }, [defaultValues, isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful, reset]);
+
+  function cancelProfileEdits() {
+    if (isEditing) {
+      reset();
+      setisEditing(!isEditing);
+    }
+  }
 
   return (
     //onSubmit will be invoked from parent when form and inputs are put together;
@@ -43,12 +48,41 @@ export default function ProfileSettingsForm({
                 ...child.props,
                 register: methods.register,
                 errors,
-                mainServicetype,
                 key: child.props.name,
+                isEditing,
               },
             })
           : child;
       })}
+      <button
+        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
+        className={` mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
+          isEditing ? 'hidden' : 'block'
+        }`}
+        onClick={(event) => {
+          setisEditing(!isEditing);
+        }}
+      >
+        Edit
+      </button>
+      <button
+        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
+        className={`mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
+          isEditing ? 'block' : 'hidden'
+        }`}
+        onClick={(event) => {
+          cancelProfileEdits();
+        }}
+      >
+        Cancel Edits
+      </button>
+      <input
+        className={`mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
+          isEditing ? 'block' : 'hidden'
+        }`}
+        name="Submit"
+        type="submit"
+      />
     </form>
   );
 }
@@ -60,10 +94,8 @@ ProfileSettingsForm.Input = function InputTicketFormInput({
   labelClassNames,
   inputClassNames,
   type,
-  watch,
   errors,
-  mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
-  rules,
+  isEditing,
   ...rest
 }) {
   return (
@@ -71,6 +103,7 @@ ProfileSettingsForm.Input = function InputTicketFormInput({
       <label className={labelClassNames}>
         {label}
         <input
+          readOnly={isEditing ? false : true}
           name={name}
           ref={register}
           {...rest}
@@ -90,22 +123,20 @@ ProfileSettingsForm.Select = function InputTicketFormSelect({
   labelClassNames,
   inputClassNames,
   useWatchOptions,
-  mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
+  isEditing,
   ...rest
 }) {
-  function whichOptions() {
-    if (useWatchOptions) {
-      return subServiceTypes(mainServicetype);
-    } else {
-      return options;
-    }
-  }
-
   return (
     <label htmlFor={name} className={labelClassNames}>
       {label}
-      <select className={inputClassNames} name={name} ref={register} {...rest}>
-        {whichOptions()}
+      <select
+        disabled={isEditing ? false : true}
+        className={inputClassNames}
+        name={name}
+        ref={register}
+        {...rest}
+      >
+        {options}
       </select>
     </label>
   );
@@ -141,7 +172,9 @@ ProfileSettingsForm.Heading = function InputTicketFormHeading({
   ...rest
 }) {
   return (
-    <h2 className="mx-auto text-lg font-bold text-center">Submit a Ticket</h2>
+    <h2 className="mx-auto text-lg font-bold text-center">
+      Update your profile settings
+    </h2>
   );
 };
 ProfileSettingsForm.Submit = function InputTicketFormSubmit({
