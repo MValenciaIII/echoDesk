@@ -1,7 +1,7 @@
 import { React } from 'react';
 
 import Ticketcontainer from './TicketsContainer';
-import InputTicketForm from '../components/TicketForm';
+import InputTicketForm from '../containers/TicketFormContainer';
 import Dashboard from '../components/DashBoard';
 
 // reminder: containers props are coming from pages folder;  I.e. ClientHome would be the caller here;

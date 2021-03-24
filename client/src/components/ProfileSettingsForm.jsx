@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { subServiceTypes } from '../utils/ticketCategories';
 import ErrorMessage from '../components/ErrorMessage';
-export default function InputTicketForm({
+export default function ProfileSettingsForm({
   children,
   onSubmit,
   classNames,
@@ -53,7 +53,7 @@ export default function InputTicketForm({
   );
 }
 
-InputTicketForm.Input = function InputTicketFormInput({
+ProfileSettingsForm.Input = function InputTicketFormInput({
   register,
   name,
   label,
@@ -82,7 +82,7 @@ InputTicketForm.Input = function InputTicketFormInput({
   );
 };
 
-InputTicketForm.Select = function InputTicketFormSelect({
+ProfileSettingsForm.Select = function InputTicketFormSelect({
   label,
   register,
   options,
@@ -111,7 +111,7 @@ InputTicketForm.Select = function InputTicketFormSelect({
   );
 };
 
-InputTicketForm.TextArea = function InputTicketFormTextArea({
+ProfileSettingsForm.TextArea = function InputTicketFormTextArea({
   register,
   name,
   label,
@@ -136,7 +136,7 @@ InputTicketForm.TextArea = function InputTicketFormTextArea({
   );
 };
 
-InputTicketForm.Heading = function InputTicketFormHeading({
+ProfileSettingsForm.Heading = function InputTicketFormHeading({
   inputClassNames,
   ...rest
 }) {
@@ -144,7 +144,7 @@ InputTicketForm.Heading = function InputTicketFormHeading({
     <h2 className="mx-auto text-lg font-bold text-center">Submit a Ticket</h2>
   );
 };
-InputTicketForm.Submit = function InputTicketFormSubmit({
+ProfileSettingsForm.Submit = function InputTicketFormSubmit({
   name,
   classNames,
   register,

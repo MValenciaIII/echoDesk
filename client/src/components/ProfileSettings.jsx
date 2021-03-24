@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { WarningIcon } from '../components/Icons';
+
 import { UserContext } from '../context/dbUserContext';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -63,6 +63,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         console.log(result);
         if (!result.error) {
           await setmysqlUser(valueToSubmit);
+          console.log(mysqlUser);
           toast.success('Profile Settings Created', {
             position: 'top-right',
             autoClose: 1000,
@@ -141,6 +142,7 @@ export default function ProfileSetttings({ userSub, setmysqlUser, mysqlUser }) {
         console.log(result);
         if (!result.error) {
           await setmysqlUser(valueToSubmit);
+          console.log(mysqlUser);
           toast.success('Profile Settings Updated', {
             position: 'top-right',
             autoClose: 1000,

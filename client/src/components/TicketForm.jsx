@@ -28,7 +28,8 @@ export default function InputTicketForm() {
 
   // watch input value by passing the name of it, second param is default
   const mainServicetype = watch('service_id', '1');
-  const secondaryServicetype = watch('service_details_id', '1');
+  //todo: for 3rd dropdown of details
+  // const secondaryServicetype = watch('service_details_id', '1');
 
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
   async function onSubmit(data, event) {
