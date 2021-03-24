@@ -54,6 +54,7 @@ export default function Ticket({
   async function onSubmit(data, event) {
     debugger;
     event.preventDefault();
+    data.id = id; //attaching ticket id to the request to update via id;
 
     try {
       let response = await fetch(
@@ -403,7 +404,6 @@ Ticket.Description = function TicketDescription({
 
 Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   children,
-  assignedTo,
   handleChange,
   id,
   status,
@@ -411,6 +411,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   agentAssignedTo,
   ...restProps
 }) {
+  // debugger;
   return (
     <div
       data-id="agentAssignedTo"
@@ -420,14 +421,14 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
         <UserIcon />
         <select
           // todo: activate this ref when agent assigning gets set up
-          // ref={register()}
+          ref={register()}
           name="agent_id"
-          defaultValue={status}
+          defaultValue={String(agentAssignedTo)}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700
          `}
           // onChange={(event) => }
         >
-          {AssignToAgentSelect()}
+          {<AssignToAgentSelect />}
         </select>
       </label>
     </div>
@@ -484,7 +485,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
           ref={register()}
           name="location_id"
           id=""
-          defaultValue={locationIdToWord(String(mainLocation))}
+          defaultValue={mainLocation}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700`}
         >
           {TicketLocationsOptions()}

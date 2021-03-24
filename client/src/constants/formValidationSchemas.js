@@ -20,7 +20,8 @@ export const profileSchema = yup.object().shape({
     .required('Email is required')
     .trim()
     .max(35),
-  department_id: yup.number().required(),
+  department_id: yup.string().required(),
+  location_id: yup.string().required(),
   mobile_phone: yup
     .string()
     .required()

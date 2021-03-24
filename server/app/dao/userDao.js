@@ -54,7 +54,8 @@ class UserDao {
       !req.body.location ||
       !req.body.title ||
       !req.body.department_id ||
-      !req.body.id
+      !req.body.id || 
+      !req.body.isAdmin
     ) {
       res.json({
         error: true,
