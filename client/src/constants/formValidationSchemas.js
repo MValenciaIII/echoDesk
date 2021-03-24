@@ -20,7 +20,8 @@ export const profileSchema = yup.object().shape({
     .required('Email is required')
     .trim()
     .max(35),
-  department_id: yup.number().required(),
+  department_id: yup.string().required(),
+  location_id: yup.string().required(),
   mobile_phone: yup
     .string()
     .required()
@@ -41,7 +42,6 @@ export const inputTicketSchema = yup.object().shape({
     .required('Full Name is required')
     .trim()
     .max(25, 'The max length is 45'),
-  title: yup.string().required('Title is required').trim().max(25),
   email: yup
     .string()
     .email('Must be a valid email')
