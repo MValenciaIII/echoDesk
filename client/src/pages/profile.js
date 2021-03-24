@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 // import getDbUser from '../auth/getDbUser';
 import { UserContext } from '../context/dbUserContext';
 // import Select from 'react-select';  //? NOT going to use I think; hard to use in conjuction with REACT hook form to me;  WK 3/3/21
-import ProfileSettingsForm from '../components/ProfileSettings';
+import ProfileSettingsForm from '../containers/ProfileSettingsContainer';
 import Loading from '../components/Loading';
 import HeaderFooter from '../containers/HeaderFooter';
 import Auth0subConverter from '../utils/Auth0subConverter';
@@ -13,13 +13,7 @@ export default function ProfileSettings() {
   const { user } = useAuth0();
 
   //sat
-  let {
-    mysqlUser,
-    setmysqlUser,
-    getDbUser,
-    auth0UserMeta,
-    getAuth0UserMeta,
-  } = useContext(UserContext);
+  let { mysqlUser, setmysqlUser, getDbUser } = useContext(UserContext);
 
   //! the | get's converted in a query string to a code symbol; Thus, avoiding storing the | and just stoiring the num;
   let userId = Auth0subConverter(user);
@@ -38,11 +32,9 @@ export default function ProfileSettings() {
     return (
       <HeaderFooter>
         <ProfileSettingsForm
-          auth0UserWithMeta={auth0UserMeta}
           mysqlUser={mysqlUser}
           setmysqlUser={setmysqlUser}
           userSub={userId}
-          getAuth0UserMeta={getAuth0UserMeta}
         />
       </HeaderFooter>
     );
