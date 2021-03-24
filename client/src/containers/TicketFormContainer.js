@@ -46,7 +46,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
 
   async function onSubmit(data, event) {
     // todo: REMOVE DEBUGGER WHEN NEEDED;
-    debugger;
+    // debugger;
 
     event.preventDefault();
 

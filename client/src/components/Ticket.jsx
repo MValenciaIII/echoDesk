@@ -6,6 +6,7 @@ import getTimeFxn from '../utils/timeConverter.js';
 import {
   subServiceTypes,
   PrimaryServiceCategories,
+  PriorityOptions,
 } from '../utils/ticketCategories';
 import {
   departmentIdToValue,
@@ -52,7 +53,8 @@ export default function Ticket({
   }
 
   async function onSubmit(data, event) {
-    debugger;
+    //todo: remove debugger later;
+    // debugger;
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
@@ -325,25 +327,14 @@ Ticket.AgentStatus = function TicketAgentStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          ref={register()}
+          ref={register}
           className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
           onChange={(event) => changePriorityStatus(event)}
         >
-          <option className="bg-gray-800" value="1">
-            Low
-          </option>
-          <option className="bg-gray-800" value="2">
-            Medium
-          </option>
-          <option className="bg-gray-800" value="3">
-            High
-          </option>
-          <option className="bg-gray-800" value="4">
-            Urgent
-          </option>
+          <PriorityOptions />
         </select>
       </div>
     </div>

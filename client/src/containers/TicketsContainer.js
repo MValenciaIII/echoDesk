@@ -8,10 +8,6 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  const [currentPage, setCurrentPage] = useState(0);
-  const PER_PAGE = 15;
-  const offset = currentPage * PER_PAGE;
-
   let { mysqlUser, mysqlUserTickets, auth0UserMeta, allTickets } = useContext(
     UserContext
   );
@@ -22,12 +18,14 @@ export default function TicketsContainer(props) {
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
   console.log(chosenTickets);
 
+  // React paginate
+  const [currentPage, setCurrentPage] = useState(0);
+  const PER_PAGE = 15;
+  const offset = currentPage * PER_PAGE;
   const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
-
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
   }
-
   // fakeTickets for when api is down;
   // mysqlUserTickets
 
@@ -110,7 +108,11 @@ export default function TicketsContainer(props) {
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
           <Ticket.Container key={ticket.id}>
-            <Ticket id={ticket.id} tickets={mysqlUserTickets}>
+            <Ticket
+              id={ticket.id}
+              tickets={mysqlUserTickets}
+              status={ticket.status_id}
+            >
               <Ticket.Status
                 status={ticket.status_id}
                 priority={ticket.priority_id}

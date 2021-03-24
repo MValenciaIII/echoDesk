@@ -63,7 +63,6 @@ InputTicketForm.Input = function InputTicketFormInput({
   watch,
   errors,
   mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
-  rules,
   ...rest
 }) {
   return (

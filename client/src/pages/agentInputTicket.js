@@ -47,7 +47,7 @@ export default function AgentInputTicket(props) {
       <HeaderFooter>
         <div
           id="agentTicketInputContainer"
-          className={'bg-gray-800 p-8 w-full'}
+          className={'bg-gray-800 p-8 w-full flex-grow'}
         >
           <TicketForm />
         </div>

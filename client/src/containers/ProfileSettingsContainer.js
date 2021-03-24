@@ -50,7 +50,7 @@ export default function TicketFormContainer({
 
   async function onSubmit(data, event) {
     //todo: remove debugger before prod;
-    debugger;
+    // debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
@@ -187,7 +187,10 @@ export default function TicketFormContainer({
   }
 
   return (
-    <div id="ProfileSettingsFormContainer" className="w-full p-8 bg-gray-800 ">
+    <div
+      id="ProfileSettingsFormContainer"
+      className="flex-grow w-full p-8 bg-gray-800 "
+    >
       <ProfileSettingsForm
         onSubmit={onSubmit}
         classNames={formClassname}
@@ -244,12 +247,6 @@ export default function TicketFormContainer({
           name={'office_phone'}
           label="Phone Number"
           type={'tel'}
-          labelClassNames={labelClassNames}
-          inputClassNames={inputClassNames}
-        />
-        <ProfileSettingsForm.Input
-          name={'email'}
-          label="Email"
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}
         />

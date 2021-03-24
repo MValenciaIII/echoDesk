@@ -25,7 +25,7 @@ export default function ProfileSettingsForm({
     if (isSubmitSuccessful) {
       setisEditing(false);
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
   function cancelProfileEdits() {
     if (isEditing) {
