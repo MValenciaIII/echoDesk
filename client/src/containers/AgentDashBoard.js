@@ -1,6 +1,6 @@
 import { React } from 'react';
-import Ticketcontainer from '../containers/TicketsContainer';
-import TicketFilter from '../containers/TicketFilter';
+import Ticketcontainer from './TicketsContainer';
+import TicketFilter from './TicketFilter';
 import Dashboard from '../components/DashBoard';
 
 //called by agentHome.js PAGE;

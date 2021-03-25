@@ -6,6 +6,7 @@ import getTimeFxn from '../utils/timeConverter.js';
 import {
   subServiceTypes,
   PrimaryServiceCategories,
+  PriorityOptions,
 } from '../utils/ticketCategories';
 import {
   departmentIdToValue,
@@ -29,7 +30,7 @@ export default function Ticket({
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
   const [isEditingTicket, setisEditingTicket] = useState(false);
-  const { register, handleSubmit, watch, errors, reset } = useForm();
+  const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
 
   let childrenWithProps = React.Children.map(children, (child) => {
@@ -52,8 +53,10 @@ export default function Ticket({
   }
 
   async function onSubmit(data, event) {
-    debugger;
+    //todo: remove debugger later;
+    // debugger;
     event.preventDefault();
+    data.id = id; //attaching ticket id to the request to update via id;
 
     try {
       let response = await fetch(
@@ -324,25 +327,14 @@ Ticket.AgentStatus = function TicketAgentStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          ref={register()}
+          ref={register}
           className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
           onChange={(event) => changePriorityStatus(event)}
         >
-          <option className="bg-gray-800" value="1">
-            Low
-          </option>
-          <option className="bg-gray-800" value="2">
-            Medium
-          </option>
-          <option className="bg-gray-800" value="3">
-            High
-          </option>
-          <option className="bg-gray-800" value="4">
-            Urgent
-          </option>
+          <PriorityOptions />
         </select>
       </div>
     </div>
@@ -403,7 +395,6 @@ Ticket.Description = function TicketDescription({
 
 Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   children,
-  assignedTo,
   handleChange,
   id,
   status,
@@ -411,6 +402,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   agentAssignedTo,
   ...restProps
 }) {
+  // debugger;
   return (
     <div
       data-id="agentAssignedTo"
@@ -420,14 +412,14 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
         <UserIcon />
         <select
           // todo: activate this ref when agent assigning gets set up
-          // ref={register()}
+          ref={register()}
           name="agent_id"
-          defaultValue={status}
+          defaultValue={String(agentAssignedTo)}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700
          `}
           // onChange={(event) => }
         >
-          {AssignToAgentSelect()}
+          {<AssignToAgentSelect />}
         </select>
       </label>
     </div>
@@ -484,7 +476,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
           ref={register()}
           name="location_id"
           id=""
-          defaultValue={locationIdToWord(String(mainLocation))}
+          defaultValue={mainLocation}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700`}
         >
           {TicketLocationsOptions()}

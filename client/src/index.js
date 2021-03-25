@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { UserContextProvider } from './context/dbUserContext';
 
+// https://auth0.com/blog/complete-guide-to-react-user-authentication/
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
