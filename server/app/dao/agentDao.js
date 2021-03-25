@@ -37,8 +37,8 @@ class AgentDao {
     let values = Object.values(req.body);
     //Required Min Data
     if (
-      !req.body.client_id ||
-      !req.body.group_id
+      !req.body.id || 
+      !req.body.client_id
     ) {
       res.json({
         error: true,
