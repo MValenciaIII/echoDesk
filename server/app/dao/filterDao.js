@@ -1,8 +1,8 @@
 const pool = require('../config/dbconfig');
-
-class TicketDao {
+                                         
+class FilterDao {
   //sometimes you have a parent dao class so its best to give the classes more define names.
-  constructor() {
+  constructor() {                                      
     this.pool = pool;
   }
 
@@ -11,7 +11,7 @@ async filterTickets(req, res) {
   let fields = Object.keys(req.query); 
   let values = Object.values(req.query); 
     let query = req.query;  
-      let tickets = await pool.query(`SELECT * from tickets WHERE ${fields.join('=? AND ')}=?`, [...values]);
+      let tickets = await pool.query(`SELECT * from tickets WHERE agent_id BETWEEN ${fields.join('=? AND')}=?`, [...values]);
       console.log(tickets);
       let files = await pool.query('Select * from files');
       let comments = await pool.query(`Select tn.id, tn.note_text, tn.client_id, tn.ticket_id, c.fname, c.lname, tn.created_at
@@ -59,4 +59,4 @@ async filterTickets(req, res) {
     });
   }
  }
-module.exports = TicketDao;
+module.exports = FilterDao;
