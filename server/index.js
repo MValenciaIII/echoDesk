@@ -18,7 +18,7 @@ app.use(bodyparser.urlencoded({
 }))
 // Database connection
 const db = mysql.createConnection({
-    host: "10.0.0.9",
+    host: "10.195.103.107",
     user: "root",
     password: "memadev",
     database: "echodeskDev"

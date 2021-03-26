@@ -7,10 +7,11 @@ class UserDao {
 
 
   findAll(req, res) {
-    let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    from clients c
-    join departments d ON c.department_id = d.id
-    join location l ON c.location_id = l.id ORDER BY c.id;`
+    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
+    // from clients c
+    // join departments d ON c.department_id = d.id
+    // join location l ON c.location_id = l.id ORDER BY c.id;`
+    let sql = `SELECT * from clients ORDER BY id;`
     this.pool.query(sql, function (err, rows) {
       if (err) {
         res.json({
@@ -25,11 +26,12 @@ class UserDao {
 
 
   findbyID(req, res, id) {
-    let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department, l.location
-    from clients c
-    join departments d ON c.department_id = d.id
-    join location l ON c.location_id = l.id
-    where c.id = ?;`;
+    // let sql = `SELECT c.id, c.fname, c.lname, c.email, c.mobile_phone, c.office_phone, c.title, d.department_id, l.location_id
+    // from clients c
+    // join departments d ON c.department_id = d.id
+    // join location l ON c.location_id = l.id
+    // where c.id = ?;`;
+    let sql = `SELECT * from clients where id =?;`
     this.pool.query(sql, [id], function (err, rows) {
       if (err) {
         res.json({
@@ -55,7 +57,8 @@ class UserDao {
       !req.body.title ||
       !req.body.department_id ||
       !req.body.id || 
-      !req.body.isAdmin
+      !req.body.isAdmin ||
+      !req.body.agent_id
     ) {
       res.json({
         error: true,
