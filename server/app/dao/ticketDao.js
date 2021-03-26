@@ -42,9 +42,12 @@ class TicketDao {
   } 
   }
 
-  // async filterAgent(req, res, agent_id, location_id, priority_id, status_id) {
+  // async filterTickets(req, res) {
   //   try {
-  //     let tickets = await pool.query(`SELECT * FROM tickets WHERE agent_id=? AND location_id=? AND priority_id=? AND status_id=?`, [agent_id],  [location_id],  [priority_id], [status_id],);
+  // let fields = Object.keys(req.query); 
+  // let values = Object.values(req.query); 
+  //   let query = req.query;  
+  //     let tickets = await pool.query(`SELECT * from tickets WHERE ${fields.join('=? AND ')}=?`, [...values]);
   //     console.log(tickets);
   //     let files = await pool.query('Select * from files');
   //     let comments = await pool.query(`Select tn.id, tn.note_text, tn.client_id, tn.ticket_id, c.fname, c.lname, tn.created_at
@@ -61,8 +64,7 @@ class TicketDao {
   // } 
   // }
 
-
-
+  
   create(req, res) {
     // let sql = "SELECT * FROM movies where id= ?";
     let fields = Object.keys(req.body);

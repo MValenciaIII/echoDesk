@@ -3,7 +3,7 @@ const util = require('util');
 
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: '10.195.103.107',
+  host: '10.0.0.9',
   user: 'root',
   password: 'memadev',
   database: 'echodeskDev',
