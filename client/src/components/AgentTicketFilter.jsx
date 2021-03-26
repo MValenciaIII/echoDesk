@@ -43,19 +43,22 @@ AgentTicketFilterForm.Input = function AgentTicketFilterInput({
   inputClassNames,
   type,
   watch,
+  label,
   ...rest
 }) {
   console.log(watch);
   return (
     <label className={labelClassNames}>
-      {name}
-      <input name={name} ref={register} {...rest} className={inputClassNames} />
+      {label && label}
+      <input
+        name={name}
+        ref={register}
+        {...rest}
+        className={inputClassNames}
+        type={type}
+      />
     </label>
   );
-};
-
-AgentTicketFilterForm.css = function AgentTicketFiltercss({ ...rest }) {
-  return <input className="block w-56 p-1 rounded-sm" />;
 };
 
 AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
@@ -64,11 +67,12 @@ AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
   name,
   labelClassNames,
   inputClassNames,
+  label,
   ...rest
 }) {
   return (
     <label htmlFor={name} className={labelClassNames}>
-      {name}
+      {label && label}
       <select
         defaultValue=""
         placeholder="any"
@@ -77,11 +81,7 @@ AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
         ref={register}
         {...rest}
       >
-        {options.map((value) => (
-          <option key={value} value={value}>
-            {value}
-          </option>
-        ))}
+        {options}
       </select>
     </label>
   );

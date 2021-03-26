@@ -59,11 +59,13 @@ export default function TicketFormContainer({
     // 1 = admin; 0 = normal client
     if (auth0UserMeta) {
       data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
+      data.agent_id = auth0UserMeta.app_metadata?.agent_id;
     } else {
       data.isAdmin = false;
+      data.agent_id = null;
     }
 
-    // Posting new Users
+    //! Posting new Users
     if (!mysqlUser.fname) {
       try {
         let valueToSubmit = { ...data };
@@ -96,10 +98,10 @@ export default function TicketFormContainer({
         if (auth0UserMeta.app_metadata?.isAdmin) {
           // !CREATING AGENTS
           try {
-            // todo: see about putting more agent meta in; doubtful for now
-            let agentData = valueToSubmit;
-            agentData.client_id = userSub;
+            // todo: see about putting more agent meta in; doubtful for now;  GROUPS
+            let agentData = {};
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
+            agentData.client_id = userSub;
 
             let agentResponse = await fetch(
               'http://10.195.103.107:3075/api/agents/create',
@@ -114,7 +116,8 @@ export default function TicketFormContainer({
             let agentResult = await agentResponse.json();
             console.log({ agentResult });
             if (!agentResult.error) {
-              await setmysqlUser(agentData);
+              await setmysqlUser(valueToSubmit);
+
               toast.success('Agent Profile Settings Created', {
                 position: 'top-right',
                 autoClose: 1000,

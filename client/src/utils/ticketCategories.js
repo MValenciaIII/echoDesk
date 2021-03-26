@@ -177,6 +177,28 @@ export function PriorityOptions() {
     </>
   );
 }
+// export function PriorityOptions() {
+//   return (
+//     <>
+//       <option value="1">Low</option>
+//       <option value="2">Medium</option>
+//       <option value="3">High</option>
+//       <option value="4">Urgent</option>
+//     </>
+//   );
+// }
+
+export function StatusOptions() {
+  return (
+    <>
+      <option value=""></option>
+      <option value="1">Open</option>
+      <option value="2">Pending</option>
+      <option value="3">Resolved</option>
+      <option value="4">Closed</option>
+    </>
+  );
+}
 
 export function AgentOptions() {
   return (

@@ -144,6 +144,7 @@ function UserContextProvider(props) {
         auth0UserMeta,
         getAuth0UserMeta,
         allTickets,
+        setAllTickets,
       }}
     >
       {props.children}
