@@ -32,7 +32,7 @@ export default function TicketFormContainer({
     lname: mysqlUser.lname || '',
     title: mysqlUser.title || '',
     email: mysqlUser.email || '',
-    department_id: mysqlUser.department || '',
+    department_id: mysqlUser.department_id || '',
     location_id: mysqlUser.location_id || mysqlUser.location,
     mobile_phone: mysqlUser.mobile_phone || '',
     office_phone: mysqlUser.office_phone || '',

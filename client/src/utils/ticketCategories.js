@@ -196,13 +196,21 @@ export function PriorityOptions({ classNames }) {
 //   );
 // }
 
-export function StatusOptions() {
+export function StatusOptions({ classNames }) {
   return (
     <>
-      <option value="1">Open</option>
-      <option value="2">Pending</option>
-      <option value="3">Resolved</option>
-      <option value="4">Closed</option>
+      <option className={classNames} value="1">
+        Open
+      </option>
+      <option className={classNames} value="2">
+        Pending
+      </option>
+      <option className={classNames} value="3">
+        Resolved
+      </option>
+      <option className={classNames} value="4">
+        Closed
+      </option>
     </>
   );
 }

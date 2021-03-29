@@ -43,6 +43,7 @@ export default function Ticket({
   async function onSubmit(data, event) {
     //todo: remove debugger later;
     // debugger;
+
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
@@ -65,6 +66,7 @@ export default function Ticket({
       console.log(result);
       await getDbUsersTickets();
 
+      // todo: Don't think I need this anymore;
       setisEditingTicket(false);
     } catch (error) {
       console.error({ error });
@@ -181,22 +183,28 @@ Ticket.Status = function TicketStatus({
     <div
       className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
-      <select
-        ref={register}
-        name="status_id"
-        defaultValue={status}
-        className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
-         `}
-        // onChange={(event) => changeStylingStatus(event)}
-        onChange={handleSubmit}
+      <div
+        data-name="status-container"
+        className={`${statusClasses()}  w-full md:h-1/2`}
       >
-        <option value="1" className="bg-gray-800">
-          Open
-        </option>
-        <option value="4" className="bg-gray-800">
-          Closed
-        </option>
-      </select>
+        <select
+          ref={register}
+          name="status_id"
+          defaultValue={status}
+          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full
+        `}
+          onChange={(event) =>
+            setStylingStatus(statusIdToWord(event.target.value))
+          }
+        >
+          <option value="1" className="bg-gray-800">
+            Open
+          </option>
+          <option value="4" className="bg-gray-800">
+            Closed
+          </option>
+        </select>
+      </div>
       {/* //! PRIORITY */}
       <div
         name="PriorityContainer"
@@ -207,7 +215,10 @@ Ticket.Status = function TicketStatus({
           name="priority_id"
           title="Priority"
           defaultValue={priority}
-          // onChange={(event) => changePriorityStatus(event)}
+          ref={register}
+          onChange={(event) =>
+            setstylingPriority(priorityIDtoWord(event.target.value))
+          }
         >
           <PriorityOptions classNames="bg-gray-700" />
         </select>
@@ -280,17 +291,24 @@ Ticket.AgentStatus = function TicketAgentStatus({
     <div
       className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
-      <select
-        ref={register}
-        name="status_id"
-        defaultValue={status}
-        className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
-         `}
-        // onChange={(event) => changeStylingStatus(event)}
-        // onChange={handleSubmit}
+      <div
+        data-name="status-container"
+        className={`${statusClasses()}  w-full md:h-1/2`}
       >
-        <StatusOptions />
-      </select>
+        <select
+          ref={register}
+          name="status_id"
+          defaultValue={status}
+          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full
+         `}
+          onChange={(event) =>
+            setStylingStatus(statusIdToWord(event.target.value))
+          }
+          // onChange={handleSubmit}
+        >
+          <StatusOptions classNames="bg-gray-700" />
+        </select>
+      </div>
 
       {/* //! PRIORITY */}
       <div
@@ -303,7 +321,9 @@ Ticket.AgentStatus = function TicketAgentStatus({
           name="priority_id"
           title="Priority"
           defaultValue={priority}
-          // onChange={(event) => changePriorityStatus(event)}
+          onChange={(event) =>
+            setstylingPriority(priorityIDtoWord(event.target.value))
+          }
         >
           <PriorityOptions classNames="bg-gray-700" />
         </select>
@@ -468,7 +488,7 @@ Ticket.Category = function TicketCategory({
   ...restProps
 }) {
   // todo:change to form and watch values using technique on ticket input;
-  debugger;
+  // debugger;
   return (
     <div
       data-id="ticketCategory"
