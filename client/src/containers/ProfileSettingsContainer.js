@@ -50,7 +50,7 @@ export default function TicketFormContainer({
 
   async function onSubmit(data, event) {
     //todo: remove debugger before prod;
-    // debugger;
+    debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
@@ -58,8 +58,9 @@ export default function TicketFormContainer({
 
     // 1 = admin; 0 = normal client
     if (auth0UserMeta) {
-      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
-      data.agent_id = auth0UserMeta.app_metadata?.agent_id;
+      // mySql not converting the bool, hence the manual 1 or 0;
+      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? '1' : '0';
+      data.agent_id = auth0UserMeta.app_metadata?.agent_id || null;
     } else {
       data.isAdmin = false;
       data.agent_id = null;
