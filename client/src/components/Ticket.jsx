@@ -7,6 +7,7 @@ import {
   subServiceTypes,
   PrimaryServiceCategories,
   PriorityOptions,
+  StatusOptions,
 } from '../utils/ticketCategories';
 import {
   departmentIdToValue,
@@ -19,7 +20,7 @@ import {
 import { UserIcon, LocationIcon, OfficeIcon } from './Icons';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
-//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow;
+//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow that column widths;
 export default function Ticket({
   children,
   id,
@@ -33,19 +34,6 @@ export default function Ticket({
   const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
 
-  let childrenWithProps = React.Children.map(children, (child) => {
-    return React.cloneElement(child, {
-      id,
-      activityLogShown,
-      toggleActivityLog,
-      isEditingTicket,
-      setisEditingTicket,
-      register: register,
-      watch: watch,
-      reset,
-    });
-  });
-
   function grayOutClosedOrResolvedTicket() {
     if (status === 3 || status === 4) {
       return 'closedTicket';
@@ -58,6 +46,10 @@ export default function Ticket({
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
+    let dataWithNullsRemoved = Object.fromEntries(
+      Object.entries(data).filter(([item, val]) => val)
+    );
+
     try {
       let response = await fetch(
         `http://10.195.103.107:3075/api/tickets/update/${id}`,
@@ -66,7 +58,7 @@ export default function Ticket({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(dataWithNullsRemoved),
         }
       );
       let result = await response.json();
@@ -79,11 +71,24 @@ export default function Ticket({
     }
   }
 
+  let childrenWithProps = React.Children.map(children, (child) => {
+    return React.cloneElement(child, {
+      id,
+      activityLogShown,
+      toggleActivityLog,
+      isEditingTicket,
+      setisEditingTicket,
+      register: register,
+      watch: watch,
+      reset,
+      handleSubmit,
+    });
+  });
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      // todo: see about setting onChange to be the handleSubmit trigger if you do no want a submit button or a confirm/cancel changed button;  ~wk 3-15
-      onChange={() => setisEditingTicket(true)}
+      onChange={handleSubmit(onSubmit)}
       className={`relative grid w-full grid-cols-12 truncate divide-y divide-gray-300 lg:divide-y-0 ${grayOutClosedOrResolvedTicket()}`}
     >
       {childrenWithProps}
@@ -124,6 +129,7 @@ Ticket.Status = function TicketStatus({
   handleChange,
   status,
   register,
+  handleSubmit,
   ...restProps
 }) {
   let wordStatus = statusIdToWord(String(status));
@@ -171,26 +177,18 @@ Ticket.Status = function TicketStatus({
       }
   }
 
-  function changeStylingStatus(event) {
-    console.log(event);
-    console.log(event.target.value);
-    setStylingStatus(statusIdToWord(String(event.target.value)));
-  }
-  function changePriorityStatus(event) {
-    setstylingPriority(priorityIDtoWord(event.target.value));
-  }
-
   return (
     <div
       className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
       <select
-        ref={register()}
+        ref={register}
         name="status_id"
         defaultValue={status}
         className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
          `}
-        onChange={(event) => changeStylingStatus(event)}
+        // onChange={(event) => changeStylingStatus(event)}
+        onChange={handleSubmit}
       >
         <option value="1" className="bg-gray-800">
           Open
@@ -209,20 +207,9 @@ Ticket.Status = function TicketStatus({
           name="priority_id"
           title="Priority"
           defaultValue={priority}
-          onChange={(event) => changePriorityStatus(event)}
+          // onChange={(event) => changePriorityStatus(event)}
         >
-          <option className="bg-gray-800" value="1">
-            Low
-          </option>
-          <option className="bg-gray-800" value="2">
-            Medium
-          </option>
-          <option className="bg-gray-800" value="3">
-            High
-          </option>
-          <option className="bg-gray-800" value="4">
-            Urgent
-          </option>
+          <PriorityOptions classNames="bg-gray-700" />
         </select>
       </div>
     </div>
@@ -238,8 +225,10 @@ Ticket.AgentStatus = function TicketAgentStatus({
   handleChange,
   status,
   register,
+  handleSubmit,
   ...restProps
 }) {
+  // debugger;
   let wordStatus = statusIdToWord(String(status));
   let [stylingStatus, setStylingStatus] = useState(wordStatus);
 
@@ -287,40 +276,22 @@ Ticket.AgentStatus = function TicketAgentStatus({
     }
   }
 
-  function changeStylingStatus(event) {
-    console.log(event);
-    console.log(event.target.value);
-    setStylingStatus(statusIdToWord(String(event.target.value)));
-  }
-  function changePriorityStatus(event) {
-    setstylingPriority(priorityIDtoWord(event.target.value));
-  }
-
   return (
     <div
       className={`col-span-12 md:col-span-1 flex md:block relative text-xs w-full justify-self-stretch self-stretch h-full text-center`}
     >
       <select
-        ref={register()}
+        ref={register}
         name="status_id"
         defaultValue={status}
         className={`${statusClasses()} text-white w-full md:h-1/2 align-middle
          `}
-        onChange={(event) => changeStylingStatus(event)}
+        // onChange={(event) => changeStylingStatus(event)}
+        // onChange={handleSubmit}
       >
-        <option value="1" className="bg-gray-800">
-          Open
-        </option>
-        <option value="2" className="bg-gray-800">
-          Pending
-        </option>
-        <option value="3" className="bg-gray-800">
-          Resolved
-        </option>
-        <option value="4" className="bg-gray-800">
-          Closed
-        </option>
+        <StatusOptions />
       </select>
+
       {/* //! PRIORITY */}
       <div
         name="PriorityContainer"
@@ -332,9 +303,9 @@ Ticket.AgentStatus = function TicketAgentStatus({
           name="priority_id"
           title="Priority"
           defaultValue={priority}
-          onChange={(event) => changePriorityStatus(event)}
+          // onChange={(event) => changePriorityStatus(event)}
         >
-          <PriorityOptions />
+          <PriorityOptions classNames="bg-gray-700" />
         </select>
       </div>
     </div>
@@ -362,7 +333,7 @@ Ticket.Description = function TicketDescription({
     <div className="flex-grow col-span-12 p-1 bg-gray-100 border border-red-500 md:col-span-11">
       <div className="">
         <h2 className="inline-block font-bold text-black text-md">{title}</h2>
-        {/*// todo: relocate this img to a better place ?? */}
+
         <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
           {description}
         </h3>
@@ -381,6 +352,7 @@ Ticket.Description = function TicketDescription({
             (Click to view or manage notes below) (
             {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
           </span>
+          {/*// todo: relocate this icon to a different place ?? */}
           <img
             src="/media/icons/arrow-down.svg"
             alt="arrow-down"
@@ -411,14 +383,14 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
       <label className="mx-auto text-center w-max">
         <UserIcon />
         <select
-          // todo: activate this ref when agent assigning gets set up
-          ref={register()}
+          ref={register}
           name="agent_id"
           defaultValue={String(agentAssignedTo)}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700
          `}
           // onChange={(event) => }
         >
+          {/* //todo:   use latest select options */}
           {<AssignToAgentSelect />}
         </select>
       </label>
@@ -473,7 +445,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
         <span className="sr-only">Location</span>
         <LocationIcon />
         <select
-          ref={register()}
+          ref={register}
           name="location_id"
           id=""
           defaultValue={mainLocation}
@@ -491,15 +463,12 @@ Ticket.Category = function TicketCategory({
   id,
   category,
   subcategory,
-  handleChange,
   watch,
   register,
   ...restProps
 }) {
-  const mainServicetype = watch('service_id', '1');
-
   // todo:change to form and watch values using technique on ticket input;
-
+  debugger;
   return (
     <div
       data-id="ticketCategory"
@@ -510,35 +479,27 @@ Ticket.Category = function TicketCategory({
       </label>
       <OfficeIcon />
       <select
-        ref={register()}
+        ref={register}
         className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-28 "
         name="service_id"
         id=""
         defaultValue={category}
       >
-        <option value="1">Building</option>
-        <option value="2">IT</option>
-        <option value="3">Communications</option>
-        <option value="4">GIS</option>
-        <option value="5">Employee Setup</option>
-        <option value="6">Wasp Inventory System</option>
-        <option value="7">Surveilance Camera System</option>
-        <option value="8">Training</option>
-        <option value="9">Thermoscan Account</option>
+        <PrimaryServiceCategories />
       </select>
       {/* //! SUBCATEGORY DIVIDER */}
       <label htmlFor="service_details_id" className="sr-only">
         Subservice Type
       </label>
       <select
-        ref={register()}
+        ref={register}
         className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-max"
         name="service_details_id"
         id=""
         defaultValue={subcategory}
       >
         {/* //@ REACT HOOK FORM IS PUTTING IN OTHER OPTIONS VIA UTIL PLUS WATCH */}
-        {subServiceTypes(mainServicetype)}
+        {subServiceTypes(String(category))}
       </select>
     </div>
   );
@@ -582,37 +543,37 @@ Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   );
 };
 
-Ticket.MakeChangesButtons = function SubmitChangesButton({
-  isEditingTicket,
-  setisEditingTicket,
-  reset,
-  ...restProps
-}) {
-  if (isEditingTicket) {
-    return (
-      <div className="absolute bottom-0 right-0 flex flex-col border-none md:top-0">
-        <button
-          type="submit"
-          className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-white"
-        >
-          Submit Changes
-        </button>
-        <button
-          type="button"
-          className="block px-2 py-1 text-xs text-red-700 bg-gray-300 border-none hover:bg-red-900 hover:text-white"
-          onClick={(event) => {
-            reset();
-            setisEditingTicket(false);
-          }}
-        >
-          Cancel Changes
-        </button>
-      </div>
-    );
-  } else {
-    return null;
-  }
-};
+// Ticket.MakeChangesButtons = function SubmitChangesButton({
+//   isEditingTicket,
+//   setisEditingTicket,
+//   reset,
+//   ...restProps
+// }) {
+//   if (isEditingTicket) {
+//     return (
+//       <div className="absolute bottom-0 right-0 flex flex-col border-none md:top-0">
+//         <button
+//           type="submit"
+//           className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-white"
+//         >
+//           Submit Changes
+//         </button>
+//         <button
+//           type="button"
+//           className="block px-2 py-1 text-xs text-red-700 bg-gray-300 border-none hover:bg-red-900 hover:text-white"
+//           onClick={(event) => {
+//             reset();
+//             setisEditingTicket(false);
+//           }}
+//         >
+//           Cancel Changes
+//         </button>
+//       </div>
+//     );
+//   } else {
+//     return null;
+//   }
+// };
 
 Ticket.ActivityLogContainer = function ActivityLogContainer({
   children,
@@ -680,6 +641,8 @@ Ticket.InputNote = function InputNote({
   const { getDbUsersTickets } = useContext(UserContext);
 
   function onSubmit(data, event) {
+    // todo: remove debugger;
+    // debugger;
     event.preventDefault();
 
     if (!data.note_text) {
@@ -709,7 +672,7 @@ Ticket.InputNote = function InputNote({
     >
       <textarea
         name="note_text"
-        ref={register()}
+        ref={register}
         id=""
         cols="30"
         rows="2"

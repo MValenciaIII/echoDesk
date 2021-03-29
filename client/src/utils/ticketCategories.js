@@ -119,7 +119,7 @@ function Thermoscan(props) {
   );
 }
 
-// todo: finish filling out from freshdesk
+// todo: finish filling out from freshdesk????
 
 export function PrimaryServiceCategories() {
   return (
@@ -167,13 +167,21 @@ export function LocationOptions() {
     </>
   );
 }
-export function PriorityOptions() {
+export function PriorityOptions({ classNames }) {
   return (
     <>
-      <option value="1">Low</option>
-      <option value="2">Medium</option>
-      <option value="3">High</option>
-      <option value="4">Urgent</option>
+      <option className={classNames} value="1">
+        Low
+      </option>
+      <option className={classNames} value="2">
+        Medium
+      </option>
+      <option className={classNames} value="3">
+        High
+      </option>
+      <option className={classNames} value="4">
+        Urgent
+      </option>
     </>
   );
 }
@@ -191,7 +199,6 @@ export function PriorityOptions() {
 export function StatusOptions() {
   return (
     <>
-      <option value=""></option>
       <option value="1">Open</option>
       <option value="2">Pending</option>
       <option value="3">Resolved</option>

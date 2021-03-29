@@ -12,7 +12,7 @@ export default function TicketsContainer(props) {
     UserContext
   );
 
-  // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0;
+  // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
   const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
 
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
@@ -63,7 +63,6 @@ export default function TicketsContainer(props) {
                 contactEmail={ticket.email}
                 title={ticket.subject}
               />
-              <Ticket.MakeChangesButtons />
             </Ticket>
             <Ticket.ActivityLogContainer>
               {ticket.notes?.map((note) => (
@@ -136,7 +135,6 @@ export default function TicketsContainer(props) {
                 contactPhone={ticket.client_phone_number}
                 contactEmail={ticket.email}
               />
-              <Ticket.MakeChangesButtons />
             </Ticket>
             <Ticket.ActivityLogContainer>
               {ticket.notes?.map((note) => (

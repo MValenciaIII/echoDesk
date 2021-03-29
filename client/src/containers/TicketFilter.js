@@ -13,20 +13,42 @@ import AgentTicketFilterForm from '../components/AgentTicketFilter';
 
 export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const { setAllTickets } = useContext(UserContext);
+  const defaultValues = {
+    agent_id: '',
+    Created: '',
+    Resolution_due_by: '',
+    First_Response_due_by: '',
+    status_id: '',
+    priority_id: '',
+    department_id: '',
+    location_id: '',
+    service_id: '',
+  };
 
   async function onSubmit(data, event) {
     // todo: DEFINE API ROUTES IN A CONSTANTS FOLDER LATER; remove
     // todo: remove debugger too
     // debugger;
+
     try {
+      let url;
+
       let formData = new FormData(event.target);
       const dataArray = [...formData.entries()].filter((entry) => entry[1]);
-      const asString = new URLSearchParams(dataArray).toString();
-      console.log(asString);
+      const dataAsString = new URLSearchParams(dataArray).toString();
+      console.log(dataAsString);
 
-      const url = 'http://10.195.103.107:3075/api/tickets/filter/search?';
-      const query = url.concat(asString);
-      let response = await fetch(query, {
+      let dataArrayWithNullsRemoved = Object.entries(data).filter(
+        ([item, val]) => val
+      );
+      if (dataArrayWithNullsRemoved.length === 0) {
+        url = 'http://10.195.103.107:3075/api/tickets';
+      } else {
+        url = 'http://10.195.103.107:3075/api/tickets/filter/search?';
+        url = url.concat(dataAsString);
+      }
+
+      let response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -47,9 +69,10 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
     'p-8 mx-auto text-white bg-gray-700 rounded-lg max-w-max sm:max-w-lg';
 
   const labelClassNames = 'block mt-3';
+  const submitLabelClassNames = 'mt-3';
   const inputClassNames = 'block p-1 rounded-sm text-black w-56  lg:w-72';
   const submitClassNames =
-    'block p-1 rounded-sm w-max text-black hover:bg-green-800 hover:text-white ';
+    'inline-block p-1 rounded-sm w-max text-black hover:bg-green-800 hover:text-white font-bold';
 
   return (
     <AgentTicketFilterForm onSubmit={onSubmit} classNames={formClassname}>
@@ -102,7 +125,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         ]}
       />
       <AgentTicketFilterForm.Select
-        name="Resolution due by"
+        name="Resolution_due_by"
         label="Resolution due by"
         labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
@@ -119,7 +142,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         ]}
       />
       <AgentTicketFilterForm.Select
-        name="First Response due by"
+        name="First_Response_due_by"
         label="First Response due by"
         labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
@@ -170,12 +193,24 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         inputClassNames={inputClassNames}
         options={<FilterPrimaryServiceCategories />}
       />
-      <AgentTicketFilterForm.Input
-        name="Submit"
-        labelClassNames={labelClassNames}
-        inputClassNames={submitClassNames}
-        type="Submit"
-      />
+
+      {/* note the name prop is required even though not an input due to the react.children.map conditional in the corresponiding agent ticket filter component */}
+
+      <AgentTicketFilterForm.FlexPane
+        classNames="flex justify-between mt-3"
+        name="flexPane"
+      >
+        <AgentTicketFilterForm.Input
+          name="Submit"
+          labelClassNames={submitLabelClassNames}
+          inputClassNames={submitClassNames}
+          type="Submit"
+        />
+        <AgentTicketFilterForm.Button
+          name="ResetButton"
+          defaultValues={defaultValues}
+        />
+      </AgentTicketFilterForm.FlexPane>
     </AgentTicketFilterForm>
   );
 }

@@ -18,7 +18,7 @@ function UserContextProvider(props) {
         let response = await fetch(ticketsUrl);
         let allTickets = await response.json();
 
-        // todo:sort based on NOT CLOSED THEN timestamps;  Change sorting to server side in SQL statement and limit?
+        // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
         let defaultSorted = allTickets.sort((one, two) => {
           return two.id - one.id;
         });

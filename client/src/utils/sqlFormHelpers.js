@@ -274,7 +274,7 @@ export function statusIdToWord(id) {
 export function AssignToAgentSelect() {
   return (
     <>
-      <option value={null}>Not yet Assigned</option>
+      <option value="">Not yet Assigned</option>
       <option value="1">Casey Mott</option>
       <option value="2">Charlieyya Smith</option>
       <option value="3">Alisha Torrence</option>

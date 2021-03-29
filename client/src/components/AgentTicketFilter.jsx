@@ -28,6 +28,7 @@ export default function AgentTicketFilterForm({
                 ...child.props,
                 register: methods.register,
                 key: child.props.name,
+                reset: methods.reset,
               },
             })
           : child;
@@ -53,7 +54,6 @@ AgentTicketFilterForm.Input = function AgentTicketFilterInput({
       <input
         name={name}
         ref={register}
-        {...rest}
         className={inputClassNames}
         type={type}
       />
@@ -79,7 +79,6 @@ AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
         className={inputClassNames}
         name={name}
         ref={register}
-        {...rest}
       >
         {options}
       </select>
@@ -93,5 +92,37 @@ AgentTicketFilterForm.Heading = function AgentTicketFilterHeading({
 }) {
   return (
     <h2 className="mx-auto text-lg font-bold text-center">Filter Tickets</h2>
+  );
+};
+
+AgentTicketFilterForm.Button = function AgentTicketFilterButton({
+  register,
+  reset,
+  defaultValues,
+  ...rest
+}) {
+  return (
+    <button
+      onClick={(e) => reset({ ...defaultValues })}
+      type="button"
+      className="px-2 py-1 mt-3 text-center text-black bg-gray-100 hover:bg-red-400 hover:text-white "
+    >
+      Reset Form
+    </button>
+  );
+};
+
+// For flexbox panes in form;
+AgentTicketFilterForm.FlexPane = function AgentTicketFilterFlexPane({
+  classNames,
+  children,
+  ...restProps //props from the from
+}) {
+  return (
+    <div className={classNames}>
+      {React.Children.map(children, (child) => {
+        return React.cloneElement(child, { ...child.props, ...restProps });
+      })}
+    </div>
   );
 };
