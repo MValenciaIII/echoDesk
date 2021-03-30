@@ -48,7 +48,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         url = filteringRoute;
         url = url.concat(dataAsString);
       }
-
+      console.log({ url });
       let response = await fetch(url, {
         method: 'GET',
         headers: {

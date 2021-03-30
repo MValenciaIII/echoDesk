@@ -15,7 +15,7 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
-import {createTicketRoute} from '../constants/apiRoutes'
+import { createTicketRoute } from '../constants/apiRoutes';
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -54,36 +54,34 @@ export default function TicketFormContainer({ children, ...restProps }) {
     // ! SUPPLMENTING DATA WITH AUTH INFO;
     data.status_id = '1'; //default of open; not from form;send....
     data.client_id = mysqlUser.id; // attaching the user's ID to the ticket
-    console.log(data);
+    console.log({ data });
 
     // Posting new TICKETS
     try {
-      let response = await fetch(
-        createTicketRoute,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      let response = await fetch(createTicketRoute, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
       let result = await response.json();
       console.log(result);
+      if (!result.error) {
+        await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+        toast.success('Ticket Successfully Created', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
       // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
-      await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
 
       //FORM RESET WITH USEEFFECT HOOK BACK TO DEFAULT VALUES
-
-      toast.success('Ticket submitted successfully!', {
-        position: 'top-right',
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
     } catch (error) {
       console.warn(error);
     }

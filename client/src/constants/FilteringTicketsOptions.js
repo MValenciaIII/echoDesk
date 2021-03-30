@@ -25,7 +25,7 @@ export function FilterPriorityOptions() {
 export function FilterDepartmentOptions() {
   return (
     <>
-      <option value=""></option>
+      <option value="">Any</option>
       <option value="1">Executive</option>
       <option value="2">Preparedness</option>
       <option value="3">Mitigation</option>
@@ -39,7 +39,7 @@ export function FilterDepartmentOptions() {
       <option value="11">Logistics</option>
       <option value="12">Operations</option>
       <option value="13">Individual Assistance</option>
-      <option value="13">Information Technology</option>
+      <option value="14">Information Technology</option>
     </>
   );
 }

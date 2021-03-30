@@ -57,7 +57,6 @@ function UserContextProvider(props) {
 
   async function getDbUser(userId = defaultuserId) {
     try {
-      debugger;
       let url = dbUserRoute(userId);
       let response = await fetch(url);
       let sqlUser = await response.json();
