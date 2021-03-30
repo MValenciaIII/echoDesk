@@ -15,6 +15,7 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
+import {createTicketRoute} from '../constants/apiRoutes'
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -58,7 +59,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     // Posting new TICKETS
     try {
       let response = await fetch(
-        'http://10.195.103.107:3075/api/tickets/create',
+        createTicketRoute,
         {
           method: 'POST',
           headers: {

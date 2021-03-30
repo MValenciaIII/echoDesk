@@ -12,6 +12,11 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { profileSchema } from '../constants/formValidationSchemas';
+import {
+  createUserRoute,
+  updateUserRoute,
+  createAgentRoute,
+} from '../constants/apiRoutes';
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -70,16 +75,13 @@ export default function TicketFormContainer({
     if (!mysqlUser.fname) {
       try {
         let valueToSubmit = { ...data };
-        let response = await fetch(
-          'http://10.195.103.107:3075/api/users/create',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(valueToSubmit),
-          }
-        );
+        let response = await fetch(createUserRoute, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(valueToSubmit),
+        });
         let result = await response.json();
         console.log(result);
         if (!result.error) {
@@ -104,16 +106,13 @@ export default function TicketFormContainer({
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
             agentData.client_id = userSub;
 
-            let agentResponse = await fetch(
-              'http://10.195.103.107:3075/api/agents/create',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(agentData),
-              }
-            );
+            let agentResponse = await fetch(createAgentRoute, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(agentData),
+            });
             let agentResult = await agentResponse.json();
             console.log({ agentResult });
             if (!agentResult.error) {
@@ -150,16 +149,13 @@ export default function TicketFormContainer({
     else {
       try {
         let valueToSubmit = { ...data };
-        let response = await fetch(
-          `http://10.195.103.107:3075/api/users/update/${userSub}`,
-          {
-            method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(valueToSubmit),
-          }
-        );
+        let response = await fetch(updateUserRoute(userSub), {
+          method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(valueToSubmit),
+        });
         let result = await response.json();
         console.log(result);
         if (!result.error) {

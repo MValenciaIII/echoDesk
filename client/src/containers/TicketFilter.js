@@ -10,6 +10,7 @@ import {
 } from '../constants/FilteringTicketsOptions';
 
 import AgentTicketFilterForm from '../components/AgentTicketFilter';
+import { filteringRoute, allTicketsRoute } from '../constants/apiRoutes';
 
 export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const { setAllTickets } = useContext(UserContext);
@@ -42,9 +43,9 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         ([item, val]) => val
       );
       if (dataArrayWithNullsRemoved.length === 0) {
-        url = 'http://10.195.103.107:3075/api/tickets';
+        url = allTicketsRoute;
       } else {
-        url = 'http://10.195.103.107:3075/api/tickets/filter/search?';
+        url = filteringRoute;
         url = url.concat(dataAsString);
       }
 

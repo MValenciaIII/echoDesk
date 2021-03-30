@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import {
+  allTicketsRoute,
+  dbUserRoute,
+  dbUsersTicketsRoute,
+} from '../constants/apiRoutes';
 
 const UserContext = React.createContext();
 
@@ -13,8 +18,9 @@ function UserContextProvider(props) {
 
   useEffect(() => {
     async function fetchTickets() {
+      // todo: Should this be refactored to only call if the currently logged in user is an admin?  Otherwise anyone could inspect files and makes this call no?  A form of front end security
       try {
-        let ticketsUrl = `http://10.195.103.107:3075/api/tickets`;
+        let ticketsUrl = allTicketsRoute;
         let response = await fetch(ticketsUrl);
         let allTickets = await response.json();
 
@@ -51,7 +57,8 @@ function UserContextProvider(props) {
 
   async function getDbUser(userId = defaultuserId) {
     try {
-      let url = `http://10.195.103.107:3075/api/users/${userId}`;
+      debugger;
+      let url = dbUserRoute(userId);
       let response = await fetch(url);
       let sqlUser = await response.json();
       if (response.ok) {
@@ -65,7 +72,7 @@ function UserContextProvider(props) {
 
   async function getDbUsersTickets(userId = reduceAuthSubToNumbers(user.sub)) {
     try {
-      let ticketsUrl = `http://10.195.103.107:3075/api/tickets/${userId}/`;
+      let ticketsUrl = dbUsersTicketsRoute(userId);
       let response = await fetch(ticketsUrl);
       let sqlUsersTickets = await response.json();
 

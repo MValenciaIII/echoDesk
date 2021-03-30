@@ -18,6 +18,7 @@ import {
   TicketLocationsOptions,
 } from '../utils/sqlFormHelpers';
 import { UserIcon, LocationIcon, OfficeIcon } from './Icons';
+import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
 //todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow that column widths;
@@ -52,16 +53,13 @@ export default function Ticket({
     );
 
     try {
-      let response = await fetch(
-        `http://10.195.103.107:3075/api/tickets/update/${id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataWithNullsRemoved),
-        }
-      );
+      let response = await fetch(updateTicketRoute(id), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataWithNullsRemoved),
+      });
       let result = await response.json();
       console.log(result);
       await getDbUsersTickets();
@@ -671,7 +669,7 @@ Ticket.InputNote = function InputNote({
     data.ticket_id = ticket_id;
     data.client_id = client_id;
     // PATCHING EXISTING TICKETS
-    fetch(`http://10.195.103.107:3075/api/notes/create`, {
+    fetch(createNoteRoute, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
