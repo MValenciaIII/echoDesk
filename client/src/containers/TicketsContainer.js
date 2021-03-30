@@ -16,7 +16,6 @@ export default function TicketsContainer(props) {
   const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
 
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
-  console.log(chosenTickets);
 
   // React paginate
   const [currentPage, setCurrentPage] = useState(0);

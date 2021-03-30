@@ -66,10 +66,21 @@ export default function TicketFormContainer({ children, ...restProps }) {
         body: JSON.stringify(data),
       });
       let result = await response.json();
+      console.log(JSON.stringify(data));
       console.log(result);
       if (!result.error) {
         await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
         toast.success('Ticket Successfully Created', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else if (result.error) {
+        toast.error('Ticket Not Created', {
           position: 'top-right',
           autoClose: 1000,
           hideProgressBar: false,

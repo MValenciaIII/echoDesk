@@ -22,14 +22,22 @@ Dashboard.TicketsContainer = function DashboardTicketsContainer({ children }) {
   );
 };
 
-Dashboard.Header = function DashboardHeader({ children, mysqlUser }) {
-  return (
-    <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
-      {mysqlUser
-        ? `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are your tickets`
-        : 'Welcome, here are your current tickets'}
-    </h2>
-  );
+Dashboard.Header = function DashboardHeader({ children, mysqlUser, isAgent }) {
+  if (isAgent) {
+    return (
+      <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
+        {mysqlUser &&
+          `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are the tickets`}
+      </h2>
+    );
+  } else
+    return (
+      <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
+        {mysqlUser
+          ? `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are your tickets`
+          : 'Welcome, here are your current tickets'}
+      </h2>
+    );
 };
 
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {

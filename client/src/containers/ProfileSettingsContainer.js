@@ -55,7 +55,7 @@ export default function TicketFormContainer({
 
   async function onSubmit(data, event) {
     //todo: remove debugger before prod;
-    debugger;
+    // debugger;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;

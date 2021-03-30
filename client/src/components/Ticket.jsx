@@ -62,10 +62,10 @@ export default function Ticket({
       });
       let result = await response.json();
       console.log(result);
-      await getDbUsersTickets();
+      // await getDbUsersTickets();
 
       // todo: Don't think I need this anymore;
-      setisEditingTicket(false);
+      // setisEditingTicket(false);
     } catch (error) {
       console.error({ error });
     }
@@ -658,7 +658,7 @@ Ticket.InputNote = function InputNote({
   const { register, handleSubmit, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
 
-  function onSubmit(data, event) {
+  async function onSubmit(data, event) {
     // todo: remove debugger;
     // debugger;
     event.preventDefault();
@@ -669,18 +669,23 @@ Ticket.InputNote = function InputNote({
     data.ticket_id = ticket_id;
     data.client_id = client_id;
     // PATCHING EXISTING TICKETS
-    fetch(createNoteRoute, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((message) => console.log(message))
-      .then(() => getDbUsersTickets())
-      .then(() => reset())
-      .catch((error) => console.log({ error }));
+
+    try {
+      let response = fetch(createNoteRoute, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      let result = await response.json();
+      console.log(result);
+      if (result.ok) {
+        reset();
+      }
+    } catch (error) {
+      console.error({ error });
+    }
   }
 
   return (

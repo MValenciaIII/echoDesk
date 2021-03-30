@@ -30,7 +30,6 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
     // todo: DEFINE API ROUTES IN A CONSTANTS FOLDER LATER; remove
     // todo: remove debugger too
     // debugger;
-
     try {
       let url;
 
@@ -58,8 +57,11 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       });
       console.log(response);
       let filteredTickets = await response.json();
-      console.log(filteredTickets);
-      setAllTickets(filteredTickets);
+      let sortedTickets = filteredTickets.sort((one, two) => {
+        return two.id - one.id;
+      });
+      console.log(sortedTickets);
+      setAllTickets(sortedTickets);
     } catch (error) {
       console.error({ error });
       setAllTickets([]);
@@ -209,6 +211,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         />
         <AgentTicketFilterForm.Button
           name="ResetButton"
+          onSubmit={onSubmit}
           defaultValues={defaultValues}
         />
       </AgentTicketFilterForm.FlexPane>
