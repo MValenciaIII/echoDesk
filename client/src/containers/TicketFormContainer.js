@@ -92,7 +92,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }
       // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
 
-      //FORM RESET WITH USEEFFECT HOOK BACK TO DEFAULT VALUES
+      //FORM WILL RESET DUE USEEFFECT HOOK IN THE COMPONENT FILE AND GO BACK TO DEFAULT VALUES
     } catch (error) {
       console.warn(error);
     }
@@ -192,6 +192,13 @@ export default function TicketFormContainer({ children, ...restProps }) {
           name="description"
           placeholder="Please write a short description here"
           labelClassNames={labelClassNames}
+        />
+        <InputTicketForm.FileUpload
+          name={'files'}
+          label="Upload a file"
+          labelClassNames={labelClassNames}
+          inputClassNames={inputClassNames}
+          type={'file'}
         />
         <InputTicketForm.Submit
           type="submit"

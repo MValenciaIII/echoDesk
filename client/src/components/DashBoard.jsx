@@ -42,7 +42,7 @@ Dashboard.Header = function DashboardHeader({ children, mysqlUser, isAgent }) {
 
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   return (
-    <div id="formContainer" className="order-1 md:order-none">
+    <div id="formContainer" className="order-1 m-3 md:order-none">
       {children}
     </div>
   );

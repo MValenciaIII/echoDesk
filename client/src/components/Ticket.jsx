@@ -28,12 +28,14 @@ export default function Ticket({
   activityLogShown,
   toggleActivityLog,
   status,
+  isAdmin,
   ...restProps
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
   const [isEditingTicket, setisEditingTicket] = useState(false);
   const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
+  const { currentFilterQuery, setAllTickets } = useContext(UserContext);
 
   function grayOutClosedOrResolvedTicket() {
     if (status === 3 || status === 4) {
@@ -62,10 +64,20 @@ export default function Ticket({
       });
       let result = await response.json();
       console.log(result);
-      // await getDbUsersTickets();
-
-      // todo: Don't think I need this anymore;
-      // setisEditingTicket(false);
+      if (isAdmin && currentFilterQuery) {
+        try {
+          let filteredResponse = await fetch(currentFilterQuery);
+          let filteredTickets = await filteredResponse.json();
+          let filteredSorted = filteredTickets.sort((one, two) => {
+            return two.id - one.id;
+          });
+          setAllTickets(filteredSorted);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
+      }
     } catch (error) {
       console.error({ error });
     }
@@ -709,7 +721,7 @@ Ticket.InputNote = function InputNote({
         name="note_text"
         ref={register}
         id=""
-        cols="30"
+        cols="25"
         rows="2"
         className="w-full p-2 text-sm "
         placeholder="leave a note here"

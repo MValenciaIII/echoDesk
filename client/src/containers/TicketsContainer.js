@@ -37,6 +37,7 @@ export default function TicketsContainer(props) {
               id={ticket.id}
               tickets={mysqlUserTickets}
               status={ticket.status_id}
+              isAdmin={isAdmin}
             >
               <Ticket.AgentStatus
                 status={ticket.status_id}
