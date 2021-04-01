@@ -18,7 +18,6 @@ ReactDOM.render(
       redirectUri={window.location.origin}
       audience="https://memaechodesk.us.auth0.com/api/v2/"
       scope="read:current_user read:users_app_metadata update:current_user_metadata"
-      useRefreshTokens={true}
     >
       <UserContextProvider>
         <App />
