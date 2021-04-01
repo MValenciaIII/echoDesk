@@ -13,7 +13,7 @@ import AgentTicketFilterForm from '../components/AgentTicketFilter';
 import { filteringRoute, allTicketsRoute } from '../constants/apiRoutes';
 
 export default function AgentTicketFilterContainer({ children, ...restProps }) {
-  const { setAllTickets } = useContext(UserContext);
+  const { setAllTickets, setcurrentFilterQuery } = useContext(UserContext);
   const defaultValues = {
     agent_id: '',
     Created: '',
@@ -48,6 +48,9 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         url = url.concat(dataAsString);
       }
       console.log({ url });
+      // ! This context state setter is getting stored to context in order to later access it on the refreshing of the ticket when a comment is submitted to determine whether to fetch ALL tickets or to fetch the currently set filtered tickets
+      setcurrentFilterQuery(url);
+
       let response = await fetch(url, {
         method: 'GET',
         headers: {

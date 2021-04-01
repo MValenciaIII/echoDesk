@@ -652,11 +652,13 @@ Ticket.InputNote = function InputNote({
   children,
   ticket_id,
   client_id,
-
+  isAdmin,
   ...restProps
 }) {
   const { register, handleSubmit, reset } = useForm();
-  const { getDbUsersTickets } = useContext(UserContext);
+  const { getDbUsersTickets, currentFilterQuery, setAllTickets } = useContext(
+    UserContext
+  );
 
   async function onSubmit(data, event) {
     // todo: remove debugger;
@@ -671,7 +673,7 @@ Ticket.InputNote = function InputNote({
     // PATCHING EXISTING TICKETS
 
     try {
-      let response = fetch(createNoteRoute, {
+      let response = await fetch(createNoteRoute, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -680,8 +682,18 @@ Ticket.InputNote = function InputNote({
       });
       let result = await response.json();
       console.log(result);
-      if (result.ok) {
-        reset();
+      //reseting the textArea
+      reset();
+      if (isAdmin && currentFilterQuery) {
+        try {
+          let filteredResponse = await fetch(currentFilterQuery);
+          let filteredTickets = await filteredResponse.json();
+          setAllTickets(filteredTickets);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
       }
     } catch (error) {
       console.error({ error });

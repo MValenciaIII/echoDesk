@@ -15,6 +15,7 @@ function UserContextProvider(props) {
   const [mysqlUserTickets, setmysqlUserTickets] = useState();
   const [allTickets, setAllTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
+  const [currentFilterQuery, setcurrentFilterQuery] = useState()
 
   useEffect(() => {
     async function fetchTickets() {
@@ -151,6 +152,8 @@ function UserContextProvider(props) {
         getAuth0UserMeta,
         allTickets,
         setAllTickets,
+        currentFilterQuery,
+        setcurrentFilterQuery
       }}
     >
       {props.children}

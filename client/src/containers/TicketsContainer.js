@@ -78,6 +78,7 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
+                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
@@ -150,6 +151,7 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
+                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
