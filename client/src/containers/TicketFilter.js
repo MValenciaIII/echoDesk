@@ -7,6 +7,7 @@ import {
   FilterPrimaryServiceCategories,
   FilterAgentOptions,
   FilterStatusOptions,
+  FilterCreatedAtDate,
 } from '../constants/FilteringTicketsOptions';
 
 import AgentTicketFilterForm from '../components/AgentTicketFilter';
@@ -50,7 +51,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       console.log({ url });
       // ! This context state setter is getting stored to context in order to later access it on the refreshing of the ticket when a comment is submitted to determine whether to fetch ALL tickets or to fetch the currently set filtered tickets
       setcurrentFilterQuery(url);
-
+      debugger;
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -109,26 +110,11 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       /> */}
 
       <AgentTicketFilterForm.Select
-        name="Created"
+        name="created_at"
         label="Created"
         labelClassNames={labelClassNames}
         inputClassNames={inputClassNames}
-        options={[
-          '',
-          'Within 15 minutes',
-          'Within 30 minutes',
-          'Within 1 hour',
-          'Within 4 hours',
-          'Within 12 hours',
-          'Within 24 hours',
-          'Today',
-          'Yesterday',
-          'This week',
-          'Last 7 days',
-          'Last 30 days',
-          'Last 60 days',
-          'Last 180 days',
-        ]}
+        options={<FilterCreatedAtDate />}
       />
       <AgentTicketFilterForm.Select
         name="Resolution_due_by"

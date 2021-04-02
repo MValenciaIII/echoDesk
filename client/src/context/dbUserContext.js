@@ -17,31 +17,33 @@ function UserContextProvider(props) {
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
 
-  useEffect(() => {
-    async function fetchTickets() {
-      // todo: Should this be refactored to only call if the currently logged in user is an admin?  Otherwise anyone could inspect files and makes this call no?  A form of front end security
-      if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
-        try {
-          let ticketsUrl = allTicketsRoute;
-          let response = await fetch(ticketsUrl);
-          let allTickets = await response.json();
+  // useEffect(() => {
+  //   async function fetchTickets() {
+  //     // todo: Should this be refactored to only call if the currently logged in user is an admin?  Otherwise anyone could inspect files and makes this call no?  A form of front end security
 
-          // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
-          let defaultSorted = allTickets.sort((one, two) => {
-            return two.id - one.id;
-          });
-          console.log(defaultSorted);
-          if (response.ok) {
-            setAllTickets([...defaultSorted]);
-          }
-        } catch (error) {
-          console.error({ error });
-          setAllTickets([]);
-        }
-      }
-    }
-    fetchTickets();
-  }, [auth0UserMeta, mysqlUserTickets]);
+  //     // todo: take out of useEffect... this is returning undefined (above)
+  //     // if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
+  //     try {
+  //       let ticketsUrl = allTicketsRoute;
+  //       let response = await fetch(ticketsUrl);
+  //       let allTickets = await response.json();
+
+  //       // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
+  //       let defaultSorted = allTickets.sort((one, two) => {
+  //         return two.id - one.id;
+  //       });
+  //       console.log(defaultSorted);
+  //       if (response.ok) {
+  //         setAllTickets([...defaultSorted]);
+  //       }
+  //     } catch (error) {
+  //       console.error({ error });
+  //       setAllTickets([]);
+  //     }
+  //   }
+  //   // }
+  //   fetchTickets();
+  // }, [user, auth0UserMeta, mysqlUserTickets, mysqlUser]);
 
   let barIndex;
   let defaultuserId; //i.e. the current auth0 user with pipe removed
@@ -57,6 +59,26 @@ function UserContextProvider(props) {
   }
 
   //!! EXPORTED FUNCTIONS;  NOT RUN THROUGH USE EFFECT HERE BECAUSE THE AUTH0 CLIENT IS UNDEFINED AT THIS POINT IN THE TREE;  IT IS ONLY DEFINED AFTER TRYING TO LOGIN;  THESE ARE CALLED AT THE PAGES LEVEL AFTER AUTH0 USER IS DEFINED
+
+  async function getAllTickets() {
+    try {
+      let ticketsUrl = allTicketsRoute;
+      let response = await fetch(ticketsUrl);
+      let allTickets = await response.json();
+
+      // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
+      let defaultSorted = allTickets.sort((one, two) => {
+        return two.id - one.id;
+      });
+      console.log(defaultSorted);
+      if (response.ok) {
+        setAllTickets([...defaultSorted]);
+      }
+    } catch (error) {
+      console.error({ error });
+      setAllTickets([]);
+    }
+  }
 
   async function getDbUser(userId = defaultuserId) {
     try {
@@ -113,6 +135,10 @@ function UserContextProvider(props) {
 
       let user_metadata = await metadataResponse.json();
       setAuth0UserMeta(user_metadata);
+      if (user_metadata.app_metadata?.isAdmin) {
+        //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
+        getAllTickets();
+      }
     } catch (error) {
       console.log(error);
       try {
@@ -134,6 +160,10 @@ function UserContextProvider(props) {
 
         let user_metadata = await metadataResponse.json();
         setAuth0UserMeta(user_metadata);
+        if (user_metadata.app_metadata?.isAdmin) {
+          //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
+          getAllTickets();
+        }
       } catch (error) {
         console.log(error);
       }

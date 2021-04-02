@@ -193,13 +193,13 @@ export default function TicketFormContainer({ children, ...restProps }) {
           placeholder="Please write a short description here"
           labelClassNames={labelClassNames}
         />
-        <InputTicketForm.FileUpload
+        {/* <InputTicketForm.FileUpload
           name={'files'}
           label="Upload a file"
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}
           type={'file'}
-        />
+        /> */}
         <InputTicketForm.Submit
           type="submit"
           value="Submit"
