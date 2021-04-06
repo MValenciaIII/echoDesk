@@ -18,7 +18,6 @@ ReactDOM.render(
       redirectUri={window.location.origin}
       audience="https://memaechodesk.us.auth0.com/api/v2/"
       scope="read:current_user read:users_app_metadata update:current_user_metadata"
-      useRefreshTokens={true}
     >
       <UserContextProvider>
         <App />
@@ -27,7 +26,7 @@ ReactDOM.render(
   </Router>,
   document.getElementById('root')
 );
-auth0Client.crossOriginVerifiication();
+
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

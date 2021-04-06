@@ -126,8 +126,37 @@ InputTicketForm.TextArea = function InputTicketFormTextArea({
           name={name}
           ref={register}
           className={'block p-2 text-black py-0.5 px-1'}
-          cols="38"
+          cols="25"
           rows="5"
+        />
+      </label>
+      {errors[name]?.message && <ErrorMessage message={errors[name].message} />}
+    </React.Fragment>
+  );
+};
+
+InputTicketForm.FileUpload = function InputTicketFormFileUpload({
+  register,
+  name,
+  label,
+  labelClassNames,
+  inputClassNames,
+  type,
+  watch,
+  errors,
+  mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
+  ...rest
+}) {
+  return (
+    <React.Fragment>
+      <label className={labelClassNames}>
+        {label}
+        <input
+          name={name}
+          ref={register}
+          {...rest}
+          className={inputClassNames}
+          type={type}
         />
       </label>
       {errors[name]?.message && <ErrorMessage message={errors[name].message} />}

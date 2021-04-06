@@ -14,7 +14,7 @@ export default function TicketsContainer(props) {
 
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
   const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
-
+  // debugger;
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
 
   // React paginate
@@ -37,6 +37,7 @@ export default function TicketsContainer(props) {
               id={ticket.id}
               tickets={mysqlUserTickets}
               status={ticket.status_id}
+              isAdmin={isAdmin}
             >
               <Ticket.AgentStatus
                 status={ticket.status_id}
@@ -78,6 +79,7 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
+                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
@@ -150,6 +152,7 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
+                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
