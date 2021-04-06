@@ -6,13 +6,30 @@ class FilterDao {
     this.pool = pool;
   }
 
-async filterTickets(req, res) {
+ async filterTickets(req, res) {
+  // if (true) console.log(true)​​​​​​​​​​​​​​​​;
+  // console.log('FILTERING LOGS BELOW');
+  let {created_at,...rest} = req.query;
+  let createdAtSql='';
     try {
-  let fields = Object.keys(req.query); 
-  let values = Object.values(req.query); 
-    let query = req.query;  
-      let tickets = await pool.query(`SELECT * from tickets WHERE ${fields.join('=? AND ')}=?`, [...values]);
-      console.log(tickets);
+    console.log({rest})
+  //  let created_at = req.query; //doesn't like this syntax.
+      console.log({created_at})
+      let fields=Object.keys(rest);
+      let values=Object.values(req.query);
+      // let joined = fields.join('=? AND ')
+      let joined =  `${fields.join('=? AND ')}=?`
+      if (created_at) {
+        //  created_at = created_at.replace('+', ' ');
+         createdAtSql = `created_at >= DATE_SUB(NOW(), INTERVAL ${created_at})`;
+        // createdAtSql = `DAY(created_at) `;
+        joined = fields.join('=? AND ')
+      }
+      let sql=`SELECT * from tickets WHERE ${createdAtSql.concat(joined)}`;
+      
+      console.log({sql})
+      let tickets = await pool.query(sql, [...values]);
+      // console.log(tickets);
       let files = await pool.query('Select * from files');
       let comments = await pool.query(`Select tn.id, tn.note_text, tn.client_id, tn.ticket_id, c.fname, c.lname, tn.created_at
       from ticket_notes tn
@@ -27,7 +44,9 @@ async filterTickets(req, res) {
     throw new Error(err)
   } 
 }
-  updateById(req, res) {
+
+
+updateById(req, res) {
     let fields = Object.keys(req.body); // making dynamic. fields is now an array
     // fields[fields.indexOf('condition')] = 'condition'; //if i were using my cars database (for condition because condition is a reserve word in sql) : at position in the array, make equal to backtick array
     let values = Object.values(req.body); //making dynmical
@@ -45,7 +64,7 @@ async filterTickets(req, res) {
     }
     let sql = `UPDATE tickets set ${fields.join('=?,')}=? WHERE id =?`; //update the data!
     //have to put =? at the end of the join because join only add between things!
-    console.log(sql);
+    console.log({sql});
     this.pool.query(sql, [...values, req.params.id], (err, rows) => {
       //... means SPREAD. It takes values from of array (in this instance).
       //did this method because, cant send id in body of values. if we didnt use params, then id would have to be passed in last. sent id as a "url param" and that seperated id for the body content.
@@ -58,5 +77,5 @@ async filterTickets(req, res) {
       res.json(rows);
     });
   }
- }
+}
 module.exports = FilterDao;

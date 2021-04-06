@@ -8,7 +8,7 @@ const cors = require('cors'); //gives us access to cors. Cors handles the http f
 const bodyParser = require('body-parser'); // allows us to parse
 const router = require('./app/routes/router');
 const { getConnection } = require('./app/config/dbconfig');
-const e = require('express');
+// const e = require('express');
 //use express static folder
 var publicDir = require('path').join(__dirname, './public/Images');
 app.use(express.static(publicDir));

@@ -14,7 +14,7 @@ router.get('/search?', async (req, res) => {
 });
 
 
-router.post('/update/:id', (req, res) => {
+router.post('/update/:id', async (req, res) => {
   console.log(req.body);
 
   //res.json(req.body);
