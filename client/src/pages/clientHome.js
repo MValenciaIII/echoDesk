@@ -22,6 +22,8 @@ function ClientDashboard(props) {
     getDbUsersTickets,
     auth0UserMeta,
     getAuth0UserMeta,
+    allTickets,
+    isAdmin,
   } = useContext(UserContext);
 
   // console.log({ mysqlUserTickets });
@@ -54,13 +56,13 @@ function ClientDashboard(props) {
   }, [user]);
 
   useEffect(() => {
-    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
+    if (isAdmin) {
       history.push('/agentHome');
     }
-  }, [user, auth0UserMeta]);
+  }, [user, auth0UserMeta, mysqlUser, isAdmin]);
 
   // ||mysqlUserTickets
-  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta) {
+  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta || !isAdmin) {
     return <Loading />;
   } else {
     return (

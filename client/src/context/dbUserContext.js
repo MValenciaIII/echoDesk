@@ -16,6 +16,7 @@ function UserContextProvider(props) {
   const [allTickets, setAllTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
+  const [isAdmin, setisAdmin] = useState();
 
   // useEffect(() => {
   //   async function fetchTickets() {
@@ -116,6 +117,7 @@ function UserContextProvider(props) {
 
   async function getAuth0UserMeta() {
     const domain = 'memaechodesk.us.auth0.com';
+
     try {
       const accessToken = await getAccessTokenSilently({
         audience: `https://${domain}/api/v2/`,
@@ -137,10 +139,15 @@ function UserContextProvider(props) {
       setAuth0UserMeta(user_metadata);
       if (user_metadata.app_metadata?.isAdmin) {
         //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
-        getAllTickets();
+        await getAllTickets();
+        setisAdmin(true);
+        console.log(allTickets);
+      } else {
+        setisAdmin(false);
       }
     } catch (error) {
       console.log(error);
+      console.log(allTickets);
       try {
         const accessToken = await getAccessTokenWithPopup({
           audience: `https://${domain}/api/v2/`,
@@ -162,7 +169,10 @@ function UserContextProvider(props) {
         setAuth0UserMeta(user_metadata);
         if (user_metadata.app_metadata?.isAdmin) {
           //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
-          getAllTickets();
+          await getAllTickets();
+          setisAdmin(true);
+        } else {
+          setisAdmin(false);
         }
       } catch (error) {
         console.log(error);
@@ -186,6 +196,7 @@ function UserContextProvider(props) {
         setAllTickets,
         currentFilterQuery,
         setcurrentFilterQuery,
+        isAdmin,
       }}
     >
       {props.children}

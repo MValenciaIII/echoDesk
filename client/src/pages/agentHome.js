@@ -20,6 +20,7 @@ function AgentDashboard(props) {
     auth0UserMeta,
     getAuth0UserMeta,
     allTickets,
+    isAdmin,
   } = useContext(UserContext);
 
   let barIndex = user.sub.indexOf('|') + 1;
@@ -39,18 +40,30 @@ function AgentDashboard(props) {
 
   //Redirect if not an admin;
   useEffect(() => {
-    if (auth0UserMeta && !auth0UserMeta.app_metadata?.isAdmin) {
+    if (!isAdmin) {
       history.push('/');
     }
   }, [auth0UserMeta, user]);
 
   //  Gatekeeping the Components from loading if the necessary data has not yet been fetched here at the page leve;
-  if (!mysqlUser || !allTickets || !auth0UserMeta || !mysqlUserTickets) {
+
+  if (
+    !mysqlUser ||
+    !allTickets ||
+    !auth0UserMeta ||
+    !mysqlUserTickets ||
+    !isAdmin
+  ) {
     return <Loading />;
   } else {
     return (
       <HeaderFooter>
-        <AgentDashboardContainer mysqlUser={mysqlUser} />
+        <AgentDashboardContainer
+          mysqlUser={mysqlUser}
+          allTickets={allTickets}
+          auth0UserMeta={auth0UserMeta}
+          mysqlUserTickets={mysqlUserTickets}
+        />
       </HeaderFooter>
     );
   }
