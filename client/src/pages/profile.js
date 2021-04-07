@@ -18,7 +18,6 @@ export default function ProfileSettings() {
   //! the | get's converted in a query string to a code symbol; Thus, avoiding storing the | and just stoiring the num;
   let userId = Auth0subConverter(user);
 
-  // console.log(Object.entries(mysqlUser || ''));
   useEffect(() => {
     if (!mysqlUser) {
       getDbUser(userId);

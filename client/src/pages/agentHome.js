@@ -10,7 +10,6 @@ function AgentDashboard(props) {
   let history = useHistory();
 
   const { user } = useAuth0();
-  console.log(user);
 
   const {
     mysqlUser,

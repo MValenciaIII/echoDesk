@@ -18,34 +18,6 @@ function UserContextProvider(props) {
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
   const [isAdmin, setisAdmin] = useState();
 
-  // useEffect(() => {
-  //   async function fetchTickets() {
-  //     // todo: Should this be refactored to only call if the currently logged in user is an admin?  Otherwise anyone could inspect files and makes this call no?  A form of front end security
-
-  //     // todo: take out of useEffect... this is returning undefined (above)
-  //     // if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
-  //     try {
-  //       let ticketsUrl = allTicketsRoute;
-  //       let response = await fetch(ticketsUrl);
-  //       let allTickets = await response.json();
-
-  //       // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
-  //       let defaultSorted = allTickets.sort((one, two) => {
-  //         return two.id - one.id;
-  //       });
-  //       console.log(defaultSorted);
-  //       if (response.ok) {
-  //         setAllTickets([...defaultSorted]);
-  //       }
-  //     } catch (error) {
-  //       console.error({ error });
-  //       setAllTickets([]);
-  //     }
-  //   }
-  //   // }
-  //   fetchTickets();
-  // }, [user, auth0UserMeta, mysqlUserTickets, mysqlUser]);
-
   let barIndex;
   let defaultuserId; //i.e. the current auth0 user with pipe removed
   // if (user) {
@@ -71,7 +43,7 @@ function UserContextProvider(props) {
       let defaultSorted = allTickets.sort((one, two) => {
         return two.id - one.id;
       });
-      console.log(defaultSorted);
+
       if (response.ok) {
         setAllTickets([...defaultSorted]);
       }
@@ -141,13 +113,11 @@ function UserContextProvider(props) {
         //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
         await getAllTickets();
         setisAdmin(true);
-        console.log(allTickets);
       } else {
         setisAdmin(false);
       }
     } catch (error) {
       console.log(error);
-      console.log(allTickets);
       try {
         const accessToken = await getAccessTokenWithPopup({
           audience: `https://${domain}/api/v2/`,

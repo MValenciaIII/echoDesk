@@ -28,7 +28,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
   const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
 
   const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
-  console.log({ mysqlUser });
+
 
   const defaultValues = {
     client_full_name: mysqlUser.fname + ' ' + mysqlUser.lname,

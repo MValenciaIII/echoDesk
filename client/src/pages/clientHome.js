@@ -26,23 +26,8 @@ function ClientDashboard(props) {
     isAdmin,
   } = useContext(UserContext);
 
-  // console.log({ mysqlUserTickets });
-  // console.log({ mysqlUser });
-
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
-
-  // useEffect(() => {
-  //   if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta) {
-  //     Promise.all([
-  //       getDbUser(userId),
-  //       getDbUsersTickets(userId),
-  //       getAuth0UserMeta(),
-  //     ])
-  //       .then((values) => console.log(values))
-  //       .catch((err) => console.log(err));
-  //   }
-  // }, [user, mysqlUser, mysqlUserTickets, getAuth0UserMeta, auth0UserMeta]);
 
   useEffect(() => {
     if (!mysqlUser || !auth0UserMeta || !mysqlUserTickets)

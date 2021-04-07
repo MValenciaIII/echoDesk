@@ -25,12 +25,13 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
     department_id: '',
     location_id: '',
     service_id: '',
+    reactSelect: '',
   };
 
   async function onSubmit(data, event) {
     // todo: DEFINE API ROUTES IN A CONSTANTS FOLDER LATER; remove
     // todo: remove debugger too
-    // debugger;
+    debugger;
     try {
       let url;
 
@@ -51,7 +52,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       console.log({ url });
       // ! This context state setter is getting stored to context in order to later access it on the refreshing of the ticket when a comment is submitted to determine whether to fetch ALL tickets or to fetch the currently set filtered tickets
       setcurrentFilterQuery(url);
-      debugger;
+
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -187,7 +188,8 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       />
 
       {/* note the name prop is required even though not an input due to the react.children.map conditional in the corresponiding agent ticket filter component */}
-
+      {/* // todo: CONTINUE TESTING REACTSELECT FOR BETTER UX ON OUR FORM SUBMISSIONS  ~ WK Wednesday April 07, 2021 04:49PM*/}
+      {/* <AgentTicketFilterForm.ReactSelect name="reactSelect" /> */}
       <AgentTicketFilterForm.FlexPane
         classNames="flex justify-between mt-3"
         name="flexPane"
@@ -198,6 +200,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
           inputClassNames={submitClassNames}
           type="Submit"
         />
+
         <AgentTicketFilterForm.Button
           name="ResetButton"
           onSubmit={onSubmit}

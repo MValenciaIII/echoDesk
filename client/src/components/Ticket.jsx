@@ -63,7 +63,7 @@ export default function Ticket({
         body: JSON.stringify(dataWithNullsRemoved),
       });
       let result = await response.json();
-      console.log(result);
+
       if (isAdmin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
@@ -255,8 +255,6 @@ Ticket.AgentStatus = function TicketAgentStatus({
 
   let wordPriority = priorityIDtoWord(String(priority));
   let [stylingPriority, setstylingPriority] = useState(wordPriority);
-
-  console.log(stylingPriority);
 
   function statusClasses() {
     switch (stylingStatus) {
@@ -693,7 +691,7 @@ Ticket.InputNote = function InputNote({
         body: JSON.stringify(data),
       });
       let result = await response.json();
-      console.log(result);
+
       //reseting the textArea
       reset();
       if (isAdmin && currentFilterQuery) {
