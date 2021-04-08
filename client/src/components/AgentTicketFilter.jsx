@@ -12,6 +12,7 @@ export default function AgentTicketFilterForm({
   ...restProps
 }) {
   const methods = useForm({ defaultValues });
+
   const { handleSubmit } = methods;
 
   return (

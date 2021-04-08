@@ -164,6 +164,7 @@ function UserContextProvider(props) {
         getAuth0UserMeta,
         allTickets,
         setAllTickets,
+        getAllTickets,
         currentFilterQuery,
         setcurrentFilterQuery,
         isAdmin,

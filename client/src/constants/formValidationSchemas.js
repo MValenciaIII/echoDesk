@@ -41,7 +41,7 @@ export const inputTicketSchema = yup.object().shape({
     .string()
     .required('Full Name is required')
     .trim()
-    .max(25, 'The max length is 45'),
+    .max(45, 'The max length is 45'),
   email: yup
     .string()
     .email('Must be a valid email')
@@ -56,8 +56,8 @@ export const inputTicketSchema = yup.object().shape({
     .trim()
     .matches(phoneValidationRegex, 'Must be a valid phone'),
   //https://stackoverflow.com/questions/52483260/validate-phone-number-with-yup
-  subject: yup.string().required('Subject is required').trim().max(35),
-  service_id: yup.number().required('Service Ttype is required'),
+  subject: yup.string().required('Subject is required').trim().max(55),
+  service_id: yup.number().required('Service Type is required'),
   service_details_id: yup.number().required('Subservice type is required'),
   priority_id: yup.number().required('Priority is required'),
   description: yup

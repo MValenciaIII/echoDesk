@@ -17,7 +17,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const { setAllTickets, setcurrentFilterQuery } = useContext(UserContext);
   const defaultValues = {
     agent_id: '',
-    Created: '',
+    created_at: '1 Month',
     Resolution_due_by: '',
     First_Response_due_by: '',
     status_id: '',
@@ -83,7 +83,11 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
     'inline-block p-1 rounded-sm w-max text-black hover:bg-green-800 hover:text-white font-bold';
 
   return (
-    <AgentTicketFilterForm onSubmit={onSubmit} classNames={formClassname}>
+    <AgentTicketFilterForm
+      onSubmit={onSubmit}
+      classNames={formClassname}
+      defaultValues={defaultValues}
+    >
       <AgentTicketFilterForm.Heading />
 
       <AgentTicketFilterForm.Select
@@ -117,7 +121,8 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         inputClassNames={inputClassNames}
         options={<FilterCreatedAtDate />}
       />
-      <AgentTicketFilterForm.Select
+      {/* //todo: come back and implement later? */}
+      {/* <AgentTicketFilterForm.Select
         name="Resolution_due_by"
         label="Resolution due by"
         labelClassNames={labelClassNames}
@@ -150,7 +155,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
           'Next hour',
           'Next 30 minutes',
         ]}
-      />
+      /> */}
       <AgentTicketFilterForm.Select
         name="status_id"
         label="Status"

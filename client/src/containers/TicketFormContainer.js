@@ -27,8 +27,9 @@ export default function TicketFormContainer({ children, ...restProps }) {
 
   const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
 
-  const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
-
+  const { mysqlUser, getDbUsersTickets, isAdmin, getAllTickets } = useContext(
+    UserContext
+  );
 
   const defaultValues = {
     client_full_name: mysqlUser.fname + ' ' + mysqlUser.lname,
@@ -69,7 +70,11 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.log(JSON.stringify(data));
       console.log(result);
       if (!result.error) {
-        await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+        if (isAdmin) {
+          await getAllTickets();
+        } else {
+          await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+        }
         toast.success('Ticket Successfully Created', {
           position: 'top-right',
           autoClose: 1000,
