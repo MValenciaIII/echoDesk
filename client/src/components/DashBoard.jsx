@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 // import { HideClosedTickets } from '../utils/quickFilterFunctions';
-
+import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
 
 // @# SET OF COMPOUND COMPONENTS THAT ARE MOSTLY CONTAINERS FOR RENDERING TICKET PARTS AND FORMS ON SIDE OF PAGE;
@@ -47,6 +47,17 @@ Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   return (
     <div id="formContainer" className="order-1 m-3 md:order-none">
       {children}
+    </div>
+  );
+};
+
+Dashboard.QuickFilters = function DashboardQuickFilters({ children }) {
+  let { allTickets, setAllTickets } = useContext(UserContext);
+  const { register, handleSubmit } = useForm();
+
+  return (
+    <div id="filtersContainer" className="">
+      <img src="https://www.mema4kids.info/file-1617989280638.jpg" alt="test" />
     </div>
   );
 };

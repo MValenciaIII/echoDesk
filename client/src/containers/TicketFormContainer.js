@@ -48,7 +48,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
 
   async function onSubmit(data, event) {
     // todo: REMOVE DEBUGGER WHEN NEEDED;
-    // debugger;
+    debugger;
 
     event.preventDefault();
 
@@ -205,6 +205,8 @@ export default function TicketFormContainer({ children, ...restProps }) {
           inputClassNames={inputClassNames}
           type={'file'}
         /> */}
+        {/* //todo: FILES */}
+        {/* <InputTicketForm.Input type="file" name="file" /> */}
         <InputTicketForm.Submit
           type="submit"
           value="Submit"

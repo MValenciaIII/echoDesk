@@ -73,6 +73,7 @@ InputTicketForm.Input = function InputTicketFormInput({
           name={name}
           ref={register}
           {...rest}
+          type={type}
           className={inputClassNames}
         />
       </label>
