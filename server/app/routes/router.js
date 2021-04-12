@@ -7,6 +7,8 @@ router.use('/tickets', require('./api/ticketRoutes')); // calls tickets file.
 
 router.use('/tickets/filter', require('./api/filterRoutes'));
 
+router.use('/tickets/quickFilters', require('./api/quickFilterRoutes'));
+
 router.use('/priority', require('./api/priorityRoutes'));
 
 router.use('/notes', require('./api/noteRoutes'));

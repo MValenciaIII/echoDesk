@@ -7,6 +7,8 @@ import AgentHome from './pages/agentHome';
 import ProfileSettings from './pages/profile';
 import AgentInputTicket from './pages/agentInputTicket.js';
 import Loading from './components/Loading';
+import Images from './components/Images';
+import FilesUploadComponent from './components/Images';
 // import Ticket from './components/Ticket';
 
 function App() {
@@ -21,8 +23,10 @@ function App() {
         <ProtectedRoute path="/profilesettings" component={ProfileSettings} />
         <ProtectedRoute path="/agentHome" component={AgentHome} />
         <ProtectedRoute path="/agentInputTicket" component={AgentInputTicket} />
+        <ProtectedRoute path="/images" component={Images} />
         <ProtectedRoute exact path="/" component={ClientDashboard} />
       </Switch>
+      {/* <FilesUploadComponent /> */}
     </div>
   );
 }
