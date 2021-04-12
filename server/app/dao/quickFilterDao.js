@@ -10,15 +10,17 @@ class FilterDao {
    console.log(req.query)
     try {
       let sql = 'Select * from tickets WHERE '
-        if(req.query.urgent){
-          sql += `tickets.priority_id = 4 AND `
-        }
-       else if (req.query.hideClosed){
-            sql += `tickets.status_id != 3 AND tickets.status_id != 4 AND `
-        }
-        else if (req.query.assignedToMe){
-          sql += `tickets.agent_id = ${req.query.assignedToMe} AND `
+      if(req.query.urgent){
+        sql += `tickets.priority_id = 1 AND `
+        console.log('urgent');
       }
+     if (req.query.hideClosed){
+          sql += `tickets.status_id != 3 AND tickets.status_id != 4 AND `
+          console.log('closed');
+      }
+      if (req.query.assignedToMe){
+        sql += `tickets.agent_id = ${req.query.assignedToMe} AND `
+    }
         sql += ` tickets.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)`
         console.log({sql});
       let tickets = await pool.query(sql);
