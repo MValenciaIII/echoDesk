@@ -8,7 +8,7 @@ export default function SettingsDropdown(props) {
   let { auth0UserMeta } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
 
   function clientOrAgentLink() {
-    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
+    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin?.checked) {
       return '/agentHome';
     } else {
       return '/';

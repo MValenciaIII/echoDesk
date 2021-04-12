@@ -20,6 +20,7 @@ const Auth0ProviderWithHistory = ({ children }) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      scope="read:current_user read:users_app_metadata update:current_user_metadata "
     >
       {children}
     </Auth0Provider>

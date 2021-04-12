@@ -19,20 +19,22 @@ export default function TicketsContainer(props) {
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
 
   // debugger;
-  let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
+  let chosenTickets = isAdmin.admin ? allTickets : mysqlUserTickets;
 
   // React paginate
   const [currentPage, setCurrentPage] = useState(0);
   const PER_PAGE = 15;
   const offset = currentPage * PER_PAGE;
-  const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
+  const pageCount = Math.ceil(chosenTickets?.length / PER_PAGE);
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
   }
   // fakeTickets for when api is down;
   // mysqlUserTickets
-
-  if (isAdmin) {
+  if (!chosenTickets) {
+    return null;
+  }
+  if (isAdmin?.admin) {
     return (
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (

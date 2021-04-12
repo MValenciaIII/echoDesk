@@ -8,7 +8,7 @@ function Header(props) {
   let { auth0UserMeta } = useContext(UserContext);
 
   function clientOrAgentLink() {
-    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
+    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin?.admin) {
       return '/agentHome';
     } else {
       return '/';

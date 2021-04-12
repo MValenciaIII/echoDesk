@@ -41,13 +41,14 @@ function ClientDashboard(props) {
   }, [user]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAdmin && isAdmin.admin) {
       history.push('/agentHome');
     }
   }, [user, auth0UserMeta, mysqlUser, isAdmin]);
 
   // ||mysqlUserTickets
-  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta || !isAdmin) {
+  // debugger;
+  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta || !isAdmin?.checked) {
     return <Loading />;
   } else {
     return (

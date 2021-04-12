@@ -98,7 +98,7 @@ export default function TicketFormContainer({
           });
         }
 
-        if (auth0UserMeta.app_metadata?.isAdmin) {
+        if (auth0UserMeta.app_metadata?.isAdmin?.admin) {
           // !CREATING AGENTS
           try {
             // todo: see about putting more agent meta in; doubtful for now;  GROUPS

@@ -47,7 +47,7 @@ export default function Ticket({
 
   async function onSubmit(data, event) {
     //todo: remove debugger later;
-    // debugger;
+    debugger;
 
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
@@ -66,7 +66,7 @@ export default function Ticket({
       });
       let result = await response.json();
 
-      if (isAdmin && currentFilterQuery) {
+      if (isAdmin?.admin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
           let filteredTickets = await filteredResponse.json();
@@ -77,7 +77,7 @@ export default function Ticket({
         } catch (error) {
           console.error(error);
         }
-      } else if (isAdmin) {
+      } else if (isAdmin?.admin) {
         await getAllTickets(); //i.e. no filter query currently set;
       } else {
         await getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
@@ -695,7 +695,7 @@ Ticket.InputNote = function InputNote({
 
       //reseting the textArea
       reset();
-      if (isAdmin && currentFilterQuery) {
+      if (isAdmin?.admin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
           let filteredTickets = await filteredResponse.json();

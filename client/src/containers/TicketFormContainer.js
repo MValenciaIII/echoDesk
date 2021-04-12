@@ -70,7 +70,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.log(JSON.stringify(data));
       console.log(result);
       if (!result.error) {
-        if (isAdmin) {
+        if (isAdmin?.admin) {
           await getAllTickets();
         } else {
           await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
@@ -104,7 +104,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
   }
 
   function showAssignAgentToAdmins() {
-    if (mysqlUser.isAdmin) {
+    if (mysqlUser.isAdmin?.admin) {
       return (
         <InputTicketForm.Select
           options={<AgentOptions />}

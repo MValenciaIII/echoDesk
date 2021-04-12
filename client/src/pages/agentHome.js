@@ -39,7 +39,7 @@ function AgentDashboard(props) {
 
   //Redirect if not an admin;
   useEffect(() => {
-    if (!isAdmin) {
+    if (isAdmin && !isAdmin.admin) {
       history.push('/');
     }
   }, [auth0UserMeta, user]);
@@ -51,7 +51,7 @@ function AgentDashboard(props) {
     !allTickets ||
     !auth0UserMeta ||
     !mysqlUserTickets ||
-    !isAdmin
+    !isAdmin?.checked
   ) {
     return <Loading />;
   } else {
