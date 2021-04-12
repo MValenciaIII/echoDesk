@@ -6,13 +6,18 @@ class FilterDao {
     this.pool = pool;
   }
 
- async quickTickets(req, res) {
+ async quickFilters(req, res) {
     try {
         let sql = "Select * FROM tickets WHERE "
         if(req.query.urgent){
-            sql.concat("ticket.priority_id = 4 AND ")
+            sql.concat("priority_id = 4 AND ")
         }
-      let tickets = await pool.query(sql, [...values]);
+        if (req.query.closed){
+            sql.concat("tickets.status_id != 3 AND ticket.status_id != 4 AND ")
+        }
+        sql.concat('ticket.created_at => DATE_SUB(NOW(), INTERVAL 1 MONTH)')
+        console.log({sql})
+      let tickets = await pool.query(sql)
       // console.log(tickets);
       let files = await pool.query('Select * from files');
       let comments = await pool.query(`Select tn.id, tn.note_text, tn.client_id, tn.ticket_id, c.fname, c.lname, tn.created_at
