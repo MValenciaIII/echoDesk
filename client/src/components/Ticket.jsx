@@ -35,7 +35,9 @@ export default function Ticket({
   const [isEditingTicket, setisEditingTicket] = useState(false);
   const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
-  const { currentFilterQuery, setAllTickets } = useContext(UserContext);
+  const { currentFilterQuery, setAllTickets, getAllTickets } = useContext(
+    UserContext
+  );
 
   function grayOutClosedOrResolvedTicket() {
     if (status === 3 || status === 4) {
@@ -63,7 +65,7 @@ export default function Ticket({
         body: JSON.stringify(dataWithNullsRemoved),
       });
       let result = await response.json();
-      console.log(result);
+
       if (isAdmin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
@@ -75,8 +77,10 @@ export default function Ticket({
         } catch (error) {
           console.error(error);
         }
+      } else if (isAdmin) {
+        await getAllTickets(); //i.e. no filter query currently set;
       } else {
-        getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
+        await getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
       }
     } catch (error) {
       console.error({ error });
@@ -255,8 +259,6 @@ Ticket.AgentStatus = function TicketAgentStatus({
 
   let wordPriority = priorityIDtoWord(String(priority));
   let [stylingPriority, setstylingPriority] = useState(wordPriority);
-
-  console.log(stylingPriority);
 
   function statusClasses() {
     switch (stylingStatus) {
@@ -477,7 +479,6 @@ Ticket.AgentLocation = function TicketAgentLocation({
         <select
           ref={register}
           name="location_id"
-          id=""
           defaultValue={mainLocation}
           className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700`}
         >
@@ -512,7 +513,6 @@ Ticket.Category = function TicketCategory({
         ref={register}
         className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-28 "
         name="service_id"
-        id=""
         defaultValue={category}
       >
         <PrimaryServiceCategories />
@@ -525,7 +525,6 @@ Ticket.Category = function TicketCategory({
         ref={register}
         className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-max"
         name="service_details_id"
-        id=""
         defaultValue={subcategory}
       >
         {/* //@ REACT HOOK FORM IS PUTTING IN OTHER OPTIONS VIA UTIL PLUS WATCH */}
@@ -693,7 +692,7 @@ Ticket.InputNote = function InputNote({
         body: JSON.stringify(data),
       });
       let result = await response.json();
-      console.log(result);
+
       //reseting the textArea
       reset();
       if (isAdmin && currentFilterQuery) {
@@ -720,7 +719,6 @@ Ticket.InputNote = function InputNote({
       <textarea
         name="note_text"
         ref={register}
-        id=""
         cols="25"
         rows="2"
         className="w-full p-2 text-sm "

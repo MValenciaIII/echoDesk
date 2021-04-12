@@ -16,34 +16,7 @@ function UserContextProvider(props) {
   const [allTickets, setAllTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
-
-  // useEffect(() => {
-  //   async function fetchTickets() {
-  //     // todo: Should this be refactored to only call if the currently logged in user is an admin?  Otherwise anyone could inspect files and makes this call no?  A form of front end security
-
-  //     // todo: take out of useEffect... this is returning undefined (above)
-  //     // if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
-  //     try {
-  //       let ticketsUrl = allTicketsRoute;
-  //       let response = await fetch(ticketsUrl);
-  //       let allTickets = await response.json();
-
-  //       // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
-  //       let defaultSorted = allTickets.sort((one, two) => {
-  //         return two.id - one.id;
-  //       });
-  //       console.log(defaultSorted);
-  //       if (response.ok) {
-  //         setAllTickets([...defaultSorted]);
-  //       }
-  //     } catch (error) {
-  //       console.error({ error });
-  //       setAllTickets([]);
-  //     }
-  //   }
-  //   // }
-  //   fetchTickets();
-  // }, [user, auth0UserMeta, mysqlUserTickets, mysqlUser]);
+  const [isAdmin, setisAdmin] = useState();
 
   let barIndex;
   let defaultuserId; //i.e. the current auth0 user with pipe removed
@@ -70,7 +43,7 @@ function UserContextProvider(props) {
       let defaultSorted = allTickets.sort((one, two) => {
         return two.id - one.id;
       });
-      console.log(defaultSorted);
+
       if (response.ok) {
         setAllTickets([...defaultSorted]);
       }
@@ -116,6 +89,7 @@ function UserContextProvider(props) {
 
   async function getAuth0UserMeta() {
     const domain = 'memaechodesk.us.auth0.com';
+
     try {
       const accessToken = await getAccessTokenSilently({
         audience: `https://${domain}/api/v2/`,
@@ -137,7 +111,10 @@ function UserContextProvider(props) {
       setAuth0UserMeta(user_metadata);
       if (user_metadata.app_metadata?.isAdmin) {
         //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
-        getAllTickets();
+        await getAllTickets();
+        setisAdmin(true);
+      } else {
+        setisAdmin(false);
       }
     } catch (error) {
       console.log(error);
@@ -162,7 +139,10 @@ function UserContextProvider(props) {
         setAuth0UserMeta(user_metadata);
         if (user_metadata.app_metadata?.isAdmin) {
           //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
-          getAllTickets();
+          await getAllTickets();
+          setisAdmin(true);
+        } else {
+          setisAdmin(false);
         }
       } catch (error) {
         console.log(error);
@@ -184,8 +164,10 @@ function UserContextProvider(props) {
         getAuth0UserMeta,
         allTickets,
         setAllTickets,
+        getAllTickets,
         currentFilterQuery,
         setcurrentFilterQuery,
+        isAdmin,
       }}
     >
       {props.children}

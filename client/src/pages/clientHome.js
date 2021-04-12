@@ -22,25 +22,12 @@ function ClientDashboard(props) {
     getDbUsersTickets,
     auth0UserMeta,
     getAuth0UserMeta,
+    allTickets,
+    isAdmin,
   } = useContext(UserContext);
-
-  // console.log({ mysqlUserTickets });
-  // console.log({ mysqlUser });
 
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
-
-  // useEffect(() => {
-  //   if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta) {
-  //     Promise.all([
-  //       getDbUser(userId),
-  //       getDbUsersTickets(userId),
-  //       getAuth0UserMeta(),
-  //     ])
-  //       .then((values) => console.log(values))
-  //       .catch((err) => console.log(err));
-  //   }
-  // }, [user, mysqlUser, mysqlUserTickets, getAuth0UserMeta, auth0UserMeta]);
 
   useEffect(() => {
     if (!mysqlUser || !auth0UserMeta || !mysqlUserTickets)
@@ -54,13 +41,13 @@ function ClientDashboard(props) {
   }, [user]);
 
   useEffect(() => {
-    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin) {
+    if (isAdmin) {
       history.push('/agentHome');
     }
-  }, [user, auth0UserMeta]);
+  }, [user, auth0UserMeta, mysqlUser, isAdmin]);
 
   // ||mysqlUserTickets
-  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta) {
+  if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta || !isAdmin) {
     return <Loading />;
   } else {
     return (

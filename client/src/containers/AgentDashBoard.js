@@ -10,6 +10,7 @@ function DashboardContainer(props) {
       <Dashboard.InnerContainer>
         <Dashboard.TicketsContainer>
           <Dashboard.Header isAgent mysqlUser={props.mysqlUser} />
+
           <Ticketcontainer />
         </Dashboard.TicketsContainer>
         <Dashboard.FormContainer>

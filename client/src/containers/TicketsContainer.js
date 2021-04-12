@@ -8,12 +8,16 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  let { mysqlUser, mysqlUserTickets, auth0UserMeta, allTickets } = useContext(
-    UserContext
-  );
+  let {
+    mysqlUser,
+    mysqlUserTickets,
+    auth0UserMeta,
+    allTickets,
+    isAdmin,
+  } = useContext(UserContext);
 
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
-  const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
+
   // debugger;
   let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
 
