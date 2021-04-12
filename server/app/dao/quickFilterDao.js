@@ -6,14 +6,24 @@ class FilterDao {
     this.pool = pool;
   }
 
- async quickTickets(req, res) {
+ async quickFilters(req, res) {
+   console.log(req.query)
     try {
-        let sql = "Select * FROM tickets WHERE "
-        if(req.query.urgent){
-            sql.concat("ticket.priority_id = 4 AND ")
-        }
-      let tickets = await pool.query(sql, [...values]);
-      // console.log(tickets);
+      let sql = 'Select * from tickets WHERE '
+      if(req.query.urgent){
+        sql += `tickets.priority_id = 1 AND `
+        console.log('urgent');
+      }
+     if (req.query.hideClosed){
+          sql += `tickets.status_id != 3 AND tickets.status_id != 4 AND `
+          console.log('closed');
+      }
+      if (req.query.assignedToMe){
+        sql += `tickets.agent_id = ${req.query.assignedToMe} AND `
+    }
+        sql += ` tickets.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)`
+        console.log({sql});
+      let tickets = await pool.query(sql);
       let files = await pool.query('Select * from files');
       let comments = await pool.query(`Select tn.id, tn.note_text, tn.client_id, tn.ticket_id, c.fname, c.lname, tn.created_at
       from ticket_notes tn
@@ -62,8 +72,5 @@ updateById(req, res) {
     });
   }
 }
-
-// console.log(FilterDao)
-// FilterDao.prototype.filterTickets({test:"secondTest"}, 'res');
 
 module.exports = FilterDao;
