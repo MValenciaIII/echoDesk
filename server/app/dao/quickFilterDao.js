@@ -6,28 +6,12 @@ class FilterDao {
     this.pool = pool;
   }
 
- async filterTickets(req, res) {
+ async quickTickets(req, res) {
     try {
-      let {created_at, ...rest} = req.query;
-      let createdAtSql='';
-    console.log({rest})
-      console.log({created_at})
-      let fields=Object.keys(rest);
-      console.log({fields})
-      let values=Object.values(rest);
-      console.log({values})
-      //*Conditional is not working ? 
-      let joined = fields.join('=? AND ');  //if only 1 field, no=? to join with;  if mutliples, appends;
-      if (created_at) {
-         created_at = created_at.replace('+', ' ');
-         createdAtSql = `created_at >= DATE_SUB(NOW(), INTERVAL ${created_at})`;
-        //  joined = fields.join('=? AND ')
-        if (fields.length > 0) {
-          joined = ' AND '.concat(`${fields.join('=? AND ')}=?`)
+        let sql = "Select * FROM tickets WHERE "
+        if(req.query.urgent){
+            sql.concat("ticket.priority_id = 4 AND ")
         }
-      }
-      let sql=`SELECT * from tickets WHERE ${createdAtSql.concat(joined)}`;
-      console.log({sql})
       let tickets = await pool.query(sql, [...values]);
       // console.log(tickets);
       let files = await pool.query('Select * from files');

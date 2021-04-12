@@ -10,7 +10,7 @@ const router = require('./app/routes/router');
 const { getConnection } = require('./app/config/dbconfig');
 // const e = require('express');
 //use express static folder
-var publicDir = require('path').join(__dirname, './public/Images');
+var publicDir = require('path').join(__dirname, './public/Images/');
 app.use(express.static(publicDir));
 app.use(bodyparser.json());
 app.use(
@@ -18,9 +18,11 @@ app.use(
     extended: true,
   })
 );
+app.use(cors());
+const DIR = './public/Images/';
 // Database connection
 const db = mysql.createConnection({
-  host: '10.195.103.107',
+  host: 'localhost',
   user: 'root',
   password: 'memadev',
   database: 'echodeskDev',
@@ -34,7 +36,7 @@ db.connect(function (err) {
 //! Use of Multer
 var storage = multer.diskStorage({
   destination: (req, file, callBack) => {
-    callBack(null, './public/Images'); // './public/images/' directory name where save the file
+    callBack(null, DIR); // './public/images/' directory name where save the file
   },
   filename: (req, file, callBack) => {
     callBack(
@@ -46,22 +48,7 @@ var storage = multer.diskStorage({
 var upload = multer({
   storage: storage,
 });
-//! Routes start
-
-//@type   GET
-//$route  /
-//@desc   route for Home page
-//@access PUBLIC
-router.get('/create', (req, res) => {
-  // res.render('./index.html');
-  res.sendFile(__dirname + '/index.html');
-});
-
-//@type   POST
-//$route  /post
-//@desc   route for post data
-//@access PUBLIC
-router.post('/post', upload.single('fileUpload'), (req, res) => {
+router.post('/post', upload.single('file'), (req, res) => {
   if (!req.file) {
     console.log('No file upload');
   } else {
@@ -73,6 +60,7 @@ router.post('/post', upload.single('fileUpload'), (req, res) => {
       console.log('file uploaded');
     });
   }
+  console.log(req.body)
 });
 
 const PORT = 4000; //? Any connection to the react port of 3000 for local hos
