@@ -21,6 +21,8 @@ export const createNoteRoute = baseApiUrl.concat('notes/create');
 export const updateTicketRoute = (id) =>
   baseApiUrl.concat(`tickets/update/${id}`);
 
+export const quickFilterRoute = baseApiUrl.concat('tickets/quickFilters/find?');
+
 // http://10.195.103.107:3075/api/tickets/update/${id}
 // http://10.195.103.107:3075/api/notes/create
 // http://10.195.103.107:3075/api/agents/create

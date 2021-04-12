@@ -1,7 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 // import { HideClosedTickets } from '../utils/quickFilterFunctions';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
+import { allTicketsRoute, quickFilterRoute } from '../constants/apiRoutes';
+import { FilterIcon } from './Icons';
 
 // @# SET OF COMPOUND COMPONENTS THAT ARE MOSTLY CONTAINERS FOR RENDERING TICKET PARTS AND FORMS ON SIDE OF PAGE;
 export default function Dashboard({ children }) {
@@ -25,13 +27,29 @@ Dashboard.TicketsContainer = function DashboardTicketsContainer({ children }) {
   );
 };
 
-Dashboard.Header = function DashboardHeader({ children, mysqlUser, isAgent }) {
+Dashboard.Header = function DashboardHeader({
+  children,
+  mysqlUser,
+  isAgent,
+  showFilters,
+  setShowFilters,
+}) {
+  function toggleFilter() {
+    setShowFilters(!showFilters);
+  }
   if (isAgent) {
     return (
-      <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
-        {mysqlUser &&
-          `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are the tickets`}
-      </h2>
+      <>
+        <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
+          {mysqlUser &&
+            `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are the tickets`}
+          <FilterIcon
+            title="Toggle Quick Filter"
+            classNames="text-white fill-current cursor-pointer ml-1 w-6"
+            onClick={toggleFilter}
+          />
+        </h2>
+      </>
     );
   } else
     return (
@@ -51,13 +69,106 @@ Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   );
 };
 
-Dashboard.QuickFilters = function DashboardQuickFilters({ children }) {
-  let { allTickets, setAllTickets } = useContext(UserContext);
-  const { register, handleSubmit } = useForm();
+Dashboard.QuickFilters = function DashboardQuickFilters({
+  showFilters,
+  children,
+}) {
+  let { setAllTickets, mysqlUser, setcurrentFilterQuery } = useContext(
+    UserContext
+  );
+
+  const { handleSubmit, register } = useForm();
+
+  async function onSubmit(data, event) {
+    debugger;
+    let url;
+
+    let formData = new FormData(event.target);
+    const dataArray = [...formData.entries()].filter((entry) => entry[1]);
+    let dataAsString = new URLSearchParams(dataArray).toString();
+    console.log(dataAsString);
+    dataAsString = dataAsString.replaceAll('on', 'true');
+
+    let dataArrayWithNullsRemoved = Object.entries(data).filter(
+      ([item, val]) => val
+    );
+
+    if (dataArrayWithNullsRemoved.length === 0) {
+      url = allTicketsRoute;
+    } else {
+      url = quickFilterRoute;
+      url = url.concat(dataAsString);
+    }
+
+    try {
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          body: JSON.stringify(data),
+        },
+      });
+      if (response.ok) {
+        let filteredTickets = await response.json();
+        let sortedTickets = filteredTickets.sort((one, two) => {
+          return two.id - one.id;
+        });
+        setAllTickets(sortedTickets);
+        setcurrentFilterQuery(url);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
-    <div id="filtersContainer" className="">
-      <img src="https://www.mema4kids.info/file-1617989280638.jpg" alt="test" />
+    <div id="filtersContainer" className={showFilters ? 'block' : 'hidden'}>
+      {/* <img src="https://www.mema4kids.info/file-1617989280638.jpg" alt="test" /> */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={`bg-gray-200 py-2 px-4 text-center rounded-md`}
+      >
+        <h2>Quick filters for last month of tickets</h2>
+        <label className="mx-2" htmlFor="urgent">
+          Urgent Tickets
+          <input
+            ref={register}
+            type="checkbox"
+            name="urgent"
+            id="urgent"
+            className="mx-1"
+          />
+        </label>
+        <label className="mx-2" htmlFor="hideClosed">
+          Hide Closed
+          <input
+            ref={register}
+            type="checkbox"
+            name="hideClosed"
+            id="hideClosed"
+            className="mx-1"
+          />
+        </label>
+        <label className="mx-2" htmlFor="assignedToMe">
+          Assigned to Me
+          <input
+            ref={register}
+            type="checkbox"
+            id="assignedToMe"
+            name="assignedToMe"
+            className="mx-1"
+            // todo: uncomment this line below
+            // value={mysqlUser.agent_id}
+            value={'3'}
+          />
+        </label>
+        <button
+          type="submit"
+          className="inline-block p-1 ml-2 text-gray-300 bg-green-800 rounded-md w-max hover:text-white"
+        >
+          Apply Quick Filters
+        </button>
+      </form>
     </div>
   );
 };
