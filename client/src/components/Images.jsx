@@ -7,7 +7,7 @@ export default function Images(){
          const data = new FormData();
          data.append("file", file );
         
-        fetch('http://mema4kids.info/api/post' , {
+        fetch('https://mema4kids.info/api/post' , {
             method: 'post',
             body: data,
             mode: 'no-cors'

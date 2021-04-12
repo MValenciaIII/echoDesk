@@ -39,7 +39,6 @@ class FilterDao {
   } 
 }
 
-
 updateById(req, res) {
     let fields = Object.keys(req.body); // making dynamic. fields is now an array
     // fields[fields.indexOf('condition')] = 'condition'; //if i were using my cars database (for condition because condition is a reserve word in sql) : at position in the array, make equal to backtick array
