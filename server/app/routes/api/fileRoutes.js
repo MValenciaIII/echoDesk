@@ -23,10 +23,10 @@ router.get('/:id', (req, res) => {
 
 
 // //UPDATE FILE ROUTE.
-// router.post("/update/:id", (req, res) => {
-// console.log(req.body);
-// dao.updateById(req, res);
-// });
+router.post("/update/:id", (req, res) => {
+console.log(req.body);
+dao.updateById(req, res);
+});
 
 
 module.exports = router;

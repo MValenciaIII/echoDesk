@@ -4,13 +4,23 @@ export default function Images(){
     const [file, setFile] = useState();
 
      const submit = event => {
+        // debugger;
          const data = new FormData();
          data.append("file", file );
+         data.append('ticket_id',34) //adds to req.body!
         
-        fetch('http://mema4kids.info/api/post' , {
+        // fetch('https://mema4kids.info/api/post' , {
+        //     method: 'post',
+        //     body: data,
+        //     mode: 'no-cors'
+        //   }).then(response => console.log('Success:', response))
+        //   .catch(error => console.error('Error:', error));
+
+     
+          fetch('http://localhost:4000/api/post' , {
             method: 'post',
             body: data,
-            mode: 'no-cors'
+            // mode: 'no-cors'
           }).then(response => console.log('Success:', response))
           .catch(error => console.error('Error:', error));
      };
