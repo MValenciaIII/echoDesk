@@ -37,7 +37,7 @@ var storage = multer.diskStorage({
       null,
       file.fieldname + '-' + Date.now() + path.extname(file.originalname)
     );
-  },
+  }
 });
 var upload = multer({
   storage: storage,
@@ -48,12 +48,21 @@ router.post('/post', upload.single('file'), (req, res) => {
   if (!req.file) {
     console.log('No file upload');
   } else {
-    console.log(req.file.filename);
+    // console.log(req.file.filename);
+    // console.log(req.file.ticket_id)
     var imgsrc = 'http://localhost:4000/' + req.file.filename;
-    var insertData = 'INSERT INTO files(file_name)VALUES(?)';
-    db.query(insertData, [imgsrc], (err, result) => {
+    console.log({imgsrc})
+    // req.file.ticket_id = 19;
+    console.log(req.body);
+    console.log(req.body.ticket_id);
+    var insertData = `INSERT INTO files SET file_name = ?, ticket_id = ?`;
+    db.query(insertData, [imgsrc, req.body.ticket_id], (err, result) => {
       if (err) throw err;
       console.log('file uploaded');
+      res.send({
+        "code": 200,
+        "success": "file uploaded successfully."
+    })
     });
   }
   console.log(req.body)
