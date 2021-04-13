@@ -22,7 +22,6 @@ function ClientDashboard(props) {
     getDbUsersTickets,
     auth0UserMeta,
     getAuth0UserMeta,
-    allTickets,
     isAdmin,
   } = useContext(UserContext);
 
