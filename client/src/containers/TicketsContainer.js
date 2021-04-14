@@ -34,6 +34,7 @@ export default function TicketsContainer(props) {
   if (!chosenTickets) {
     return null;
   }
+  // ? NOTE: DON'T LOVE THIS IF ELSE;  PROBABLY COULD HAVE CONDITIONALLY RENDERED SOMETHING BETTER IN THE MAP;  FOR NOW, BE SURE CLIENT AND ADMIN MAP PROPS ARE SAME AS NEEDED FOR ADJUSTMENTS;   ~WK 4-13-2021
   if (isAdmin?.admin) {
     return (
       <div id="TicketsContainer" className="">
@@ -56,6 +57,7 @@ export default function TicketsContainer(props) {
                 department={ticket.department_id}
                 timeSubmitted={ticket.created_at}
                 ticketNotes={ticket.notes}
+                files={ticket.files}
               />
               <Ticket.AgentAssignedTo agentAssignedTo={ticket.agent_id} />
               <Ticket.AgentLocation mainLocation={ticket.location_id} />
@@ -130,6 +132,7 @@ export default function TicketsContainer(props) {
                 department={ticket.department_id}
                 timeSubmitted={ticket.created_at}
                 ticketNotes={ticket.notes}
+                files={ticket.files}
               />
               <Ticket.AssignedTo assignedTo={ticket.assignedTo} />
               <Ticket.Location mainLocation={ticket.location_id} />

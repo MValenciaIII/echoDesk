@@ -90,3 +90,56 @@ export function FilterIcon({ classNames, title, ...restProps }) {
     </svg>
   );
 }
+
+export function AttachmentPaperclipIcon({ classNames, title, ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className={`inline-block ${classNames}`}
+    >
+      <title> {title ? title : 'Attachment Icon'}</title>
+      <path d="M20.807 10.22l-2.030-2.029-10.15 10.148c-1.682 1.681-1.682 4.408 0 6.089s4.408 1.681 6.090 0l12.18-12.178c2.804-2.802 2.804-7.346 0-10.148-2.802-2.803-7.347-2.803-10.149 0l-12.788 12.787c-0.009 0.009-0.019 0.018-0.027 0.026-3.909 3.909-3.909 10.245 0 14.153 3.908 3.908 10.246 3.908 14.156 0 0.009-0.009 0.016-0.018 0.026-0.027l0.001 0.001 8.729-8.728-2.031-2.029-8.729 8.727c-0.009 0.008-0.018 0.018-0.026 0.026-2.784 2.783-7.312 2.783-10.096 0-2.783-2.783-2.783-7.31 0-10.093 0.010-0.009 0.019-0.018 0.028-0.026l-0.001-0.002 12.79-12.786c1.678-1.679 4.411-1.679 6.090 0s1.678 4.411 0 6.089l-12.18 12.178c-0.56 0.56-1.47 0.56-2.030 0-0.559-0.559-0.559-1.47 0-2.029l10.15-10.149z"></path>
+    </svg>
+  );
+}
+
+export function MailEnvelopeClosed({ classNames, title, ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className={`inline-block ${classNames}`}
+    >
+      <title> {title ? title : 'Mail Envelope Closed'}</title>
+
+      <path d="M5.315 9.274l11.185 9.726 11.187-9.728c0.194 0.184 0.313 0.445 0.313 0.735v11.986c0 0.557-0.449 1.007-1.003 1.007h-20.994c-0.564 0-1.003-0.451-1.003-1.007v-11.986c0-0.289 0.121-0.549 0.315-0.733zM6.004 8c-1.107 0-2.004 0.895-2.004 1.994v12.012c0 1.101 0.89 1.994 2.004 1.994h20.993c1.107 0 2.004-0.895 2.004-1.994v-12.012c0-1.101-0.89-1.994-2.004-1.994h-20.993zM16.5 17.7l-10-8.7h20l-10 8.7z"></path>
+    </svg>
+  );
+}
+
+export function MailEnvelopeOpen({ classNames, title, ...restProps }) {
+  return (
+    <svg
+      {...restProps}
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      className={`inline-block ${classNames}`}
+    >
+      <title> {title ? title : 'Mail Envelope Open'}</title>
+
+      <path d="M16.5 3l-12.5 11v14.006c0 1.101 0.89 1.994 2.004 1.994h20.993c1.107 0 2.004-0.895 2.004-1.994v-14.006l-12.5-11zM13.5 23h6l7 6h-20l7-6zM16.5 4.3l11 9.7-9 8h-4l-9-8 11-9.7zM27.685 28.725l-7.685-6.708 8-7.017v13c0 0.283-0.121 0.542-0.315 0.725v0 0zM5.315 28.725v0 0c-0.194-0.183-0.315-0.442-0.315-0.725v-13l8 7.017-7.685 6.708z"></path>
+    </svg>
+  );
+}

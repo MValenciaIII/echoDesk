@@ -156,7 +156,7 @@ InputTicketForm.FileUpload = function InputTicketFormFileUpload({
           name={name}
           ref={register}
           {...rest}
-          className={inputClassNames}
+          className={'block p-1 rounded-sm  text-white'}
           type={type}
         />
       </label>

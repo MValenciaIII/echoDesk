@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   allTicketsRoute,
@@ -93,8 +93,7 @@ function UserContextProvider(props) {
     try {
       const accessToken = await getAccessTokenSilently({
         audience: `https://${domain}/api/v2/`,
-        scope:
-          'read:current_user read:users_app_metadata update:current_user_metadata',
+        scope: 'read:current_user  update:current_user_metadata',
       });
 
       // API LINK WITH USER SUB
@@ -128,8 +127,7 @@ function UserContextProvider(props) {
       try {
         const accessToken = await getAccessTokenWithPopup({
           audience: `https://${domain}/api/v2/`,
-          scope:
-            'read:current_user read:users_app_metadata update:current_user_metadata',
+          scope: 'read:current_user  update:current_user_metadata',
         });
 
         // API LINK WITH USER SUB
@@ -146,7 +144,6 @@ function UserContextProvider(props) {
         let user_metadata = await metadataResponse.json();
         setAuth0UserMeta(user_metadata);
         if (user_metadata.app_metadata?.isAdmin) {
-          //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
           await getAllTickets();
           setisAdmin({
             checked: true,

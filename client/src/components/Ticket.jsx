@@ -17,7 +17,14 @@ import {
   AssignToAgentSelect,
   TicketLocationsOptions,
 } from '../utils/sqlFormHelpers';
-import { UserIcon, LocationIcon, OfficeIcon } from './Icons';
+import {
+  UserIcon,
+  LocationIcon,
+  OfficeIcon,
+  MailEnvelopeClosed,
+  MailEnvelopeOpen,
+  AttachmentPaperclipIcon,
+} from './Icons';
 import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
@@ -354,48 +361,93 @@ Ticket.Description = function TicketDescription({
   timeSubmitted,
   ticketNotes,
   toggleActivityLog,
+  files,
   ...restProps
 }) {
   let wordDepartment = departmentIdToValue(String(department));
-  function arrowClasses() {
-    return activityLogShown && 'transform rotate-180';
+
+  function showFilesIfPresent() {
+    if (files.length) {
+      let mapped = files.map((file) => {
+        return <Ticket.FileAttachment key={file.id} file={file} />;
+      });
+      return (
+        <>
+          <AttachmentPaperclipIcon classNames="w-6 p-1 text-blue stroke-current" />
+          <span>({files.length}) </span>
+          {mapped}
+        </>
+      );
+    }
   }
 
   return (
-    <div className="flex-grow col-span-12 p-1 bg-gray-100 border border-red-500 md:col-span-11">
-      <div className="">
-        <h2 className="inline-block font-bold text-black text-md">{title}</h2>
+    <div
+      data-name="TicketTitleContainer"
+      className="flex-grow col-span-12 p-1 bg-gray-100 border border-red-500 md:col-span-11"
+    >
+      <h2 className="inline-block font-bold text-black text-md">{title}</h2>
 
-        <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
-          {description}
-        </h3>
-        <p
-          name="metaTicketInfo"
-          className="mt-1 text-xs break-words whitespace-normal sm:mt-auto md:text-sm sm:w-auto"
-        >
-          By
-          <span className="font-bold">{` ${raisedBy} `} </span>
-          <span className="text-xs font-light"> ({wordDepartment}) </span>
-          on
-          <span className="text-xs font-light">{` (${getTimeFxn(
-            timeSubmitted
-          )}) `}</span>
-          <span className="inline-block text-xs ml1">
-            (Click to view or manage notes below) (
-            {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
-          </span>
-          {/*// todo: relocate this icon to a different place ?? */}
-          <img
-            src="/media/icons/arrow-down.svg"
-            alt="arrow-down"
-            className={`${arrowClasses()} inline-block w-6 p-1 duration-150`}
+      <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
+        {description}
+      </h3>
+      <p
+        name="metaTicketInfo"
+        className="mt-1 text-xs break-words whitespace-normal sm:mt-auto md:text-sm sm:w-auto"
+      >
+        By
+        <span className="font-bold">{` ${raisedBy} `} </span>
+        <span className="text-xs font-light"> ({wordDepartment}) </span>
+        on
+        <span className="text-xs font-light">{` (${getTimeFxn(
+          timeSubmitted
+        )}) `}</span>
+        <span className="inline-block text-xs ml1">
+          (Click to view or manage notes below) (
+          {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
+        </span>
+        {/*// todo: relocate this icon to a different place ?? */}
+        {activityLogShown ? (
+          <MailEnvelopeOpen
+            classNames={'text-blue  stroke-current w-8 p-1'}
             onClick={toggleActivityLog}
           />
-        </p>
-      </div>
+        ) : (
+          <MailEnvelopeClosed
+            classNames={'text-blue  stroke-current w-8 p-1'}
+            onClick={toggleActivityLog}
+          />
+        )}
+        {showFilesIfPresent()}
+      </p>
     </div>
   );
 };
+
+Ticket.FileAttachment = function TicketFileAttachment({ file }) {
+  return (
+    <a
+      className={
+        'text-decoration-none text-blue-800 hover:text-blue-400 text-xs'
+      }
+      rel="noreferrer"
+      target="_blank"
+      href={file.file_name}
+    >
+      Attachment {file.id}
+    </a>
+  );
+};
+
+//todo: maybe make a modal for seeing file images; Right now it'd be better off as a portal since it needs to live above the dom tree it's in; (hence absolute center class there; There would also be some state in opening the modal that I don't want to muck up this file with at the moment  4-13-2021   ~WK)
+// Ticket.FileModal = function TicketFileModal({ file }) {
+//   return (
+//     <div className="z-10 w-32 h-20 absolute-center">
+//       <button>Close Modal X</button>
+//       <img className="max-w-full" src={file.file_name} alt="file.file_name" />
+//     </div>
+//   );
+// };
 
 Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   children,
@@ -667,9 +719,12 @@ Ticket.InputNote = function InputNote({
   ...restProps
 }) {
   const { register, handleSubmit, reset } = useForm();
-  const { getDbUsersTickets, currentFilterQuery, setAllTickets } = useContext(
-    UserContext
-  );
+  const {
+    getDbUsersTickets,
+    currentFilterQuery,
+    setAllTickets,
+    getAllTickets,
+  } = useContext(UserContext);
 
   async function onSubmit(data, event) {
     // todo: remove debugger;
@@ -699,12 +754,17 @@ Ticket.InputNote = function InputNote({
         try {
           let filteredResponse = await fetch(currentFilterQuery);
           let filteredTickets = await filteredResponse.json();
-          setAllTickets(filteredTickets);
+          let filteredSorted = filteredTickets.sort((one, two) => {
+            return two.id - one.id;
+          });
+          setAllTickets(filteredSorted);
         } catch (error) {
           console.error(error);
         }
+      } else if (isAdmin?.admin) {
+        await getAllTickets(); //i.e. no filter query currently set;
       } else {
-        getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
+        await getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
       }
     } catch (error) {
       console.error({ error });

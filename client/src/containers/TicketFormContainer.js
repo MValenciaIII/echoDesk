@@ -15,7 +15,7 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
-import { createTicketRoute } from '../constants/apiRoutes';
+import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -42,6 +42,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     service_details_id: '1',
     priority_id: '1',
     description: ' ',
+    file: null,
   };
 
   const resolver = yupResolver(inputTicketSchema);
@@ -49,14 +50,32 @@ export default function TicketFormContainer({ children, ...restProps }) {
   async function onSubmit(data, event) {
     // todo: REMOVE DEBUGGER WHEN NEEDED;
     debugger;
-
     event.preventDefault();
 
-    // ! SUPPLMENTING DATA WITH AUTH INFO;
-    data.status_id = '1'; //default of open; not from form;send....
-    data.client_id = mysqlUser.id; // attaching the user's ID to the ticket
-    console.log({ data });
+    let { file, ...restdata } = data;
 
+    async function submitFiles(id) {
+      if (!file.length) {
+        return null;
+      } else {
+        const data = new FormData();
+        data.append('file', file[0]);
+        data.append('ticket_id', id); //@@ sends to req body to attach
+        let response = await fetch(imagePostRoute, {
+          method: 'post',
+          body: data,
+        });
+        console.log(response);
+        return response;
+      }
+    }
+
+    // ! SUPPLMENTING  TICKET DATA WITH AUTH INFO;
+    restdata.status_id = '1'; //default of open; not from form;send...
+    restdata.client_id = mysqlUser.id; // attaching the user's ID to the ticket
+    restdata = Object.fromEntries(
+      Object.entries(restdata).filter(([item, val]) => val)
+    );
     // Posting new TICKETS
     try {
       let response = await fetch(createTicketRoute, {
@@ -64,11 +83,14 @@ export default function TicketFormContainer({ children, ...restProps }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(restdata),
       });
       let result = await response.json();
-      console.log(JSON.stringify(data));
-      console.log(result);
+      let filesSentResponse;
+      if (file.length) {
+        filesSentResponse = await submitFiles(result.insertId);
+      }
+      console.log(filesSentResponse);
       if (!result.error) {
         if (isAdmin?.admin) {
           await getAllTickets();
@@ -104,7 +126,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
   }
 
   function showAssignAgentToAdmins() {
-    if (mysqlUser.isAdmin?.admin) {
+    if (mysqlUser.isAdmin) {
       return (
         <InputTicketForm.Select
           options={<AgentOptions />}
@@ -198,13 +220,13 @@ export default function TicketFormContainer({ children, ...restProps }) {
           placeholder="Please write a short description here"
           labelClassNames={labelClassNames}
         />
-        {/* <InputTicketForm.FileUpload
-          name={'files'}
+        <InputTicketForm.FileUpload
+          name={'file'}
           label="Upload a file"
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}
           type={'file'}
-        /> */}
+        />
         {/* //todo: FILES */}
         {/* <InputTicketForm.Input type="file" name="file" /> */}
         <InputTicketForm.Submit

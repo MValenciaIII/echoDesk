@@ -89,6 +89,7 @@ AgentTicketFilterForm.Select = function AgentTicketFilterSelect({
   );
 };
 
+//maybe eventually will incorporate a react select for a prettier (and more aria compliant select option)
 AgentTicketFilterForm.ReactSelect = function AgentTicketFilterReactSelect({
   register,
   options,
