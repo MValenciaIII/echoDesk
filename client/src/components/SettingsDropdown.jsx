@@ -5,7 +5,7 @@ import { UserContext } from '../context/dbUserContext';
 
 export default function SettingsDropdown(props) {
   const { logout } = useAuth0();
-  let { auth0UserMeta } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
+  let { auth0UserMeta, setcurrentFilterQuery } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
 
   function clientOrAgentLink() {
     if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin?.checked) {
@@ -21,12 +21,22 @@ export default function SettingsDropdown(props) {
         <Link to={clientOrAgentLink()}>Dashboard</Link>
       </li>
       <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
-        <Link to="/profilesettings">Profile Settings</Link>
+        <Link
+          onClick={(e) => setcurrentFilterQuery(null)}
+          to="/profilesettings"
+        >
+          Profile Settings
+        </Link>
       </li>
 
       {auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin && (
         <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
-          <Link to="/agentInputTicket">Input a ticket</Link>
+          <Link
+            onClick={(e) => setcurrentFilterQuery(null)}
+            to="/agentInputTicket"
+          >
+            Input a ticket
+          </Link>
         </li>
       )}
 
