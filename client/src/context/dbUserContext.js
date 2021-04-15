@@ -39,7 +39,7 @@ function UserContextProvider(props) {
       let response = await fetch(ticketsUrl);
       let allTickets = await response.json();
 
-      // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
+     
       let defaultSorted = allTickets.sort((one, two) => {
         return two.id - one.id;
       });
@@ -110,7 +110,6 @@ function UserContextProvider(props) {
       let user_metadata = await metadataResponse.json();
       setAuth0UserMeta(user_metadata);
       if (user_metadata.app_metadata?.isAdmin) {
-        //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
         await getAllTickets();
         setisAdmin({
           checked: true,

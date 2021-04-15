@@ -29,7 +29,6 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   };
 
   async function onSubmit(data, event) {
-    // todo: DEFINE API ROUTES IN A CONSTANTS FOLDER LATER; remove
     // todo: remove debugger too
     debugger;
     try {
