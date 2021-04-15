@@ -2,6 +2,8 @@ const daoClass = require('../../dao/fileDao'); //dao needs to be in APP FOLDER
 const dao = new daoClass();
 const express = require('express');
 const router = express.Router();
+// const multer = require('multer');
+const upload = require('../../middleware/upload')
 
 
 //GET ALL FILE ROUTES 
@@ -10,10 +12,21 @@ router.get('/', (req, res) => {
 });
 
 
+//api/files/post
+router.post('/post', upload.single('file'),  (req, res) => {
+  // debugger;
+ dao.uploadFiles(req, res);
+});
+
 // FIND A FILE ROUTE BY ID
 router.get('/:id', (req, res) => {
   dao.findbyID(req, res, req.params.id);
 });
+
+// uploads.upload = upload.single(file)
+  
+
+
 
 // //CREATE FILE ROUTE
 // router.post('/create', (req, res) => {

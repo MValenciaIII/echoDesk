@@ -4,7 +4,7 @@ export default function Images(){
     const [file, setFile] = useState();
 
      const submit = event => {
-        // debugger;
+        debugger;
          const data = new FormData();
          data.append("file", file );
          data.append('ticket_id',34) //adds to req.body!
@@ -17,8 +17,8 @@ export default function Images(){
         //   .catch(error => console.error('Error:', error));
 
      
-          fetch('http://localhost:4000/api/post' , {
-            method: 'post',
+          fetch('http://localhost:4000/api/files/post' , {
+            method: 'POST',
             body: data,
             // mode: 'no-cors'
           }).then(response => console.log('Success:', response))
