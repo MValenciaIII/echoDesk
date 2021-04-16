@@ -63,7 +63,6 @@ InputTicketForm.Input = function InputTicketFormInput({
   watch,
   errors,
   mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
-  rules,
   ...rest
 }) {
   return (
@@ -74,6 +73,7 @@ InputTicketForm.Input = function InputTicketFormInput({
           name={name}
           ref={register}
           {...rest}
+          type={type}
           className={inputClassNames}
         />
       </label>
@@ -126,9 +126,38 @@ InputTicketForm.TextArea = function InputTicketFormTextArea({
         <textarea
           name={name}
           ref={register}
-          className={'block p-2 text-black py-0.5 px-1'}
-          cols="38"
+          className={'block p-2 text-black py-0.5 px-1 w-11/12 max-w-3xl'}
+          cols="25"
           rows="5"
+        />
+      </label>
+      {errors[name]?.message && <ErrorMessage message={errors[name].message} />}
+    </React.Fragment>
+  );
+};
+
+InputTicketForm.FileUpload = function InputTicketFormFileUpload({
+  register,
+  name,
+  label,
+  labelClassNames,
+  inputClassNames,
+  type,
+  watch,
+  errors,
+  mainServicetype, //ERR message since spreading on restprops onto dom and mainservice type is not an html prop.  Hence destructuring off here to avoid that err;
+  ...rest
+}) {
+  return (
+    <React.Fragment>
+      <label className={labelClassNames}>
+        {label}
+        <input
+          name={name}
+          ref={register}
+          {...rest}
+          className={'block p-1 rounded-sm  text-white'}
+          type={type}
         />
       </label>
       {errors[name]?.message && <ErrorMessage message={errors[name].message} />}

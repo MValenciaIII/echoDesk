@@ -119,7 +119,7 @@ function Thermoscan(props) {
   );
 }
 
-// todo: finish filling out from freshdesk
+// todo: finish filling out from freshdesk????
 
 export function PrimaryServiceCategories() {
   return (
@@ -167,13 +167,50 @@ export function LocationOptions() {
     </>
   );
 }
-export function PriorityOptions() {
+export function PriorityOptions({ classNames }) {
   return (
     <>
-      <option value="1">Low</option>
-      <option value="2">Medium</option>
-      <option value="3">High</option>
-      <option value="4">Urgent</option>
+      <option className={classNames} value="1">
+        Low
+      </option>
+      <option className={classNames} value="2">
+        Medium
+      </option>
+      <option className={classNames} value="3">
+        High
+      </option>
+      <option className={classNames} value="4">
+        Urgent
+      </option>
+    </>
+  );
+}
+// export function PriorityOptions() {
+//   return (
+//     <>
+//       <option value="1">Low</option>
+//       <option value="2">Medium</option>
+//       <option value="3">High</option>
+//       <option value="4">Urgent</option>
+//     </>
+//   );
+// }
+
+export function StatusOptions({ classNames }) {
+  return (
+    <>
+      <option className={classNames} value="1">
+        Open
+      </option>
+      <option className={classNames} value="2">
+        Pending
+      </option>
+      <option className={classNames} value="3">
+        Resolved
+      </option>
+      <option className={classNames} value="4">
+        Closed
+      </option>
     </>
   );
 }
@@ -181,10 +218,20 @@ export function PriorityOptions() {
 export function AgentOptions() {
   return (
     <>
-      <option value="1">Charlieyya Smith</option>
-      <option value="2">Gray</option>
-      <option value="3">Michael Valencia</option>
-      <option value="4">Will Kelly</option>
+      <option value="">Not yet Assigned</option>
+      <option value="1">Alisha Torrence</option>
+      <option value="2">Bob Buseck</option>
+      <option value="3">Casey Donovan Mott</option>
+      <option value="4">Charllieya Smith</option>
+      <option value="5">Chris Watts</option>
+      <option value="6">James Dear Jr.</option>
+      <option value="7">James Montgomery</option>
+      <option value="8">Latoya Lofton</option>
+      <option value="9">Lenard Brent</option>
+      <option value="10">Marti Calhoun</option>
+      <option value="11">Preston White</option>
+      <option value="12">Scott Davis</option>
+      <option value="13">Wesley Edwards</option>
     </>
   );
 }

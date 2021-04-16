@@ -274,11 +274,20 @@ export function statusIdToWord(id) {
 export function AssignToAgentSelect() {
   return (
     <>
-      <option value={null}>Not yet Assigned</option>
-      <option value="1">Casey Mott</option>
-      <option value="2">Charlieyya Smith</option>
-      <option value="3">Alisha Torrence</option>
-      <option value="4">Michael Valencia</option>
+      <option value="">Not yet Assigned</option>
+      <option value="1">Alisha Torrence</option>
+      <option value="2">Bob Buseck</option>
+      <option value="3">Casey Donovan Mott</option>
+      <option value="4">Charllieya Smith</option>
+      <option value="5">Chris Watts</option>
+      <option value="6">James Dear Jr.</option>
+      <option value="7">James Montgomery</option>
+      <option value="8">Latoya Lofton</option>
+      <option value="9">Lenard Brent</option>
+      <option value="10">Marti Calhoun</option>
+      <option value="11">Preston White</option>
+      <option value="12">Scott Davis</option>
+      <option value="13">Wesley Edwards</option>
     </>
   );
 }

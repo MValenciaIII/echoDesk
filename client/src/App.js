@@ -7,7 +7,6 @@ import AgentHome from './pages/agentHome';
 import ProfileSettings from './pages/profile';
 import AgentInputTicket from './pages/agentInputTicket.js';
 import Loading from './components/Loading';
-// import Ticket from './components/Ticket';
 
 function App() {
   const { isLoading } = useAuth0();

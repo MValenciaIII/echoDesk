@@ -15,6 +15,7 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
+import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -26,8 +27,9 @@ export default function TicketFormContainer({ children, ...restProps }) {
 
   const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
 
-  const { mysqlUser, getDbUsersTickets } = useContext(UserContext);
-  console.log({ mysqlUser });
+  const { mysqlUser, getDbUsersTickets, isAdmin, getAllTickets } = useContext(
+    UserContext
+  );
 
   const defaultValues = {
     client_full_name: mysqlUser.fname + ' ' + mysqlUser.lname,
@@ -40,49 +42,96 @@ export default function TicketFormContainer({ children, ...restProps }) {
     service_details_id: '1',
     priority_id: '1',
     description: ' ',
+    file: null,
   };
 
   const resolver = yupResolver(inputTicketSchema);
 
   async function onSubmit(data, event) {
-    // todo: REMOVE DEBUGGER WHEN NEEDED;
-    debugger;
-
+    // todo: REMOVE  WHEN NEEDED;
     event.preventDefault();
 
-    // ! SUPPLMENTING DATA WITH AUTH INFO;
-    data.status_id = '1'; //default of open; not from form;send....
-    data.client_id = mysqlUser.id; // attaching the user's ID to the ticket
-    console.log(data);
+    let { files, ...restdata } = data;
 
+    async function submitFiles(id) {
+      if (!files.length) {
+        return null;
+      } else {
+        const data = new FormData();
+        [...files].forEach((f) => {
+          data.append('files', f);
+        });
+        data.append('ticket_id', id); //@@ sends to req body to attach
+        let response = await fetch(imagePostRoute, {
+          method: 'post',
+          body: data,
+        });
+        console.log(response);
+        if (!response.ok) {
+          toast.error('Problem with File Upload', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        return response;
+      }
+    }
+
+    // ! SUPPLMENTING  TICKET DATA WITH AUTH INFO;
+    restdata.status_id = '1'; //default of open; not from form;send...
+    restdata.client_id = mysqlUser.id; // attaching the user's ID to the ticket
+    restdata = Object.fromEntries(
+      Object.entries(restdata).filter(([item, val]) => val)
+    );
     // Posting new TICKETS
     try {
-      let response = await fetch(
-        'http://10.195.103.107:3075/api/tickets/create',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
-      let result = await response.json();
-      console.log(result);
-      // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
-      await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
-
-      //FORM RESET WITH USEEFFECT HOOK BACK TO DEFAULT VALUES
-
-      toast.success('Ticket submitted successfully!', {
-        position: 'top-right',
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      let response = await fetch(createTicketRoute, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(restdata),
       });
+      let result = await response.json();
+      let filesSentResponse;
+      if (files.length) {
+        filesSentResponse = await submitFiles(result.insertId);
+      }
+      console.log(filesSentResponse);
+      if (response.ok) {
+        if (isAdmin?.admin) {
+          await getAllTickets();
+        } else {
+          await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
+        }
+        toast.success('Ticket Successfully Created', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else if (!response.ok) {
+        toast.error('Ticket Not Created', {
+          position: 'top-right',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
+
+      //FORM WILL RESET DUE USEEFFECT HOOK IN THE COMPONENT FILE AND GO BACK TO DEFAULT VALUES
     } catch (error) {
       console.warn(error);
     }
@@ -183,6 +232,16 @@ export default function TicketFormContainer({ children, ...restProps }) {
           placeholder="Please write a short description here"
           labelClassNames={labelClassNames}
         />
+        <InputTicketForm.FileUpload
+          name={'files'}
+          label="Upload up to 3 files"
+          multiple
+          labelClassNames={labelClassNames}
+          inputClassNames={inputClassNames}
+          type={'file'}
+        />
+        {/* //todo: FILES */}
+        {/* <InputTicketForm.Input type="file" name="file" /> */}
         <InputTicketForm.Submit
           type="submit"
           value="Submit"

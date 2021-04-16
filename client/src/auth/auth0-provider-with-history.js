@@ -1,4 +1,5 @@
 // find info on this component here:https://auth0.com/blog/complete-guide-to-react-user-authentication/
+//docs here: https://auth0.github.io/auth0-react/interfaces/auth0_provider.auth0provideroptions.html#scope
 
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -20,6 +21,8 @@ const Auth0ProviderWithHistory = ({ children }) => {
       clientId={clientId}
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      scope="read:current_user  update:current_user_metadata "
+      useRefreshTokens={true}
     >
       {children}
     </Auth0Provider>

@@ -8,30 +8,30 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  const [currentPage, setCurrentPage] = useState(0);
-  const PER_PAGE = 15;
-  const offset = currentPage * PER_PAGE;
-
-  let { mysqlUser, mysqlUserTickets, auth0UserMeta, allTickets } = useContext(
+  let { mysqlUser, mysqlUserTickets, allTickets, isAdmin } = useContext(
     UserContext
   );
 
-  // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0;
-  const isAdmin = auth0UserMeta?.app_metadata?.isAdmin;
+  // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
 
-  let chosenTickets = isAdmin ? allTickets : mysqlUserTickets;
-  console.log(chosenTickets);
+  // ;
+  let chosenTickets = isAdmin.admin ? allTickets : mysqlUserTickets;
 
-  const pageCount = Math.ceil(chosenTickets.length / PER_PAGE);
-
+  // React paginate
+  const [currentPage, setCurrentPage] = useState(0);
+  const PER_PAGE = 15;
+  const offset = currentPage * PER_PAGE;
+  const pageCount = Math.ceil(chosenTickets?.length / PER_PAGE);
   function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage);
   }
-
   // fakeTickets for when api is down;
   // mysqlUserTickets
-
-  if (isAdmin) {
+  if (!chosenTickets) {
+    return null;
+  }
+  // ? NOTE: DON'T LOVE THIS IF ELSE;  PROBABLY COULD HAVE CONDITIONALLY RENDERED SOMETHING BETTER IN THE MAP;  FOR NOW, BE SURE CLIENT AND ADMIN MAP PROPS ARE SAME AS NEEDED FOR ADJUSTMENTS;   ~WK 4-13-2021
+  if (isAdmin?.admin) {
     return (
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
@@ -40,6 +40,7 @@ export default function TicketsContainer(props) {
               id={ticket.id}
               tickets={mysqlUserTickets}
               status={ticket.status_id}
+              isAdmin={isAdmin}
             >
               <Ticket.AgentStatus
                 status={ticket.status_id}
@@ -52,6 +53,7 @@ export default function TicketsContainer(props) {
                 department={ticket.department_id}
                 timeSubmitted={ticket.created_at}
                 ticketNotes={ticket.notes}
+                files={ticket.files}
               />
               <Ticket.AgentAssignedTo agentAssignedTo={ticket.agent_id} />
               <Ticket.AgentLocation mainLocation={ticket.location_id} />
@@ -65,7 +67,6 @@ export default function TicketsContainer(props) {
                 contactEmail={ticket.email}
                 title={ticket.subject}
               />
-              <Ticket.MakeChangesButtons />
             </Ticket>
             <Ticket.ActivityLogContainer>
               {ticket.notes?.map((note) => (
@@ -110,7 +111,11 @@ export default function TicketsContainer(props) {
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
           <Ticket.Container key={ticket.id}>
-            <Ticket id={ticket.id} tickets={mysqlUserTickets}>
+            <Ticket
+              id={ticket.id}
+              tickets={mysqlUserTickets}
+              status={ticket.status_id}
+            >
               <Ticket.Status
                 status={ticket.status_id}
                 priority={ticket.priority_id}
@@ -122,6 +127,7 @@ export default function TicketsContainer(props) {
                 department={ticket.department_id}
                 timeSubmitted={ticket.created_at}
                 ticketNotes={ticket.notes}
+                files={ticket.files}
               />
               <Ticket.AssignedTo assignedTo={ticket.assignedTo} />
               <Ticket.Location mainLocation={ticket.location_id} />
@@ -134,7 +140,6 @@ export default function TicketsContainer(props) {
                 contactPhone={ticket.client_phone_number}
                 contactEmail={ticket.email}
               />
-              <Ticket.MakeChangesButtons />
             </Ticket>
             <Ticket.ActivityLogContainer>
               {ticket.notes?.map((note) => (

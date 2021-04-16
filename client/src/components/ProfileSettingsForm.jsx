@@ -25,7 +25,7 @@ export default function ProfileSettingsForm({
     if (isSubmitSuccessful) {
       setisEditing(false);
     }
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful]);
 
   function cancelProfileEdits() {
     if (isEditing) {
@@ -158,7 +158,7 @@ ProfileSettingsForm.TextArea = function InputTicketFormTextArea({
           name={name}
           ref={register}
           className={'block p-2 text-black py-0.5 px-1'}
-          cols="38"
+          cols="25"
           rows="5"
         />
       </label>

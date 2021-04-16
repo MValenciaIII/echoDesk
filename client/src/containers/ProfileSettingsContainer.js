@@ -12,6 +12,11 @@ import {
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { profileSchema } from '../constants/formValidationSchemas';
+import {
+  createUserRoute,
+  updateUserRoute,
+  createAgentRoute,
+} from '../constants/apiRoutes';
 
 // docs to package here; https://www.npmjs.com/package/react-toastify
 
@@ -32,7 +37,7 @@ export default function TicketFormContainer({
     lname: mysqlUser.lname || '',
     title: mysqlUser.title || '',
     email: mysqlUser.email || '',
-    department_id: mysqlUser.department || '',
+    department_id: mysqlUser.department_id || '',
     location_id: mysqlUser.location_id || mysqlUser.location,
     mobile_phone: mysqlUser.mobile_phone || '',
     office_phone: mysqlUser.office_phone || '',
@@ -49,8 +54,8 @@ export default function TicketFormContainer({
   }, []);
 
   async function onSubmit(data, event) {
-    //todo: remove debugger before prod;
-    debugger;
+    //todo: remove  before prod;
+    // ;
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
@@ -58,25 +63,25 @@ export default function TicketFormContainer({
 
     // 1 = admin; 0 = normal client
     if (auth0UserMeta) {
-      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? true : false;
+      // mySql not converting the bool, hence the manual 1 or 0;
+      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? '1' : '0';
+      data.agent_id = auth0UserMeta.app_metadata?.agent_id || null;
     } else {
       data.isAdmin = false;
+      data.agent_id = null;
     }
 
-    // Posting new Users
+    //! Posting new Users
     if (!mysqlUser.fname) {
       try {
         let valueToSubmit = { ...data };
-        let response = await fetch(
-          'http://10.195.103.107:3075/api/users/create',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(valueToSubmit),
-          }
-        );
+        let response = await fetch(createUserRoute, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(valueToSubmit),
+        });
         let result = await response.json();
         console.log(result);
         if (!result.error) {
@@ -93,28 +98,26 @@ export default function TicketFormContainer({
           });
         }
 
-        if (auth0UserMeta.app_metadata?.isAdmin) {
+        if (auth0UserMeta.app_metadata?.isAdmin?.admin) {
           // !CREATING AGENTS
           try {
-            // todo: see about putting more agent meta in; doubtful for now
-            let agentData = valueToSubmit;
-            agentData.client_id = userSub;
+            // todo: see about putting more agent meta in; doubtful for now;  GROUPS
+            let agentData = {};
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
+            agentData.client_id = userSub;
 
-            let agentResponse = await fetch(
-              'http://10.195.103.107:3075/api/agents/create',
-              {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(agentData),
-              }
-            );
+            let agentResponse = await fetch(createAgentRoute, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(agentData),
+            });
             let agentResult = await agentResponse.json();
             console.log({ agentResult });
             if (!agentResult.error) {
-              await setmysqlUser(agentData);
+              await setmysqlUser(valueToSubmit);
+
               toast.success('Agent Profile Settings Created', {
                 position: 'top-right',
                 autoClose: 1000,
@@ -146,16 +149,13 @@ export default function TicketFormContainer({
     else {
       try {
         let valueToSubmit = { ...data };
-        let response = await fetch(
-          `http://10.195.103.107:3075/api/users/update/${userSub}`,
-          {
-            method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(valueToSubmit),
-          }
-        );
+        let response = await fetch(updateUserRoute(userSub), {
+          method: 'POST', //PUT UPDATES THE ENTIRE RECORD; PATCH A PARTIAL UPDATE
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(valueToSubmit),
+        });
         let result = await response.json();
         console.log(result);
         if (!result.error) {
@@ -187,7 +187,10 @@ export default function TicketFormContainer({
   }
 
   return (
-    <div id="ProfileSettingsFormContainer" className="w-full p-8 bg-gray-800 ">
+    <div
+      id="ProfileSettingsFormContainer"
+      className="flex-grow w-full p-8 bg-gray-800 "
+    >
       <ProfileSettingsForm
         onSubmit={onSubmit}
         classNames={formClassname}
@@ -244,12 +247,6 @@ export default function TicketFormContainer({
           name={'office_phone'}
           label="Phone Number"
           type={'tel'}
-          labelClassNames={labelClassNames}
-          inputClassNames={inputClassNames}
-        />
-        <ProfileSettingsForm.Input
-          name={'email'}
-          label="Email"
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}
         />

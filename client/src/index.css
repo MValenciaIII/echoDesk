@@ -41,3 +41,9 @@
 .flex-grow-2 {
   flex-grow: 2;
 }
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

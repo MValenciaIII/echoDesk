@@ -6,6 +6,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { UserContextProvider } from './context/dbUserContext';
 
+// https://auth0.com/blog/complete-guide-to-react-user-authentication/
+
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
@@ -16,7 +18,7 @@ ReactDOM.render(
       clientId={clientId}
       redirectUri={window.location.origin}
       audience="https://memaechodesk.us.auth0.com/api/v2/"
-      scope="read:current_user read:users_app_metadata update:current_user_metadata"
+      scope="read:current_user  update:current_user_metadata"
     >
       <UserContextProvider>
         <App />

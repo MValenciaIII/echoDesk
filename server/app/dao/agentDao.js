@@ -1,4 +1,5 @@
 const pool = require('../config/dbconfig');
+// const pool = require('../../../client/src/components/InputTicketForm');
 
 class AgentDao {
   //sometimes you have a parent dao class so its best to give the classes more define names.
@@ -10,7 +11,7 @@ class AgentDao {
     this.pool.query(sql, function (err, rows) {
       if (err) {
         res.json({
-          //error and message suppose to look like: "error", "message". It works withou
+          //error and message suppose to look like: "error", "message". It works without
           error: true,
           message: err,
         });
@@ -31,14 +32,13 @@ class AgentDao {
     });
   }
   create(req, res) {
-    // let sql = "SELECT * FROM movies where id= ?";
     let fields = Object.keys(req.body);
     // fields[ fields.indexOf('condition')] = 'condition'; //if i were using my cars database
     let values = Object.values(req.body);
     //Required Min Data
     if (
-      !req.body.client_id ||
-      !req.body.group_id
+      !req.body.id || 
+      !req.body.client_id
     ) {
       res.json({
         error: true,

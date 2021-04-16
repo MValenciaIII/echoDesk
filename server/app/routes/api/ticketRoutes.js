@@ -14,109 +14,16 @@ router.get('/', async (req, res) => {
   dao.findAll(req, res);
 });
 
-//FIND BY ID ROUTES ->> /api/tickets/:id
+// FIND BY ID ROUTES ->> /api/tickets/:id
 router.get('/:client_id', async(req, res) => {
   console.log(req.body);
   dao.findbyID(req, res, req.params.client_id);
 });
 
-
-
-
-// router.get('/search', async(req, res) => {
+// router.get('/search?', async (req, res) => {
 //   console.log(req.body);
-//   console.log(query)
-//   let query = req.query
-//   pool.query(
-//   let sql = 'Select * from tickets';
-//   if(query.location_id){
-//     sql += 'Where location_id${query.location}'
-//   }
-//   )
+//   dao.filterTickets(req, res);
 // });
-
-
-// router.get("/search", (req, res) => {
-//   let query = req.query;
-//   console.log(query);
-//   pool.query(
-//     `SELECT * from tickets;`,
-//     (err, rows) => {
-//       if (!err) {
-//         res.send(JSON.stringify(rows));
-//         console.log(rows);
-//       } else {
-//         console.log("Error", err);
-//       }
-//     }
-//   );
-// });
-
-// router.get("/search/:agent_id/:location_id/:priority_id/:status_id/:service_id/:service_details_id", function (req, res) {
-//   let sql = `SELECT * FROM tickets WHERE agent_id = ${req.params.agent_id} AND location_id= ${req.params.location_id} AND priority_id= ${req.params.priority_id} AND status_id= ${req.params.status_id} AND service_id= ${req.params.service_id} AND service_details_id= ${req.params.service_details_id}`;
-//   let query = pool.query(sql, (err, results) => {
-//       if (err) throw err;
-//       res.send(results);
-//   });
-//   // dao.findbyID(req, res, req.params.client_id);
-// });
-
-
-
-// router.get("/search", function (req, res) {
-//   let sql = `SELECT * FROM tickets WHERE agent_id = ${req.params.agent_id} AND location_id= ${req.params.location_id} AND priority_id= ${req.params.priority_id} AND status_id= ${req.params.status_id} AND service_id= ${req.params.service_id} AND service_details_id= ${req.params.service_details_id}`;
-//   let query = pool.query(sql, (err, results) => {
-//       if (err) throw err;
-//       res.send(results);
-//   });
-//   // dao.findbyID(req, res, req.params.client_id);
-// });
-
-
-router.get('/search?', function(req, res, next) {
-  var sql = "SELECT * from tickets ";
-  const existingParams = ["agent_id", "location_id"].filter(field => req.query[field]);
-
-  if (existingParams.length !==0) {
-      sql += " WHERE ";
-      sql += existingParams.query(field => `${field} = ?`).join(" AND ");
-  }
-
-  pool.query(
-      sql,
-      existingParams.query(field => req.query[field]),
-      function (error, results, fields) {
-          res.json({"status": 200, "error": null, "response": results});
-      }
-  );
-});
-
-
-
-// router.get('/search?', function(req, res, next) {
-//   var agent = req.query.agent_id;
-//   var location = req.query.location_id;
-//   var sql = "SELECT * from users WHERE agent_id = ? AND location_id = ?"; 
-//   pool.query(sql, [agent, location], function (error, results, fields) {
-//       res.json({"status": 200, "error": null, "response": results});
-//   });
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 router.post('/update/:id', (req, res) => {
