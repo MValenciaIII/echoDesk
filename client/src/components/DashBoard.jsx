@@ -80,7 +80,6 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
   const { handleSubmit, register } = useForm();
 
   async function onSubmit(data, event) {
-    debugger;
     let url;
 
     let formData = new FormData(event.target);

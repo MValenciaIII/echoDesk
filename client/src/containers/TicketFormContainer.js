@@ -48,24 +48,36 @@ export default function TicketFormContainer({ children, ...restProps }) {
   const resolver = yupResolver(inputTicketSchema);
 
   async function onSubmit(data, event) {
-    // todo: REMOVE DEBUGGER WHEN NEEDED;
-    debugger;
+    // todo: REMOVE  WHEN NEEDED;
     event.preventDefault();
 
-    let { file, ...restdata } = data;
+    let { files, ...restdata } = data;
 
     async function submitFiles(id) {
-      if (!file.length) {
+      if (!files.length) {
         return null;
       } else {
         const data = new FormData();
-        data.append('file', file[0]);
+        [...files].forEach((f) => {
+          data.append('files', f);
+        });
         data.append('ticket_id', id); //@@ sends to req body to attach
         let response = await fetch(imagePostRoute, {
           method: 'post',
           body: data,
         });
         console.log(response);
+        if (!response.ok) {
+          toast.error('Problem with File Upload', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
         return response;
       }
     }
@@ -87,11 +99,11 @@ export default function TicketFormContainer({ children, ...restProps }) {
       });
       let result = await response.json();
       let filesSentResponse;
-      if (file.length) {
+      if (files.length) {
         filesSentResponse = await submitFiles(result.insertId);
       }
       console.log(filesSentResponse);
-      if (!result.error) {
+      if (response.ok) {
         if (isAdmin?.admin) {
           await getAllTickets();
         } else {
@@ -106,7 +118,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           draggable: true,
           progress: undefined,
         });
-      } else if (result.error) {
+      } else if (!response.ok) {
         toast.error('Ticket Not Created', {
           position: 'top-right',
           autoClose: 1000,
@@ -117,6 +129,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           progress: undefined,
         });
       }
+      // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
 
       //FORM WILL RESET DUE USEEFFECT HOOK IN THE COMPONENT FILE AND GO BACK TO DEFAULT VALUES
     } catch (error) {
@@ -220,12 +233,15 @@ export default function TicketFormContainer({ children, ...restProps }) {
           labelClassNames={labelClassNames}
         />
         <InputTicketForm.FileUpload
-          name={'file'}
-          label="Upload a file"
+          name={'files'}
+          label="Upload up to 3 files"
+          multiple
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}
           type={'file'}
         />
+        {/* //todo: FILES */}
+        {/* <InputTicketForm.Input type="file" name="file" /> */}
         <InputTicketForm.Submit
           type="submit"
           value="Submit"

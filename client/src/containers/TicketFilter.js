@@ -29,8 +29,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   };
 
   async function onSubmit(data, event) {
-    // todo: remove debugger too
-    debugger;
+    // todo: remove  too
     try {
       let url;
 

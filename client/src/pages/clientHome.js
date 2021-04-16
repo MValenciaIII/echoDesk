@@ -46,7 +46,7 @@ function ClientDashboard(props) {
   }, [user, auth0UserMeta, mysqlUser, isAdmin]);
 
   // ||mysqlUserTickets
-  // debugger;
+  // ;
   if (!mysqlUser || !mysqlUserTickets || !auth0UserMeta || !isAdmin?.checked) {
     return <Loading />;
   } else {

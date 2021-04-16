@@ -52,9 +52,7 @@ export default function Ticket({
   }
 
   async function onSubmit(data, event) {
-    //todo: remove debugger later;
-    debugger;
-
+    //todo: remove  later;
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
@@ -256,7 +254,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
   handleSubmit,
   ...restProps
 }) {
-  // debugger;
+  // ;
   let wordStatus = statusIdToWord(String(status));
   let [stylingStatus, setStylingStatus] = useState(wordStatus);
 
@@ -364,8 +362,8 @@ Ticket.Description = function TicketDescription({
 
   function showFilesIfPresent() {
     if (files.length) {
-      let mapped = files.map((file) => {
-        return <Ticket.FileAttachment key={file.id} file={file} />;
+      let mapped = files.map((file, idx) => {
+        return <Ticket.FileAttachment key={file.id} file={file} idx={idx} />;
       });
       return (
         <>
@@ -419,12 +417,12 @@ Ticket.Description = function TicketDescription({
   );
 };
 
-Ticket.FileAttachment = function TicketFileAttachment({ file }) {
+Ticket.FileAttachment = function TicketFileAttachment({ file, idx }) {
   return (
     <a
-      className={
-        'text-decoration-none text-blue-800 hover:text-blue-400 text-xs'
-      }
+      className={`text-decoration-none text-blue-800 hover:text-blue-400 text-xs inline-block${
+        idx > 0 && 'ml-1'
+      }`}
       rel="noreferrer"
       target="_blank"
       href={file.file_name}
@@ -453,7 +451,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   agentAssignedTo,
   ...restProps
 }) {
-  // debugger;
+  // ;
   return (
     <div
       data-id="agentAssignedTo"
@@ -720,8 +718,8 @@ Ticket.InputNote = function InputNote({
   } = useContext(UserContext);
 
   async function onSubmit(data, event) {
-    // todo: remove debugger;
-    // debugger;
+    // todo: remove ;
+    // ;
     event.preventDefault();
 
     if (!data.note_text) {

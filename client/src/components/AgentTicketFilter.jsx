@@ -118,7 +118,7 @@ AgentTicketFilterForm.ReactSelect = function AgentTicketFilterReactSelect({
   const colourStyles = {
     control: (styles) => ({ ...styles, backgroundColor: 'white' }),
     option: (styles, state) => {
-      // debugger;
+      // ;
       const color = state.data.color;
       return {
         ...styles,
@@ -227,7 +227,7 @@ AgentTicketFilterForm.Button = function AgentTicketFilterButton({
   handleSubmit,
   ...rest
 }) {
-  // debugger;
+  // ;
 
   return (
     <button

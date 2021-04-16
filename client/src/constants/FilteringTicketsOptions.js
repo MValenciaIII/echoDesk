@@ -61,8 +61,8 @@ export function FilterPrimaryServiceCategories() {
   );
 }
 export function FilterAgentOptions() {
-  // todo: remove debugger when needed
-  // debugger;
+  // todo: remove  when needed
+  // ;
   const { mysqlUser } = useContext(UserContext);
 
   let currentAgent = mysqlUser && mysqlUser.agent_id ? mysqlUser.agent_id : '';

@@ -14,7 +14,7 @@ export default function TicketsContainer(props) {
 
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
 
-  // debugger;
+  // ;
   let chosenTickets = isAdmin.admin ? allTickets : mysqlUserTickets;
 
   // React paginate
