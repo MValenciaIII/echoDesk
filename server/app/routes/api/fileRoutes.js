@@ -3,19 +3,17 @@ const dao = new daoClass();
 const express = require('express');
 const router = express.Router();
 // const multer = require('multer');
-const upload = require('../../middleware/upload')
+const upload = require('../../middleware/upload');
 
-
-//GET ALL FILE ROUTES 
+//GET ALL FILE ROUTES
 router.get('/', (req, res) => {
   dao.findAll(req, res);
 });
 
-
 //api/files/post
-router.post('/post', upload.single('file'),  (req, res) => {
-  // debugger;
- dao.uploadFiles(req, res);
+router.post('/post', upload.single('file'), (req, res) => {
+  // ;
+  dao.uploadFiles(req, res);
 });
 
 // FIND A FILE ROUTE BY ID
@@ -24,9 +22,6 @@ router.get('/:id', (req, res) => {
 });
 
 // uploads.upload = upload.single(file)
-  
-
-
 
 // //CREATE FILE ROUTE
 // router.post('/create', (req, res) => {
@@ -34,12 +29,10 @@ router.get('/:id', (req, res) => {
 //   dao.create(req, res);
 // });
 
-
 // //UPDATE FILE ROUTE.
-router.post("/update/:id", (req, res) => {
-console.log(req.body);
-dao.updateById(req, res);
+router.post('/update/:id', (req, res) => {
+  console.log(req.body);
+  dao.updateById(req, res);
 });
-
 
 module.exports = router;

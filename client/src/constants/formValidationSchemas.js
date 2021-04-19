@@ -2,6 +2,8 @@ import * as yup from 'yup';
 
 export const phoneValidationRegex = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
+
 export const profileSchema = yup.object().shape({
   fname: yup
     .string()
@@ -65,4 +67,16 @@ export const inputTicketSchema = yup.object().shape({
     .required('A brief description of your problem is required')
     .trim()
     .max(1000),
+  files: yup
+    .mixed()
+    .test(
+      'length',
+      'The max number of files is 3',
+      (value) => value.length <= 3
+    )
+    .test(
+      'fileFormat',
+      'Unsupported Format; Must be an image file',
+      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+    ),
 });

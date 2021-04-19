@@ -42,7 +42,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     service_details_id: '1',
     priority_id: '1',
     description: ' ',
-    file: null,
+    files: null,
   };
 
   const resolver = yupResolver(inputTicketSchema);
@@ -50,6 +50,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
   async function onSubmit(data, event) {
     // todo: REMOVE  WHEN NEEDED;
     event.preventDefault();
+    debugger;
 
     let { files, ...restdata } = data;
 
