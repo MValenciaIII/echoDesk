@@ -53,7 +53,7 @@ class UserDao {
       !req.body.email ||
       !req.body.mobile_phone ||
       !req.body.office_phone ||
-      !req.body.location ||
+      !req.body.location_id ||
       !req.body.title ||
       !req.body.department_id ||
       !req.body.id || 
