@@ -131,7 +131,7 @@ Ticket.Container = function TicketContainer({ children, ...restprops }) {
   return (
     <div
       data-name="SingleTicketContainer" //for easier ID'ING in devtools instead of a long list of classnames; ~wk 3-15-2021
-      className={`mt-4 overflow-hidden bg-gray-200 rounded-md shadow-md max-w-screen-2x`}
+      className={`mt-4 overflow-hidden bg-light-base rounded-md shadow-md max-w-screen-2x`}
     >
       {childrenWithProps}
     </div>
@@ -158,13 +158,13 @@ Ticket.Status = function TicketStatus({
   function statusClasses() {
     switch (stylingStatus) {
       case 'Open':
-        return 'bg-blue-900 ';
+        return 'bg-medium ';
       case 'Pending':
-        return 'bg-green-700 ';
+        return 'bg-pending';
       case 'Resolved':
-        return 'bg-gray-600 text-gray-200';
+        return 'bg-gray-600 text-text-muted';
       case 'Closed':
-        return 'bg-gray-600 text-gray-200';
+        return 'bg-gray-600 text-text-muted';
       default:
         return;
     }
@@ -172,10 +172,10 @@ Ticket.Status = function TicketStatus({
 
   // COLORS DIV HOLDING PRIORITY SEMANTICALLY
   function priorityClasses(el) {
-    let bgRed = 'bg-red-800';
-    let bgBlue = 'bg-blue-800';
-    let bgYellow = 'bg-yellow-800';
-    let bgGreen = 'bg-green-800';
+    let bgRed = 'bg-urgent';
+    let bgBlue = 'bg-medium';
+    let bgYellow = 'bg-high';
+    let bgGreen = 'bg-low';
 
     if (wordStatus === 'Resolved' || wordStatus === 'Closed') {
       return 'bg-gray-600';
@@ -206,16 +206,16 @@ Ticket.Status = function TicketStatus({
           ref={register}
           name="status_id"
           defaultValue={status}
-          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full
         `}
           onChange={(event) =>
             setStylingStatus(statusIdToWord(event.target.value))
           }
         >
-          <option value="1" className="bg-gray-800">
+          <option value="1" className="bg-base">
             Open
           </option>
-          <option value="4" className="bg-gray-800">
+          <option value="4" className="bg-base">
             Closed
           </option>
         </select>
@@ -226,7 +226,7 @@ Ticket.Status = function TicketStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
@@ -235,7 +235,7 @@ Ticket.Status = function TicketStatus({
             setstylingPriority(priorityIDtoWord(event.target.value))
           }
         >
-          <PriorityOptions classNames="bg-gray-700" />
+          <PriorityOptions classNames="bg-off-base" />
         </select>
       </div>
     </div>
@@ -264,13 +264,13 @@ Ticket.AgentStatus = function TicketAgentStatus({
   function statusClasses() {
     switch (stylingStatus) {
       case 'Open':
-        return 'bg-blue-900 ';
+        return 'bg-medium ';
       case 'Pending':
-        return 'bg-green-700 ';
+        return 'bg-pending ';
       case 'Resolved':
-        return 'bg-gray-600 text-gray-200 ';
+        return 'bg-gray-600 text-text-muted ';
       case 'Closed':
-        return 'bg-gray-600 text-gray-200';
+        return 'bg-gray-600 text-text-muted ';
       default:
         return;
     }
@@ -278,10 +278,10 @@ Ticket.AgentStatus = function TicketAgentStatus({
 
   // COLORS DIV HOLDING PRIORITY SEMANTICALLY
   function priorityClasses(el) {
-    let bgRed = 'bg-red-800';
-    let bgBlue = 'bg-blue-800';
-    let bgYellow = 'bg-yellow-800';
-    let bgGreen = 'bg-green-800';
+    let bgRed = 'bg-urgent';
+    let bgBlue = 'bg-medium';
+    let bgYellow = 'bg-high';
+    let bgGreen = 'bg-low';
 
     if (wordStatus === 'Resolved' || wordStatus === 'Closed') {
       return 'bg-gray-600';
@@ -312,14 +312,14 @@ Ticket.AgentStatus = function TicketAgentStatus({
           ref={register}
           name="status_id"
           defaultValue={status}
-          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full
          `}
           onChange={(event) =>
             setStylingStatus(statusIdToWord(event.target.value))
           }
           // onChange={handleSubmit}
         >
-          <StatusOptions classNames="bg-gray-700" />
+          <StatusOptions classNames="bg-off-base" />
         </select>
       </div>
 
@@ -330,7 +330,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
       >
         <select
           ref={register}
-          className={`bg-transparent inline-block align-middle text-white w-full font-bold h-full`}
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
@@ -338,7 +338,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
             setstylingPriority(priorityIDtoWord(event.target.value))
           }
         >
-          <PriorityOptions classNames="bg-gray-700" />
+          <PriorityOptions classNames="bg-off-base" />
         </select>
       </div>
     </div>
@@ -367,7 +367,7 @@ Ticket.Description = function TicketDescription({
       });
       return (
         <>
-          <AttachmentPaperclipIcon classNames="w-6 p-1 text-blue stroke-current" />
+          <AttachmentPaperclipIcon classNames="w-6 p-1 text-text-base-inverted stroke-current" />
           <span>({files.length}) </span>
           {mapped}
         </>
@@ -378,11 +378,13 @@ Ticket.Description = function TicketDescription({
   return (
     <div
       data-name="TicketTitleContainer"
-      className="flex-grow col-span-12 p-1 bg-gray-100 border border-red-500 md:col-span-11"
+      className="flex-grow col-span-12 p-1 border border-red-500 bg-light-base md:col-span-11"
     >
-      <h2 className="inline-block font-bold text-black text-md">{title}</h2>
+      <h2 className="inline-block font-bold text-text-base-inverted text-md">
+        {title}
+      </h2>
 
-      <h3 className="w-11/12 text-xs text-gray-600 break-words whitespace-normal md:text-sm md:w-5/6">
+      <h3 className="w-11/12 text-xs break-words whitespace-normal text-text-base-inverted-muted md:text-sm md:w-5/6">
         {description}
       </h3>
       <p
@@ -402,12 +404,12 @@ Ticket.Description = function TicketDescription({
         </span>
         {activityLogShown ? (
           <MailEnvelopeOpen
-            classNames={'text-blue  stroke-current w-8 p-1'}
+            classNames={'text-text-base-inverted  stroke-current w-8 p-1'}
             onClick={toggleActivityLog}
           />
         ) : (
           <MailEnvelopeClosed
-            classNames={'text-blue  stroke-current w-8 p-1'}
+            classNames={'text-text-base-inverted  stroke-current w-8 p-1'}
             onClick={toggleActivityLog}
           />
         )}
@@ -455,7 +457,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   return (
     <div
       data-id="agentAssignedTo"
-      className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2"
+      className="col-span-6 text-xs bg-light-base md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2"
     >
       <label className="mx-auto text-center w-max">
         <UserIcon />
@@ -463,7 +465,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
           ref={register}
           name="agent_id"
           defaultValue={String(agentAssignedTo)}
-          className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700
+          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base
          `}
           // onChange={(event) => }
         >
@@ -483,7 +485,7 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2">
+    <div className="col-span-6 text-xs bg-off-base md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2">
       <span className="inline-block mr-px ">
         Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
       </span>
@@ -498,7 +500,7 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-4 xl:col-span-2 md:text-sm ">
+    <div className="col-span-6 text-xs bg-off-base md:text-center md:col-span-3 lg:col-span-4 xl:col-span-2 md:text-sm ">
       <span className="inline-block mr-px text-center">
         <LocationIcon /> {locationIdToWord(String(mainLocation))}
       </span>
@@ -516,7 +518,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
   return (
     <div
       data-id="agentLocation"
-      className="col-span-6 text-xs bg-gray-200 md:text-center md:col-span-3 lg:col-span-4 xl:col-span-3"
+      className="col-span-6 text-xs md:text-center md:col-span-3 lg:col-span-4 xl:col-span-3"
     >
       <label className="mx-auto mr-px text-center w-max">
         <span className="sr-only">Location</span>
@@ -525,7 +527,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
           ref={register}
           name="location_id"
           defaultValue={mainLocation}
-          className={`inline-block w-max p-2 mx-auto mt-1  text-white bg-gray-700`}
+          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base`}
         >
           {TicketLocationsOptions()}
         </select>
@@ -554,7 +556,7 @@ Ticket.Category = function TicketCategory({
       <OfficeIcon />
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-28 "
+        className="inline-block p-1 mt-1 mr-px text-xs text-text-base bg-off-base w-28 "
         name="service_id"
         defaultValue={category}
       >
@@ -566,7 +568,7 @@ Ticket.Category = function TicketCategory({
       </label>
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs text-white bg-gray-700 w-max"
+        className="inline-block p-1 mt-1 mr-px text-xs text-text-base bg-off-base w-max"
         name="service_details_id"
         defaultValue={subcategory}
       >
@@ -626,13 +628,13 @@ Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
 //       <div className="absolute bottom-0 right-0 flex flex-col border-none md:top-0">
 //         <button
 //           type="submit"
-//           className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-white"
+//           className="block px-2 py-1 text-xs bg-gray-300 border-none hover:bg-green-900 hover:text-text-base"
 //         >
 //           Submit Changes
 //         </button>
 //         <button
 //           type="button"
-//           className="block px-2 py-1 text-xs text-red-700 bg-gray-300 border-none hover:bg-red-900 hover:text-white"
+//           className="block px-2 py-1 text-xs text-red-700 bg-gray-300 border-none hover:bg-red-900 hover:text-text-base"
 //           onClick={(event) => {
 //             reset();
 //             setisEditingTicket(false);
@@ -692,10 +694,12 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
   }
   return (
     <p className={`mb-1 ${alignSide()} shadow-sm p-1 m-1`}>
-      <span className="text-base font-bold text-black">{whoSaidit()} </span>
+      <span className="text-base font-bold text-text-base-inverted">
+        {whoSaidit()}{' '}
+      </span>
       said:
-      <span className="text-gray-900"> {message} </span>
-      <span className="text-xs text-gray-600">
+      <span className="text-text-muted"> {message} </span>
+      <span className="text-xs text-text-muted">
         ( {getTimeFxn(timestamp)} ){' '}
       </span>
     </p>
@@ -765,7 +769,7 @@ Ticket.InputNote = function InputNote({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full p-2 mx-auto mt-1 bg-gray-200 rounded-md shadow-lg md:w-4/5 lg:w-3/5"
+      className="w-full p-2 mx-auto mt-1 rounded-md shadow-lg bg-off-base md:w-4/5 lg:w-3/5"
     >
       <textarea
         name="note_text"
@@ -775,7 +779,7 @@ Ticket.InputNote = function InputNote({
         className="w-full p-2 text-sm "
         placeholder="leave a note here"
       ></textarea>
-      <button className="block px-2 py-1 mx-auto text-sm text-white rounded-md bg-blue hover:bg-green-900">
+      <button className="block px-2 py-1 mx-auto text-sm rounded-md text-text-base bg-medium hover:bg-action">
         Submit Note
       </button>
     </form>

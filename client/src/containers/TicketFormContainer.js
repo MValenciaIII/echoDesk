@@ -21,11 +21,12 @@ import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
 export default function TicketFormContainer({ children, ...restProps }) {
   const formClassname =
-    'p-8 mx-auto text-white bg-gray-700 rounded-lg max-w-max sm:max-w-lg';
+    'p-8 mx-auto text-text-base bg-off-base rounded-lg max-w-max sm:max-w-lg';
 
   const labelClassNames = 'block mt-3';
 
-  const inputClassNames = 'block p-1 rounded-sm text-black w-56 l lg:w-72';
+  const inputClassNames =
+    'block p-1 rounded-sm text-text-base-inverted w-56 l lg:w-72';
 
   const { mysqlUser, getDbUsersTickets, isAdmin, getAllTickets } = useContext(
     UserContext
@@ -246,7 +247,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           type="submit"
           value="Submit"
           onClick={onSubmit}
-          classNames="block px-2 py-1 mx-auto mt-3 font-bold text-black bg-gray-200 rounded-md hover:bg-green-900 hover:text-white"
+          classNames="block px-2 py-1 mx-auto mt-3 font-bold text-base-inverted bg-light-base rounded-md hover:bg-action hover:text-text-base"
         />
       </InputTicketForm>
       <ToastContainer transition={Zoom} />

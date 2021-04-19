@@ -233,7 +233,7 @@ AgentTicketFilterForm.Button = function AgentTicketFilterButton({
     <button
       onClick={(e) => reset(defaultValues)}
       type="submit" //submit will trigger the submitForm and thus call All Tickets again after since all Default values will be empty;
-      className="px-2 py-1 mt-3 text-center text-black bg-gray-100 hover:bg-red-400 hover:text-white "
+      className="px-2 py-1 mt-3 text-center text-text-base-inverted bg-light-base hover:bg-warning hover:text-text-base"
     >
       Reset Form
     </button>

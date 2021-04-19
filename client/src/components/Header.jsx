@@ -16,7 +16,7 @@ function Header(props) {
   }
 
   return (
-    <nav className="flex items-center justify-between w-full p-4 bg-blue">
+    <nav className="flex items-center justify-between w-full p-4 bg-off-base-lighter">
       <header>
         <Link to={clientOrAgentLink()}>
           <img
@@ -24,7 +24,7 @@ function Header(props) {
             alt="Mema Seal"
             className="inline-block w-16 md:w-20 lg:w-24"
           />
-          <h1 className="inline-block m-2 text-3xl text-white font-logo md:text-4xl lg:text-5xl logo">
+          <h1 className="inline-block m-2 text-3xl text-text-base font-logo md:text-4xl lg:text-5xl logo">
             EchoDesk
           </h1>
         </Link>

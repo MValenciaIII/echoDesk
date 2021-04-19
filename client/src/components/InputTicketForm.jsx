@@ -126,7 +126,9 @@ InputTicketForm.TextArea = function InputTicketFormTextArea({
         <textarea
           name={name}
           ref={register}
-          className={'block p-2 text-black py-0.5 px-1 w-11/12 max-w-3xl'}
+          className={
+            'block p-2 text-text-base-inverted py-0.5 px-1 w-11/12 max-w-3xl'
+          }
           cols="25"
           rows="5"
         />
@@ -156,7 +158,7 @@ InputTicketForm.FileUpload = function InputTicketFormFileUpload({
           name={name}
           ref={register}
           {...rest}
-          className={'block p-1 rounded-sm  text-white'}
+          className={'block p-1 rounded-sm  text-text-base'}
           type={type}
         />
       </label>
