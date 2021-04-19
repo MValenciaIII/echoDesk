@@ -50,7 +50,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
   async function onSubmit(data, event) {
     // todo: REMOVE  WHEN NEEDED;
     event.preventDefault();
-    debugger;
 
     let { files, ...restdata } = data;
 

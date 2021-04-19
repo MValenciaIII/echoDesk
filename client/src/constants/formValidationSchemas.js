@@ -76,7 +76,10 @@ export const inputTicketSchema = yup.object().shape({
     )
     .test(
       'fileFormat',
-      'Unsupported Format; Must be an image file',
-      (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      'Unsupported Format; Must be an image of JPG, PNG type',
+      function checkType(fileList) {
+        let filesArr = [...fileList];
+        return filesArr.every((file) => SUPPORTED_FORMATS.includes(file.type));
+      }
     ),
 });
