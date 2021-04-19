@@ -7,8 +7,6 @@ import AgentHome from './pages/agentHome';
 import ProfileSettings from './pages/profile';
 import AgentInputTicket from './pages/agentInputTicket.js';
 import Loading from './components/Loading';
-// import FilesUploadComponent from './components/Images';
-// import Ticket from './components/Ticket';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -24,7 +22,6 @@ function App() {
         <ProtectedRoute path="/agentInputTicket" component={AgentInputTicket} />
         <ProtectedRoute exact path="/" component={ClientDashboard} />
       </Switch>
-      {/* <FilesUploadComponent /> */}
     </div>
   );
 }

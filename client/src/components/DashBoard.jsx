@@ -80,7 +80,6 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
   const { handleSubmit, register } = useForm();
 
   async function onSubmit(data, event) {
-    debugger;
     let url;
 
     let formData = new FormData(event.target);
@@ -157,7 +156,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
             id="assignedToMe"
             name="assignedToMe"
             className="mx-1"
-            // todo: uncomment this line below
+            // todo: uncomment this line below when agents have been made;
             // value={mysqlUser.agent_id}
             value={'3'}
           />

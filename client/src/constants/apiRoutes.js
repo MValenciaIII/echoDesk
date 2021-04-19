@@ -23,7 +23,7 @@ export const updateTicketRoute = (id) =>
 
 export const quickFilterRoute = baseApiUrl.concat('tickets/quickFilters/find?');
 
-export const imagePostRoute = baseApiUrl.concat('post');
+export const imagePostRoute = baseApiUrl.concat('files/post');
 
 // http://10.195.103.107:3075/api/tickets/update/${id}
 // http://10.195.103.107:3075/api/notes/create

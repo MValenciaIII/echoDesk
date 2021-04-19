@@ -39,7 +39,6 @@ function UserContextProvider(props) {
       let response = await fetch(ticketsUrl);
       let allTickets = await response.json();
 
-      // todo:sort based on timestamps;  Change sorting to server side in SQL statement and limit?
       let defaultSorted = allTickets.sort((one, two) => {
         return two.id - one.id;
       });
@@ -110,7 +109,6 @@ function UserContextProvider(props) {
       let user_metadata = await metadataResponse.json();
       setAuth0UserMeta(user_metadata);
       if (user_metadata.app_metadata?.isAdmin) {
-        //todo: write async function to get and set all tickets only for admins; Take it out of useEffect since useEffect is running before auth is completed and the dependency array doesn't seem to be catching right now;
         await getAllTickets();
         setisAdmin({
           checked: true,
@@ -124,39 +122,41 @@ function UserContextProvider(props) {
       }
     } catch (error) {
       console.log(error);
-      try {
-        const accessToken = await getAccessTokenWithPopup({
-          audience: `https://${domain}/api/v2/`,
-          scope: 'read:current_user  update:current_user_metadata',
-        });
-
-        // API LINK WITH USER SUB
-        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
-
-        // get METADATA
-        let metadataResponse = await fetch(userDetailsByIdUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-type': 'application/json',
-          },
-        });
-
-        let user_metadata = await metadataResponse.json();
-        setAuth0UserMeta(user_metadata);
-        if (user_metadata.app_metadata?.isAdmin) {
-          await getAllTickets();
-          setisAdmin({
-            checked: true,
-            admin: true,
+      if (error) {
+        try {
+          const accessToken = await getAccessTokenWithPopup({
+            audience: `https://${domain}/api/v2/`,
+            scope: 'read:current_user  update:current_user_metadata',
           });
-        } else {
-          setisAdmin({
-            checked: true,
-            admin: false,
+
+          // API LINK WITH USER SUB
+          const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
+
+          // get METADATA
+          let metadataResponse = await fetch(userDetailsByIdUrl, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-type': 'application/json',
+            },
           });
+
+          let user_metadata = await metadataResponse.json();
+          setAuth0UserMeta(user_metadata);
+          if (user_metadata.app_metadata?.isAdmin) {
+            await getAllTickets();
+            setisAdmin({
+              checked: true,
+              admin: true,
+            });
+          } else {
+            setisAdmin({
+              checked: true,
+              admin: false,
+            });
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
     }
   }

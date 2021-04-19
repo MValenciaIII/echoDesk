@@ -28,7 +28,7 @@ import {
 import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
-//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow that column widths;
+//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow than column widths;
 export default function Ticket({
   children,
   id,
@@ -39,7 +39,6 @@ export default function Ticket({
   ...restProps
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
-  const [isEditingTicket, setisEditingTicket] = useState(false);
   const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
   const { currentFilterQuery, setAllTickets, getAllTickets } = useContext(
@@ -53,9 +52,7 @@ export default function Ticket({
   }
 
   async function onSubmit(data, event) {
-    //todo: remove debugger later;
-    debugger;
-
+    //todo: remove  later;
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
@@ -99,8 +96,6 @@ export default function Ticket({
       id,
       activityLogShown,
       toggleActivityLog,
-      isEditingTicket,
-      setisEditingTicket,
       register: register,
       watch: watch,
       reset,
@@ -144,7 +139,6 @@ Ticket.Container = function TicketContainer({ children, ...restprops }) {
 };
 
 Ticket.Status = function TicketStatus({
-  children,
   id,
   priority,
   tickets,
@@ -260,7 +254,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
   handleSubmit,
   ...restProps
 }) {
-  // debugger;
+  // ;
   let wordStatus = statusIdToWord(String(status));
   let [stylingStatus, setStylingStatus] = useState(wordStatus);
 
@@ -368,8 +362,8 @@ Ticket.Description = function TicketDescription({
 
   function showFilesIfPresent() {
     if (files.length) {
-      let mapped = files.map((file) => {
-        return <Ticket.FileAttachment key={file.id} file={file} />;
+      let mapped = files.map((file, idx) => {
+        return <Ticket.FileAttachment key={file.id} file={file} idx={idx} />;
       });
       return (
         <>
@@ -406,7 +400,6 @@ Ticket.Description = function TicketDescription({
           (Click to view or manage notes below) (
           {ticketNotes && ticketNotes.length ? ticketNotes.length : '0'})
         </span>
-        {/*// todo: relocate this icon to a different place ?? */}
         {activityLogShown ? (
           <MailEnvelopeOpen
             classNames={'text-blue  stroke-current w-8 p-1'}
@@ -424,12 +417,12 @@ Ticket.Description = function TicketDescription({
   );
 };
 
-Ticket.FileAttachment = function TicketFileAttachment({ file }) {
+Ticket.FileAttachment = function TicketFileAttachment({ file, idx }) {
   return (
     <a
-      className={
-        'text-decoration-none text-blue-800 hover:text-blue-400 text-xs'
-      }
+      className={`text-decoration-none text-blue-800 hover:text-blue-400 text-xs inline-block${
+        idx > 0 && 'ml-1'
+      }`}
       rel="noreferrer"
       target="_blank"
       href={file.file_name}
@@ -458,7 +451,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
   agentAssignedTo,
   ...restProps
 }) {
-  // debugger;
+  // ;
   return (
     <div
       data-id="agentAssignedTo"
@@ -474,7 +467,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
          `}
           // onChange={(event) => }
         >
-          {/* //todo:   use latest select options */}
+          {/* //todo:   check freshdesk for current agents b4 deploying */}
           {<AssignToAgentSelect />}
         </select>
       </label>
@@ -550,8 +543,6 @@ Ticket.Category = function TicketCategory({
   register,
   ...restProps
 }) {
-  // todo:change to form and watch values using technique on ticket input;
-  // debugger;
   return (
     <div
       data-id="ticketCategory"
@@ -715,7 +706,6 @@ Ticket.InputNote = function InputNote({
   children,
   ticket_id,
   client_id,
-  isAdmin,
   ...restProps
 }) {
   const { register, handleSubmit, reset } = useForm();
@@ -724,11 +714,12 @@ Ticket.InputNote = function InputNote({
     currentFilterQuery,
     setAllTickets,
     getAllTickets,
+    isAdmin,
   } = useContext(UserContext);
 
   async function onSubmit(data, event) {
-    // todo: remove debugger;
-    // debugger;
+    // todo: remove ;
+    // ;
     event.preventDefault();
 
     if (!data.note_text) {

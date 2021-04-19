@@ -8,17 +8,13 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  let {
-    mysqlUser,
-    mysqlUserTickets,
-    auth0UserMeta,
-    allTickets,
-    isAdmin,
-  } = useContext(UserContext);
+  let { mysqlUser, mysqlUserTickets, allTickets, isAdmin } = useContext(
+    UserContext
+  );
 
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
 
-  // debugger;
+  // ;
   let chosenTickets = isAdmin.admin ? allTickets : mysqlUserTickets;
 
   // React paginate
@@ -87,7 +83,6 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
-                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
@@ -161,7 +156,6 @@ export default function TicketsContainer(props) {
               <Ticket.InputNote
                 ticket_id={ticket.id}
                 client_id={mysqlUser.id}
-                isAdmin={isAdmin}
               />
             </Ticket.ActivityLogContainer>
           </Ticket.Container>
