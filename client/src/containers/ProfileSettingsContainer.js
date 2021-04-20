@@ -28,10 +28,10 @@ export default function TicketFormContainer({
   ...restProps
 }) {
   const formClassname =
-    'flex-grow w-max py-4 px-8 mx-auto bg-gray-600 rounded-md text-white';
+    'flex-grow w-max py-4 px-8 mx-auto bg-off-base-lighter rounded-md text-text-base';
   const labelClassNames = 'block mt-3';
   const inputClassNames =
-    'block py-1 px-2 rounded-md shadow text-black w-56 l lg:w-72';
+    'block py-1 px-2 rounded-md shadow text-text-base-inverted w-56 l lg:w-72';
   const defaultValues = {
     fname: mysqlUser.fname || '',
     lname: mysqlUser.lname || '',
@@ -67,7 +67,7 @@ export default function TicketFormContainer({
       data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? '1' : '0';
       data.agent_id = auth0UserMeta.app_metadata?.agent_id || null;
     } else {
-      data.isAdmin = false;
+      data.isAdmin = '0';
       data.agent_id = null;
     }
 
@@ -105,6 +105,7 @@ export default function TicketFormContainer({
             let agentData = {};
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
             agentData.client_id = userSub;
+            agentData.group_id = auth0UserMeta.app_metadata?.group_id;
 
             let agentResponse = await fetch(createAgentRoute, {
               method: 'POST',
@@ -189,7 +190,7 @@ export default function TicketFormContainer({
   return (
     <div
       id="ProfileSettingsFormContainer"
-      className="flex-grow w-full p-8 bg-gray-800 "
+      className="flex-grow w-full p-8 bg-base "
     >
       <ProfileSettingsForm
         onSubmit={onSubmit}
@@ -245,7 +246,7 @@ export default function TicketFormContainer({
         />
         <ProfileSettingsForm.Input
           name={'office_phone'}
-          label="Phone Number"
+          label="Office Phone Number"
           type={'tel'}
           labelClassNames={labelClassNames}
           inputClassNames={inputClassNames}

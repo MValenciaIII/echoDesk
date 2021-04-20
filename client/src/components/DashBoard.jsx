@@ -7,9 +7,7 @@ import { FilterIcon } from './Icons';
 
 // @# SET OF COMPOUND COMPONENTS THAT ARE MOSTLY CONTAINERS FOR RENDERING TICKET PARTS AND FORMS ON SIDE OF PAGE;
 export default function Dashboard({ children }) {
-  return (
-    <div className="box-border flex-grow py-4 bg-gray-800">{children}</div>
-  );
+  return <div className="box-border flex-grow py-4 bg-base">{children}</div>;
 }
 
 Dashboard.InnerContainer = function DashboardInnerContainer({ children }) {
@@ -40,12 +38,12 @@ Dashboard.Header = function DashboardHeader({
   if (isAgent) {
     return (
       <>
-        <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
+        <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-text-base">
           {mysqlUser &&
             `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are the tickets`}
           <FilterIcon
             title="Toggle Quick Filter"
-            classNames="text-white fill-current cursor-pointer ml-1 w-6"
+            classNames="text-text-base fill-current cursor-pointer ml-1 w-6"
             onClick={toggleFilter}
           />
         </h2>
@@ -53,7 +51,7 @@ Dashboard.Header = function DashboardHeader({
     );
   } else
     return (
-      <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-white">
+      <h2 className="mx-auto my-2 mb-2 text-2xl font-bold text-center text-text-base">
         {mysqlUser
           ? `Welcome ${mysqlUser.fname} ${mysqlUser.lname}.  Here are your tickets`
           : 'Welcome, here are your current tickets'}
@@ -125,7 +123,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
       {/* <img src="https://www.mema4kids.info/file-1617989280638.jpg" alt="test" /> */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={`bg-gray-200 py-2 px-4 text-center rounded-md`}
+        className={`bg-light-base py-2 px-4 text-center rounded-md`}
       >
         <h2>Quick filters for last month of tickets</h2>
         <label className="mx-2" htmlFor="urgent">
@@ -139,7 +137,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
           />
         </label>
         <label className="mx-2" htmlFor="hideClosed">
-          Hide Closed
+          Hide Closed/Resolved
           <input
             ref={register}
             type="checkbox"
@@ -157,13 +155,12 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
             name="assignedToMe"
             className="mx-1"
             // todo: uncomment this line below when agents have been made;
-            // value={mysqlUser.agent_id}
-            value={'3'}
+            value={mysqlUser && mysqlUser.agent_id}
           />
         </label>
         <button
           type="submit"
-          className="inline-block p-1 ml-2 text-gray-300 bg-green-800 rounded-md w-max hover:text-white"
+          className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
         >
           Apply Quick Filters
         </button>

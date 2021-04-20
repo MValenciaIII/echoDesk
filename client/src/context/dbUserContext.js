@@ -17,6 +17,25 @@ function UserContextProvider(props) {
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
   const [isAdmin, setisAdmin] = useState();
+  const [themeColor, setThemeColor] = useState(fetchTheme());
+
+  function fetchTheme() {
+    if (localStorage.colorTheme) {
+      document.documentElement.classList.add(localStorage.colorTheme);
+      return localStorage.colorTheme;
+    } else {
+      document.documentElement.classList.add('defaultBlueTheme');
+      localStorage.setItem('colorTheme', 'defaultBlueTheme');
+      return 'defaultBlueTheme';
+    }
+  }
+  function addThemeToHTML(newTheme) {
+    if (newTheme === themeColor) return;
+    document.documentElement.classList.replace(themeColor, newTheme);
+    document.documentElement.classList.add(newTheme);
+    localStorage.setItem('colorTheme', newTheme);
+    setThemeColor(newTheme);
+  }
 
   let barIndex;
   let defaultuserId; //i.e. the current auth0 user with pipe removed
@@ -72,11 +91,9 @@ function UserContextProvider(props) {
       let response = await fetch(ticketsUrl);
       let sqlUsersTickets = await response.json();
 
-      // todo:change sorting to server side with sql statemnt?
       let defaultSorted = sqlUsersTickets.sort((one, two) => {
         return two.id - one.id;
       });
-      console.log(defaultSorted);
       if (response.ok) {
         setmysqlUserTickets([...defaultSorted]);
       }
@@ -156,6 +173,7 @@ function UserContextProvider(props) {
           }
         } catch (error) {
           console.log(error);
+          return;
         }
       }
     }
@@ -179,6 +197,9 @@ function UserContextProvider(props) {
         currentFilterQuery,
         setcurrentFilterQuery,
         isAdmin,
+        setThemeColor,
+        themeColor,
+        addThemeToHTML,
       }}
     >
       {props.children}

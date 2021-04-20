@@ -41,6 +41,29 @@ export default function ProfileSettingsForm({
       className={classNames}
       onSubmit={handleSubmit(onSubmit)}
     >
+      <button
+        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
+        className={` mt-3 px-2 py-1 font-bold rounded-md hover:bg-action hover:text-text-base  bg-light-base mx-auto text-text-base-inverted ${
+          isEditing ? 'hidden' : 'block'
+        }`}
+        onClick={(event) => {
+          setisEditing(!isEditing);
+        }}
+      >
+        Click to Edit Profile Settings
+      </button>
+      <button
+        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
+        className={` mt-3 px-2 py-1 font-bold rounded-md hover:bg-action hover:text-text-base  bg-light-base mx-auto text-text-base-inverted ${
+          isEditing ? 'block' : 'hidden'
+        }`}
+        onClick={(event) => {
+          cancelProfileEdits();
+        }}
+      >
+        Cancel Edits
+      </button>
+
       {React.Children.map(children, (child) => {
         return child && child.props.name
           ? React.createElement(child.type, {
@@ -54,30 +77,9 @@ export default function ProfileSettingsForm({
             })
           : child;
       })}
-      <button
-        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
-        className={` mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
-          isEditing ? 'hidden' : 'block'
-        }`}
-        onClick={(event) => {
-          setisEditing(!isEditing);
-        }}
-      >
-        Edit
-      </button>
-      <button
-        type="button" //!IMPORTANT; must have type = button, or otherwise the submit type is automatically given and runs the api call
-        className={`mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
-          isEditing ? 'block' : 'hidden'
-        }`}
-        onClick={(event) => {
-          cancelProfileEdits();
-        }}
-      >
-        Cancel Edits
-      </button>
+
       <input
-        className={`mt-3 px-2 py-1 font-bold rounded-md hover:bg-green-900 hover:text-white  bg-gray-200 mx-auto text-black ${
+        className={`mt-3 px-2 py-1 font-bold rounded-md hover:bg-action hover:text-text-base bg-off-base mx-auto text-base-inverted ${
           isEditing ? 'block' : 'hidden'
         }`}
         name="Submit"
@@ -157,7 +159,7 @@ ProfileSettingsForm.TextArea = function InputTicketFormTextArea({
         <textarea
           name={name}
           ref={register}
-          className={'block p-2 text-black py-0.5 px-1'}
+          className={'block p-2 text-text-base-inverted py-0.5 px-1'}
           cols="25"
           rows="5"
         />

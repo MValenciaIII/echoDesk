@@ -17,10 +17,10 @@ export default function SettingsDropdown(props) {
 
   return (
     <ul className={`flex flex-col md:flex-row`}>
-      <li className={`text-gray-100 text-sm  underline m-2 inline-block`}>
+      <li className={`text-text-muted text-sm  underline m-2 inline-block`}>
         <Link to={clientOrAgentLink()}>Dashboard</Link>
       </li>
-      <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
+      <li className={`text-text-muted text-sm underline m-2 inline-block`}>
         <Link
           onClick={(e) => setcurrentFilterQuery(null)}
           to="/profilesettings"
@@ -30,7 +30,7 @@ export default function SettingsDropdown(props) {
       </li>
 
       {auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin && (
-        <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
+        <li className={`text-text-muted text-sm underline m-2 inline-block`}>
           <Link
             onClick={(e) => setcurrentFilterQuery(null)}
             to="/agentInputTicket"
@@ -40,9 +40,9 @@ export default function SettingsDropdown(props) {
         </li>
       )}
 
-      <li className={`text-gray-100 text-sm underline m-2 inline-block`}>
+      <li className={`text-text-muted text-sm underline m-2 inline-block`}>
         <button
-          className={`text-gray-100 text-sm underline inline-block`}
+          className={`text-text-muted text-sm underline inline-block`}
           onClick={() => {
             logout();
           }}

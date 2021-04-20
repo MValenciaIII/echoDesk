@@ -119,7 +119,7 @@ function Thermoscan(props) {
   );
 }
 
-// todo: finish filling out from freshdesk????
+
 
 export function PrimaryServiceCategories() {
   return (

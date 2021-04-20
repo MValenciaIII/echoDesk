@@ -72,13 +72,14 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   }
 
   const formClassname =
-    'p-8 mx-auto text-white bg-gray-700 rounded-lg max-w-max sm:max-w-lg';
+    'p-8 mx-auto text-text-base bg-off-base rounded-lg max-w-max sm:max-w-lg';
 
   const labelClassNames = 'block mt-3';
   const submitLabelClassNames = 'mt-3';
-  const inputClassNames = 'block p-1 rounded-sm text-black w-56  lg:w-72';
+  const inputClassNames =
+    'block p-1 rounded-sm text-text-base-inverted w-56  lg:w-72';
   const submitClassNames =
-    'inline-block p-1 rounded-sm w-max text-black hover:bg-green-800 hover:text-white font-bold';
+    'inline-block p-1 rounded-sm bg-base w-maxtext-text-base-inverted hover:bg-action hover:text-text-base font-bold';
 
   return (
     <AgentTicketFilterForm
@@ -194,7 +195,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       {/* // todo: CONTINUE TESTING REACTSELECT FOR BETTER UX ON OUR FORM SUBMISSIONS  ~ WK Wednesday April 07, 2021 04:49PM*/}
       {/* <AgentTicketFilterForm.ReactSelect name="reactSelect" /> */}
       <AgentTicketFilterForm.FlexPane
-        classNames="flex justify-between mt-3"
+        classNames="flex justify-between mt-3 items-end"
         name="flexPane"
       >
         <AgentTicketFilterForm.Input
