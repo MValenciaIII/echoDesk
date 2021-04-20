@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ! THESE REPRESENT HSL VALUES! PICKED UP IN TAILWIND CONFIG FILE VIA EXTENDING COLORS */
 :root {
   --color-base: 215, 28%, 17%; /*#1F2937: */
   --color-off-base: 217, 19%, 27%; /* #374151:*/
@@ -22,12 +23,29 @@
 }
 
 /*  */
+.defaultBlueTheme {
+  --color-base: 215, 28%, 17%; /*#1F2937: */
+  --color-off-base: 217, 19%, 27%; /* #374151:*/
+  --color-off-base-lighter: 207, 26%, 32%; /* #3d5467:*/
+  --color-light-base: 216, 12%, 84%; /*     #d1d5db;*/
+  --color-text-base: 0, 0%, 100%; /*     #fff: */
+  --color-text-base-inverted: 0, 0%, 0%; /* #000000 */
+  --color-text-base-inverted-muted: 0, 0%, 30%;
+  --color-text-muted: 220, 13%, 91%; /*      #E5E7EB: */
+  --color-low: 163, 88%, 20%; /*#065F46*/
+  --color-pending: 163, 94%, 24%; /*#047857*/
+  --color-medium: 226, 71%, 40%; /*#1E40AF*/
+  --color-high: 23, 82%, 31%; /* #92400E:*/
+  --color-urgent: 0, 70%, 35%; /*#991B1B:*/
+  --color-warning: 0, 91%, 71%; /*  #F87171:*/
+  --color-action: 163, 88%, 20%; /*  #065F46:*/
+}
 
 .lightTheme {
-  --color-base: 136, 1%, 75%;
-  --color-off-base: 310, 0%, 90%;
-  --color-off-base-lighter: 10, 5%, 87%;
-  --color-light-base: 210, 2%, 95%;
+  --color-base: 136, 1%, 81%;
+  --color-off-base: 310, 0%, 92%;
+  --color-off-base-lighter: 10, 0%, 97%;
+  --color-light-base: 210, 2%, 93%;
   --color-text-base: 0, 0%, 0%;
   --color-text-base-inverted: 0, 0%, 10%;
   --color-text-base-inverted-muted: 0, 0%, 47%;
@@ -57,9 +75,8 @@
   --color-urgent: 1, 45%, 39%;
   --color-warning: 7, 57%, 25%;
   --color-action: 97, 32%, 18%;
-}
 
-/* 
+  /* 
 .lightTheme {
   --color-base: #f3f4f6; 
   --color-off-base: rgba(249, 250, 251, 1; 
@@ -78,7 +95,7 @@
   --color-action: rgba(6, 95, 70, 1; 
 }
 */
-
+}
 .font-logo {
   font-family: 'Exo', sans-serif;
 }
@@ -111,7 +128,7 @@
 
 .closedTicket {
   color: #888 !important;
-  opacity: 0.6 !important;
+  opacity: 0.45 !important;
   font-weight: normal !important;
 }
 .flex-grow-2 {

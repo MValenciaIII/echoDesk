@@ -67,7 +67,7 @@ export default function TicketFormContainer({
       data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? '1' : '0';
       data.agent_id = auth0UserMeta.app_metadata?.agent_id || null;
     } else {
-      data.isAdmin = false;
+      data.isAdmin = '0';
       data.agent_id = null;
     }
 
@@ -105,6 +105,7 @@ export default function TicketFormContainer({
             let agentData = {};
             agentData.id = auth0UserMeta.app_metadata?.agent_id;
             agentData.client_id = userSub;
+            agentData.group_id = auth0UserMeta.app_metadata?.group_id;
 
             let agentResponse = await fetch(createAgentRoute, {
               method: 'POST',

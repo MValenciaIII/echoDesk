@@ -137,7 +137,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
           />
         </label>
         <label className="mx-2" htmlFor="hideClosed">
-          Hide Closed
+          Hide Closed/Resolved
           <input
             ref={register}
             type="checkbox"
@@ -155,8 +155,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
             name="assignedToMe"
             className="mx-1"
             // todo: uncomment this line below when agents have been made;
-            // value={mysqlUser.agent_id}
-            value={'3'}
+            value={mysqlUser && mysqlUser.agent_id}
           />
         </label>
         <button

@@ -656,7 +656,7 @@ Ticket.ActivityLogContainer = function ActivityLogContainer({
 }) {
   if (activityLogShown) {
     return (
-      <div className="p-4 transition-all duration-200 ease-in-out bg-gray-400 rounded-md col-span-full">
+      <div className="p-4 transition-all duration-200 ease-in-out rounded-md bg-off-base-lighter col-span-full">
         {children}
       </div>
     );
@@ -693,10 +693,8 @@ Ticket.ActivityLogEntry = function ActivityLogEntry({
     }
   }
   return (
-    <p className={`mb-1 ${alignSide()} shadow-sm p-1 m-1`}>
-      <span className="text-base font-bold text-text-base-inverted">
-        {whoSaidit()}{' '}
-      </span>
+    <p className={`mb-1 ${alignSide()} text-text-base shadow-sm p-1 m-1`}>
+      <span className="font-bold text-text-base">{whoSaidit()} </span>
       said:
       <span className="text-text-muted"> {message} </span>
       <span className="text-xs text-text-muted">

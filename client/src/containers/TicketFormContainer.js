@@ -49,7 +49,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
   const resolver = yupResolver(inputTicketSchema);
 
   async function onSubmit(data, event) {
-    // todo: REMOVE  WHEN NEEDED;
     event.preventDefault();
 
     let { files, ...restdata } = data;
@@ -130,7 +129,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
           progress: undefined,
         });
       }
-      // todo: get INSERTID from RESULT to MAKE SUBSEQUENT POST CALL IF THERE ARE FILES ATTACHED;
 
       //FORM WILL RESET DUE USEEFFECT HOOK IN THE COMPONENT FILE AND GO BACK TO DEFAULT VALUES
     } catch (error) {
@@ -241,8 +239,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           inputClassNames={inputClassNames}
           type={'file'}
         />
-        {/* //todo: FILES */}
-        {/* <InputTicketForm.Input type="file" name="file" /> */}
+
         <InputTicketForm.Submit
           type="submit"
           value="Submit"
