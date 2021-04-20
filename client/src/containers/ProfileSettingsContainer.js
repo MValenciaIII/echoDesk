@@ -31,7 +31,7 @@ export default function TicketFormContainer({
     'flex-grow w-max py-4 px-8 mx-auto bg-off-base-lighter rounded-md text-text-base';
   const labelClassNames = 'block mt-3';
   const inputClassNames =
-    'block py-1 px-2 rounded-md shadow text-text-base-inverted w-56 l lg:w-72';
+    'block py-1 px-2 rounded-md shadow text-text-base-inverted w-56 l lg:w-72 ';
   const defaultValues = {
     fname: mysqlUser.fname || '',
     lname: mysqlUser.lname || '',
@@ -96,9 +96,19 @@ export default function TicketFormContainer({
             draggable: true,
             progress: undefined,
           });
+        } else {
+          toast.error('Failed to create profile settings created', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
 
-        if (auth0UserMeta.app_metadata?.isAdmin?.admin) {
+        if (auth0UserMeta.app_metadata?.isAdmin) {
           // !CREATING AGENTS
           try {
             // todo: see about putting more agent meta in; doubtful for now;  GROUPS

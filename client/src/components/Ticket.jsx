@@ -206,7 +206,7 @@ Ticket.Status = function TicketStatus({
           ref={register}
           name="status_id"
           defaultValue={status}
-          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full rounded-lg
         `}
           onChange={(event) =>
             setStylingStatus(statusIdToWord(event.target.value))
@@ -226,7 +226,7 @@ Ticket.Status = function TicketStatus({
         className={`${priorityClasses()}  w-full md:h-1/2`}
       >
         <select
-          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full`}
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full  rounded-lg`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
@@ -312,7 +312,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
           ref={register}
           name="status_id"
           defaultValue={status}
-          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full  rounded-lg
          `}
           onChange={(event) =>
             setStylingStatus(statusIdToWord(event.target.value))
@@ -330,7 +330,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
       >
         <select
           ref={register}
-          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full`}
+          className={`bg-transparent inline-block align-middle text-text-base w-full font-bold h-full  rounded-lg`}
           name="priority_id"
           title="Priority"
           defaultValue={priority}
@@ -465,7 +465,7 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
           ref={register}
           name="agent_id"
           defaultValue={String(agentAssignedTo)}
-          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base
+          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base rounded-lg
          `}
           // onChange={(event) => }
         >
@@ -527,7 +527,7 @@ Ticket.AgentLocation = function TicketAgentLocation({
           ref={register}
           name="location_id"
           defaultValue={mainLocation}
-          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base`}
+          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base  rounded-lg`}
         >
           {TicketLocationsOptions()}
         </select>
@@ -556,7 +556,7 @@ Ticket.Category = function TicketCategory({
       <OfficeIcon />
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs text-text-base bg-off-base w-28 "
+        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg text-text-base bg-off-base w-28"
         name="service_id"
         defaultValue={category}
       >
@@ -568,7 +568,7 @@ Ticket.Category = function TicketCategory({
       </label>
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs text-text-base bg-off-base w-max"
+        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg text-text-base bg-off-base w-max"
         name="service_details_id"
         defaultValue={subcategory}
       >
