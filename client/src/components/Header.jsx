@@ -48,27 +48,27 @@ function ThemePicker() {
       <ColorPaletteIcon
         classNames={'w-full text-text-base stroke-current fill-current'}
       />
-      <span
+      <button
         className={
           'p-1 bg-gray-400  border border-black inline-block w-4 h-4 rounded-md m-1 cursor-pointer'
         }
         title={'neutral theme'}
         onClick={(e) => addThemeToHTML('neutralGrays')}
-      ></span>
-      <span
+      ></button>
+      <button
         className={
           'p-1 bg-gray-100  border border-black inline-block w-4 h-4 rounded-md m-1 cursor-pointer'
         }
         title={'light theme'}
         onClick={(e) => addThemeToHTML('lightTheme')}
-      ></span>
-      <span
+      ></button>
+      <button
         className={
           'p-1 bg-blue-900  border border-black inline-block w-4 h-4 rounded-md m-1 cursor-pointer'
         }
         title={'blue Theme'}
         onClick={(e) => addThemeToHTML('defaultBlueTheme')}
-      ></span>
+      ></button>
     </div>
   );
 }

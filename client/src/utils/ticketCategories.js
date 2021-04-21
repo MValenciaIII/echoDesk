@@ -119,8 +119,6 @@ function Thermoscan(props) {
   );
 }
 
-
-
 export function PrimaryServiceCategories() {
   return (
     <>
@@ -224,14 +222,15 @@ export function AgentOptions() {
       <option value="3">Casey Donovan Mott</option>
       <option value="4">Charllieya Smith</option>
       <option value="5">Chris Watts</option>
-      <option value="6">James Dear Jr.</option>
-      <option value="7">James Montgomery</option>
-      <option value="8">Latoya Lofton</option>
-      <option value="9">Lenard Brent</option>
-      <option value="10">Marti Calhoun</option>
-      <option value="11">Preston White</option>
-      <option value="12">Scott Davis</option>
-      <option value="13">Wesley Edwards</option>
+      <option value="6">Gray Macoy</option>
+      <option value="7">James Dear Jr.</option>
+      <option value="8">James Montgomery</option>
+      <option value="9">Latoya Lofton</option>
+      <option value="10">Lenard Brent</option>
+      <option value="11">Margarito Valencia</option>
+      <option value="12">Preston White</option>
+      <option value="13">Scott Davis</option>
+      <option value="14">Wesley Edwards</option>
     </>
   );
 }

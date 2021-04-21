@@ -244,7 +244,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           type="submit"
           value="Submit"
           onClick={onSubmit}
-          classNames="block px-2 py-1 mx-auto mt-3 font-bold text-base-inverted bg-light-base rounded-md hover:bg-action hover:text-text-base"
+          classNames="block px-2 py-1 mx-auto mt-3 font-bold text-text-base-inverted bg-light-base rounded-md hover:bg-action hover:text-text-base"
         />
       </InputTicketForm>
       <ToastContainer transition={Zoom} />

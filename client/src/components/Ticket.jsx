@@ -422,8 +422,8 @@ Ticket.Description = function TicketDescription({
 Ticket.FileAttachment = function TicketFileAttachment({ file, idx }) {
   return (
     <a
-      className={`text-decoration-none text-blue-800 hover:text-blue-400 text-xs inline-block${
-        idx > 0 && 'ml-1'
+      className={`text-decoration-none text-blue-800 hover:text-blue-400 text-xs inline-block ${
+        idx > 0 ? 'ml-1' : ''
       }`}
       rel="noreferrer"
       target="_blank"
@@ -590,7 +590,7 @@ Ticket.ContactInfo = function TicketContactInfo({
   return (
     <div className="col-span-6 p-2 md:flex md:col-span-2 lg:col-span-3 xl:col-span-3 lg:text-sm">
       <p className="ml-2">
-        Phone:{' '}
+        Mobile Phone:{' '}
         <a className="text-blue-500 underline " href={`tel:${contactPhone}`}>
           {contactPhone}
         </a>
