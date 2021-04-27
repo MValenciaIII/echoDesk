@@ -28,9 +28,12 @@ export default function TicketFormContainer({ children, ...restProps }) {
   const inputClassNames =
     'block p-1 rounded-sm text-text-base-inverted w-56 l lg:w-72';
 
-  const { mysqlUser, getDbUsersTickets, isAdmin, getAllTickets } = useContext(
-    UserContext
-  );
+  const {
+    mysqlUser,
+    getDbUsersTickets,
+    auth0UserMeta,
+    getAllTickets,
+  } = useContext(UserContext);
 
   const defaultValues = {
     client_full_name: mysqlUser.fname + ' ' + mysqlUser.lname,
@@ -104,7 +107,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }
       console.log(filesSentResponse);
       if (response.ok) {
-        if (isAdmin?.admin) {
+        if (auth0UserMeta?.isAdmin) {
           await getAllTickets();
         } else {
           await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
@@ -137,7 +140,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
   }
 
   function showAssignAgentToAdmins() {
-    if (mysqlUser.isAdmin) {
+    if (auth0UserMeta.isAdmin) {
       return (
         <InputTicketForm.Select
           options={<AgentOptions />}

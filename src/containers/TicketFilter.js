@@ -14,7 +14,9 @@ import AgentTicketFilterForm from '../components/AgentTicketFilter';
 import { filteringRoute, allTicketsRoute } from '../constants/apiRoutes';
 
 export default function AgentTicketFilterContainer({ children, ...restProps }) {
-  const { setAllTickets, setcurrentFilterQuery } = useContext(UserContext);
+  const { setAllTickets, setcurrentFilterQuery, setWhichFilter } = useContext(
+    UserContext
+  );
   const defaultValues = {
     agent_id: '',
     created_at: '1 Month',
@@ -50,6 +52,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
       console.log({ url });
       // ! This context state setter is getting stored to context in order to later access it on the refreshing of the ticket when a comment is submitted to determine whether to fetch ALL tickets or to fetch the currently set filtered tickets
       setcurrentFilterQuery(url);
+      setWhichFilter('BIG');
 
       let response = await fetch(url, {
         method: 'GET',
@@ -58,12 +61,10 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
           body: JSON.stringify(data),
         },
       });
-      console.log(response);
       let filteredTickets = await response.json();
       let sortedTickets = filteredTickets.sort((one, two) => {
         return two.id - one.id;
       });
-      console.log(sortedTickets);
       setAllTickets(sortedTickets);
     } catch (error) {
       console.error({ error });
@@ -79,7 +80,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const inputClassNames =
     'block p-1 rounded-sm text-text-base-inverted w-56  lg:w-72';
   const submitClassNames =
-    'inline-block p-1 rounded-sm bg-base w-maxtext-text-base-inverted hover:bg-action hover:text-text-base font-bold';
+    'inline-block p-1 rounded-sm bg-base w-max text-text-base hover:bg-action hover:text-text-base font-bold';
 
   return (
     <AgentTicketFilterForm

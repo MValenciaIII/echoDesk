@@ -8,14 +8,14 @@ import Ticket from '../components/Ticket';
 import { UserContext } from '../context/dbUserContext';
 
 export default function TicketsContainer(props) {
-  let { mysqlUser, mysqlUserTickets, allTickets, isAdmin } = useContext(
+  let { mysqlUser, mysqlUserTickets, allTickets, auth0UserMeta } = useContext(
     UserContext
   );
 
   // todo: change to mysql isAdmin status to keep source of truth with our db instead of with auth0???;
 
   // ;
-  let chosenTickets = isAdmin.admin ? allTickets : mysqlUserTickets;
+  let chosenTickets = auth0UserMeta.isAdmin ? allTickets : mysqlUserTickets;
 
   // React paginate
   const [currentPage, setCurrentPage] = useState(0);
@@ -31,7 +31,7 @@ export default function TicketsContainer(props) {
     return null;
   }
   // ? NOTE: DON'T LOVE THIS IF ELSE;  PROBABLY COULD HAVE CONDITIONALLY RENDERED SOMETHING BETTER IN THE MAP;  FOR NOW, BE SURE CLIENT AND ADMIN MAP PROPS ARE SAME AS NEEDED FOR ADJUSTMENTS;   ~WK 4-13-2021
-  if (isAdmin?.admin) {
+  if (auth0UserMeta.isAdmin) {
     return (
       <div id="TicketsContainer" className="">
         {chosenTickets.slice(offset, offset + PER_PAGE).map((ticket, idx) => (
@@ -40,7 +40,6 @@ export default function TicketsContainer(props) {
               id={ticket.id}
               tickets={mysqlUserTickets}
               status={ticket.status_id}
-              isAdmin={isAdmin}
             >
               <Ticket.AgentStatus
                 status={ticket.status_id}

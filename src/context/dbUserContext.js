@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   allTicketsRoute,
   dbUserRoute,
   dbUsersTicketsRoute,
 } from '../constants/apiRoutes';
+import { AUTH0_META_PROP } from '../constants/domain';
 
 const UserContext = React.createContext();
 
 function UserContextProvider(props) {
   //   user return from useAuth
-  const { user, getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
+  const { user } = useAuth0();
   const [mysqlUser, setmysqlUser] = useState();
   const [mysqlUserTickets, setmysqlUserTickets] = useState();
   const [allTickets, setAllTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
-  const [isAdmin, setisAdmin] = useState();
+  const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
+
   const [themeColor, setThemeColor] = useState(fetchTheme());
+
+  useEffect(() => {
+    if (user && user[AUTH0_META_PROP]) {
+      let meta = user[AUTH0_META_PROP];
+      setAuth0UserMeta(meta);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (auth0UserMeta?.isAdmin) {
+      getAllTickets();
+    }
+  }, [auth0UserMeta]);
 
   function fetchTheme() {
     if (localStorage.colorTheme) {
@@ -103,82 +118,6 @@ function UserContextProvider(props) {
     }
   }
 
-  async function getAuth0UserMeta() {
-    const domain = 'memaechodesk.us.auth0.com';
-
-    try {
-      const accessToken = await getAccessTokenSilently({
-        audience: `https://${domain}/api/v2/`,
-        scope: 'read:current_user  update:current_user_metadata',
-      });
-
-      // API LINK WITH USER SUB
-      const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
-
-      // get METADATA
-      let metadataResponse = await fetch(userDetailsByIdUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-type': 'application/json',
-        },
-      });
-
-      let user_metadata = await metadataResponse.json();
-      setAuth0UserMeta(user_metadata);
-      if (user_metadata.app_metadata?.isAdmin) {
-        await getAllTickets();
-        setisAdmin({
-          checked: true,
-          admin: true,
-        });
-      } else {
-        setisAdmin({
-          checked: true,
-          admin: false,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      if (error) {
-        try {
-          const accessToken = await getAccessTokenWithPopup({
-            audience: `https://${domain}/api/v2/`,
-            scope: 'read:current_user  update:current_user_metadata',
-          });
-
-          // API LINK WITH USER SUB
-          const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
-
-          // get METADATA
-          let metadataResponse = await fetch(userDetailsByIdUrl, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-type': 'application/json',
-            },
-          });
-
-          let user_metadata = await metadataResponse.json();
-          setAuth0UserMeta(user_metadata);
-          if (user_metadata.app_metadata?.isAdmin) {
-            await getAllTickets();
-            setisAdmin({
-              checked: true,
-              admin: true,
-            });
-          } else {
-            setisAdmin({
-              checked: true,
-              admin: false,
-            });
-          }
-        } catch (error) {
-          console.log(error);
-          return;
-        }
-      }
-    }
-  }
-
   // Could also destructure props to just have children;  Some people do that
   return (
     <UserContext.Provider
@@ -190,16 +129,16 @@ function UserContextProvider(props) {
         setmysqlUserTickets,
         getDbUsersTickets,
         auth0UserMeta,
-        getAuth0UserMeta,
         allTickets,
         setAllTickets,
         getAllTickets,
         currentFilterQuery,
         setcurrentFilterQuery,
-        isAdmin,
         setThemeColor,
         themeColor,
         addThemeToHTML,
+        whichFilter,
+        setWhichFilter,
       }}
     >
       {props.children}
