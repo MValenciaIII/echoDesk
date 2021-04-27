@@ -50,6 +50,8 @@ export default function Ticket({
   function grayOutClosedOrResolvedTicket() {
     if (status === 3 || status === 4) {
       return 'closedTicket';
+    } else {
+      return '';
     }
   }
 
@@ -109,7 +111,7 @@ export default function Ticket({
     <form
       onSubmit={handleSubmit(onSubmit)}
       onChange={handleSubmit(onSubmit)}
-      className={`relative grid w-full grid-cols-12 truncate divide-y divide-gray-300 lg:divide-y-0 ${grayOutClosedOrResolvedTicket()}`}
+      className={`relative grid w-full grid-cols-12 truncate divide-y divide-gray-300 lg:divide-y-0 items-center ${grayOutClosedOrResolvedTicket()}`}
     >
       {childrenWithProps}
     </form>
@@ -391,7 +393,7 @@ Ticket.Description = function TicketDescription({
       </h3>
       <p
         name="metaTicketInfo"
-        className="mt-1 text-xs break-words whitespace-normal sm:mt-auto md:text-sm sm:w-auto"
+        className="mt-1 text-xs break-words whitespace-normal sm:mt-auto sm:w-auto md:text-sm"
       >
         By
         <span className="font-bold">{` ${raisedBy} `} </span>
@@ -487,11 +489,9 @@ Ticket.AssignedTo = function TicketAssignedTo({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 text-xs bg-off-base md:text-center md:col-span-3 lg:col-span-3 xl:col-span-2">
-      <span className="inline-block mr-px ">
-        Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
-      </span>
-    </div>
+    <span className="inline-block col-span-6 p-1 m-2 text-xs text-center rounded-lg bg-off-base text-text-base md:col-span-3 lg:col-span-3 xl:col-span-2">
+      Assigned To: <br /> {assignedTo || 'Not Yet Assigned'}
+    </span>
   );
 };
 
@@ -502,11 +502,9 @@ Ticket.Location = function TicketLocation({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 text-xs bg-off-base md:text-center md:col-span-3 lg:col-span-4 xl:col-span-2 md:text-sm ">
-      <span className="inline-block mr-px text-center">
-        <LocationIcon /> {locationIdToWord(String(mainLocation))}
-      </span>
-    </div>
+    <span className="inline-block col-span-6 m-2 text-xs text-center rounded-lg bg-off-base text-text-base md:col-span-3 lg:col-span-4 xl:col-span-2">
+      <LocationIcon /> {locationIdToWord(String(mainLocation))}
+    </span>
   );
 };
 
@@ -550,7 +548,7 @@ Ticket.Category = function TicketCategory({
   return (
     <div
       data-id="ticketCategory"
-      className="flex flex-wrap content-start col-span-12 text-xs text-center lg:col-span-5 md:flex-row md:col-span-6 lg: 2xl:col-span-3"
+      className="flex flex-wrap content-start col-span-12 text-xs text-center md:flex-row md:col-span-6 lg:col-span-5 lg: 2xl:col-span-3"
     >
       <label htmlFor="service_id" className="w-full text-center sr-only">
         Category:
@@ -558,7 +556,7 @@ Ticket.Category = function TicketCategory({
       <OfficeIcon />
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg text-text-base bg-off-base w-28"
+        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg bg-off-base text-text-base w-28"
         name="service_id"
         defaultValue={category}
       >
@@ -570,7 +568,7 @@ Ticket.Category = function TicketCategory({
       </label>
       <select
         ref={register}
-        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg text-text-base bg-off-base w-max"
+        className="inline-block p-1 mt-1 mr-px text-xs rounded-lg bg-off-base text-text-base w-max"
         name="service_details_id"
         defaultValue={subcategory}
       >
@@ -590,17 +588,17 @@ Ticket.ContactInfo = function TicketContactInfo({
   ...restProps
 }) {
   return (
-    <div className="col-span-6 p-2 md:flex md:col-span-2 lg:col-span-3 xl:col-span-3 lg:text-sm">
+    <div className="col-span-6 p-2 md:flex md:col-span-2 lg:text-sm lg:col-span-3 xl:col-span-3">
       <p className="ml-2">
         Mobile Phone:{' '}
-        <a className="text-blue-500 underline " href={`tel:${contactPhone}`}>
+        <a className="text-blue-500 underline" href={`tel:${contactPhone}`}>
           {contactPhone}
         </a>
       </p>
       <p className="ml-2">
         Email:{' '}
         <a
-          className="text-blue-500 underline "
+          className="text-blue-500 underline"
           href={`mailto:${contactEmail}?subject=Your Echodesk Ticket:${title}`}
         >
           {contactEmail}
@@ -612,7 +610,7 @@ Ticket.ContactInfo = function TicketContactInfo({
 
 Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   return (
-    <div className="flex-grow w-1/3 p-2 md:w-auto md:border-0 md:text-lg lg:text-2xl xl:text-3xl">
+    <div className="flex-grow w-1/3 p-2 md:border-0 md:text-lg md:w-auto lg:text-2xl xl:text-3xl">
       <h3>Due in:</h3>
       <h4>{dueIn}</h4>
     </div>
@@ -664,7 +662,7 @@ Ticket.ActivityLogContainer = function ActivityLogContainer({
     );
   } else {
     return (
-      <div className="h-0 p-0 duration-200 transform pointer-events-none ">
+      <div className="h-0 p-0 duration-200 transform pointer-events-none">
         {children}
       </div>
     );
@@ -718,7 +716,7 @@ Ticket.InputNote = function InputNote({
     currentFilterQuery,
     setAllTickets,
     getAllTickets,
-    auth0UserMeta
+    auth0UserMeta,
   } = useContext(UserContext);
 
   async function onSubmit(data, event) {
@@ -776,10 +774,10 @@ Ticket.InputNote = function InputNote({
         ref={register}
         cols="25"
         rows="2"
-        className="w-full p-2 text-sm "
+        className="w-full p-2 text-sm"
         placeholder="leave a note here"
       ></textarea>
-      <button className="block px-2 py-1 mx-auto text-sm rounded-md text-text-base bg-medium hover:bg-action">
+      <button className="block px-2 py-1 mx-auto text-sm rounded-md bg-medium text-text-base hover:bg-action">
         Submit Note
       </button>
     </form>
