@@ -46,10 +46,10 @@ export default function TicketFormContainer({
   const resolver = yupResolver(profileSchema);
   const { auth0UserMeta } = useContext(UserContext);
 
-  
   async function onSubmit(data, event) {
     //todo: remove  before prod;
     // ;
+
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;

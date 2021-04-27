@@ -80,7 +80,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const inputClassNames =
     'block p-1 rounded-sm text-text-base-inverted w-56  lg:w-72';
   const submitClassNames =
-    'inline-block p-1 rounded-sm bg-base w-max text-text-base-inverted hover:bg-action hover:text-text-base font-bold';
+    'inline-block p-1 rounded-sm bg-base w-max text-text-base hover:bg-action hover:text-text-base font-bold';
 
   return (
     <AgentTicketFilterForm
