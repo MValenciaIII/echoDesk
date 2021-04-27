@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from '../context/dbUserContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ProfileSettingsForm from '../components/ProfileSettingsForm';
@@ -44,15 +44,9 @@ export default function TicketFormContainer({
   };
 
   const resolver = yupResolver(profileSchema);
-  const { auth0UserMeta, getAuth0UserMeta } = useContext(UserContext);
+  const { auth0UserMeta } = useContext(UserContext);
 
-  useEffect(() => {
-    if (!auth0UserMeta)
-      getAuth0UserMeta(userSub)
-        .then((values) => console.log(values))
-        .catch((err) => console.warn(err));
-  }, []);
-
+  
   async function onSubmit(data, event) {
     //todo: remove  before prod;
     // ;
@@ -64,8 +58,8 @@ export default function TicketFormContainer({
     // 1 = admin; 0 = normal client
     if (auth0UserMeta) {
       // mySql not converting the bool, hence the manual 1 or 0;
-      data.isAdmin = auth0UserMeta.app_metadata?.isAdmin ? '1' : '0';
-      data.agent_id = auth0UserMeta.app_metadata?.agent_id || null;
+      data.isAdmin = auth0UserMeta.isAdmin ? '1' : '0';
+      data.agent_id = auth0UserMeta.agent_id || null;
     } else {
       data.isAdmin = '0';
       data.agent_id = null;
@@ -108,14 +102,14 @@ export default function TicketFormContainer({
           });
         }
 
-        if (auth0UserMeta.app_metadata?.isAdmin) {
+        if (auth0UserMeta?.isAdmin) {
           // !CREATING AGENTS
           try {
             // todo: see about putting more agent meta in; doubtful for now;  GROUPS
             let agentData = {};
-            agentData.id = auth0UserMeta.app_metadata?.agent_id;
+            agentData.id = auth0UserMeta?.agent_id;
             agentData.client_id = userSub;
-            agentData.group_id = auth0UserMeta.app_metadata?.group_id;
+            agentData.group_id = auth0UserMeta?.group_id;
 
             let agentResponse = await fetch(createAgentRoute, {
               method: 'POST',

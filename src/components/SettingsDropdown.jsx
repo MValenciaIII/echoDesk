@@ -8,7 +8,7 @@ export default function SettingsDropdown(props) {
   let { auth0UserMeta, setcurrentFilterQuery } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
 
   function clientOrAgentLink() {
-    if (auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin?.checked) {
+    if (auth0UserMeta?.isAdmin) {
       return '/agentHome';
     } else {
       return '/';
@@ -29,7 +29,7 @@ export default function SettingsDropdown(props) {
         </Link>
       </li>
 
-      {auth0UserMeta && auth0UserMeta.app_metadata?.isAdmin && (
+      {auth0UserMeta && auth0UserMeta.isAdmin && (
         <li className={`text-text-muted text-sm underline m-2 inline-block`}>
           <Link
             onClick={(e) => setcurrentFilterQuery(null)}

@@ -35,15 +35,17 @@ export default function Ticket({
   activityLogShown,
   toggleActivityLog,
   status,
-  isAdmin,
   ...restProps
 }) {
   // ONLY THE TOP OF THE TICKET NEEDS THIS INFO
   const { register, handleSubmit, watch, reset } = useForm();
   const { getDbUsersTickets } = useContext(UserContext);
-  const { currentFilterQuery, setAllTickets, getAllTickets } = useContext(
-    UserContext
-  );
+  const {
+    currentFilterQuery,
+    setAllTickets,
+    getAllTickets,
+    auth0UserMeta,
+  } = useContext(UserContext);
 
   function grayOutClosedOrResolvedTicket() {
     if (status === 3 || status === 4) {
@@ -70,7 +72,7 @@ export default function Ticket({
       });
       let result = await response.json();
 
-      if (isAdmin?.admin && currentFilterQuery) {
+      if (auth0UserMeta.isAdmin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
           let filteredTickets = await filteredResponse.json();
@@ -81,7 +83,7 @@ export default function Ticket({
         } catch (error) {
           console.error(error);
         }
-      } else if (isAdmin?.admin) {
+      } else if (auth0UserMeta.isAdmin) {
         await getAllTickets(); //i.e. no filter query currently set;
       } else {
         await getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status
@@ -716,7 +718,7 @@ Ticket.InputNote = function InputNote({
     currentFilterQuery,
     setAllTickets,
     getAllTickets,
-    isAdmin,
+    auth0UserMeta
   } = useContext(UserContext);
 
   async function onSubmit(data, event) {
@@ -743,7 +745,7 @@ Ticket.InputNote = function InputNote({
 
       //reseting the textArea
       reset();
-      if (isAdmin?.admin && currentFilterQuery) {
+      if (auth0UserMeta?.isAdmin && currentFilterQuery) {
         try {
           let filteredResponse = await fetch(currentFilterQuery);
           let filteredTickets = await filteredResponse.json();
@@ -754,7 +756,7 @@ Ticket.InputNote = function InputNote({
         } catch (error) {
           console.error(error);
         }
-      } else if (isAdmin?.admin) {
+      } else if (auth0UserMeta?.isAdmin) {
         await getAllTickets(); //i.e. no filter query currently set;
       } else {
         await getDbUsersTickets(); //for admin, will return all Tickets since getDbUsersTickets calls its own setter (setmysqlUserTickets) since the useEffect of fetchAllTickets is watching mysqlUserTickets;  The tickets container then decides to render user or all based on admin status

@@ -17,9 +17,7 @@ function AgentDashboard(props) {
     mysqlUserTickets,
     getDbUsersTickets,
     auth0UserMeta,
-    getAuth0UserMeta,
     allTickets,
-    isAdmin,
   } = useContext(UserContext);
 
   let barIndex = user.sub.indexOf('|') + 1;
@@ -27,32 +25,22 @@ function AgentDashboard(props) {
 
   //Not sure if this is right use of Promise.all, but it works;  Is cleaner to read I decided vs multiple individual use effects;  wk 3-16
   useEffect(() => {
-    if (!mysqlUser || !auth0UserMeta || !mysqlUserTickets)
-      Promise.all([
-        getDbUser(userId),
-        getAuth0UserMeta(userId),
-        getDbUsersTickets(),
-      ])
+    if (!mysqlUser || !mysqlUserTickets)
+      Promise.all([getDbUser(userId), getDbUsersTickets()])
         .then((values) => console.log(values))
         .catch((err) => console.warn(err));
   }, []);
 
   //Redirect if not an admin;
   useEffect(() => {
-    if (isAdmin && !isAdmin.admin) {
+    if (auth0UserMeta && !auth0UserMeta.isAdmin) {
       history.push('/');
     }
-  }, [auth0UserMeta, user]);
+  }, [auth0UserMeta]);
 
   //  Gatekeeping the Components from loading if the necessary data has not yet been fetched here at the page leve;
 
-  if (
-    !mysqlUser ||
-    !allTickets ||
-    !auth0UserMeta ||
-    !mysqlUserTickets ||
-    !isAdmin?.checked
-  ) {
+  if (!mysqlUser || !allTickets || !auth0UserMeta || !mysqlUserTickets) {
     return <Loading />;
   } else {
     return (

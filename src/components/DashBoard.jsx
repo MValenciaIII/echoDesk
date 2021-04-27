@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 // import { HideClosedTickets } from '../utils/quickFilterFunctions';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/dbUserContext';
@@ -71,11 +71,16 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
   showFilters,
   children,
 }) {
-  let { setAllTickets, mysqlUser, setcurrentFilterQuery } = useContext(
-    UserContext
-  );
+  let {
+    setAllTickets,
+    mysqlUser,
+    setcurrentFilterQuery,
+    setWhichFilter,
+    whichFilter,
+  } = useContext(UserContext);
+  let quickFilterButtonRef = useRef();
 
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
 
   async function onSubmit(data, event) {
     let url;
@@ -112,11 +117,20 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
         });
         setAllTickets(sortedTickets);
         setcurrentFilterQuery(url);
+        setWhichFilter('QUICK');
       }
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(
+    //This will clear the quick filters checkbox when the big filter is used
+    (e) => {
+      reset();
+    },
+    [reset, whichFilter]
+  );
 
   return (
     <div id="filtersContainer" className={showFilters ? 'block' : 'hidden'}>
@@ -159,6 +173,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
           />
         </label>
         <button
+          ref={quickFilterButtonRef}
           type="submit"
           className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
         >

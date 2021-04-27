@@ -11,19 +11,10 @@ export default function AgentInputTicket(props) {
 
   const { user } = useAuth0();
 
-  const { mysqlUser, getDbUser, auth0UserMeta, getAuth0UserMeta } = useContext(
-    UserContext
-  );
+  const { mysqlUser, getDbUser, auth0UserMeta } = useContext(UserContext);
 
   let barIndex = user.sub.indexOf('|') + 1;
   let userId = user.sub.substring(barIndex);
-
-  //   auth0 meta fetch;  Promise all not working like I would expect, so splitting it up: wk-3-15
-  useEffect(() => {
-    if (!auth0UserMeta) {
-      getAuth0UserMeta();
-    }
-  }, [user, getAuth0UserMeta, auth0UserMeta]);
 
   // get user from mysql db fetch
   useEffect(() => {
@@ -34,10 +25,11 @@ export default function AgentInputTicket(props) {
 
   //Redirect if not an admin;
   useEffect(() => {
-    if (auth0UserMeta && !auth0UserMeta.app_metadata?.isAdmin) {
+
+    if (auth0UserMeta && !auth0UserMeta?.isAdmin) {
       history.push('/');
     }
-  }, [user, auth0UserMeta, history]);
+  }, [user]);
 
   // ||mysqlUserTickets
   if (!mysqlUser || !auth0UserMeta) {
