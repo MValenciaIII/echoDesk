@@ -1,15 +1,16 @@
 import React, { useEffect, useContext } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-// import getDbUser from '../auth/getDbUser';
 import { UserContext } from '../context/dbUserContext';
-// import Select from 'react-select';  //? NOT going to use I think; hard to use in conjuction with REACT hook form to me;  WK 3/3/21
+
 import ProfileSettingsForm from '../containers/ProfileSettingsContainer';
 import Loading from '../components/Loading';
 import HeaderFooter from '../containers/HeaderFooter';
 import Auth0subConverter from '../utils/Auth0subConverter';
 
+// ! This package is react-select, which creates more pleasant looking and powerful Select options... It takes some work to integrate it with React hook form.  As of 5/4/2021, I don't have it integrated, but it could be worth a shot for creating a more pleasant multiple select or searchable select.    ~wk 5/4/2021
+// import Select from 'react-select';  /
+
 export default function ProfileSettings() {
-  //   user return from useAuth
   const { user } = useAuth0();
 
   //sat
@@ -18,13 +19,14 @@ export default function ProfileSettings() {
   //! the | get's converted in a query string to a code symbol; Thus, avoiding storing the | and just stoiring the num;
   let userId = Auth0subConverter(user);
 
+  // React complains about the dependency array here having missing dependencies, but we really only would re-run this if the auth0 user changed.... I think I tried including them once and got an infinite loop due to one of the deps, probably mysqlUser
   useEffect(() => {
     if (!mysqlUser) {
       getDbUser(userId);
     }
   }, [user]);
 
-  //! MYSQLuser will be initialized to an empty object if it's the first time for a user;  Otherwise, pull their data and pass it to the profile settings;   META info doesn't exist on the first login, THUS, it CAN'T prevent us from rending the profile seetings page.  May see about pulling it in from an effect on the settings page though for posting admin status to our db.  Right now, all our admin stuff is connect to the auth0.app_metadata.isAdmin
+  //! MYSQLuser will be initialized to an empty object if it's the first time for a user to login through Auth0;  Otherwise, pull their data and pass it to the profile settings form;  The props could be pulled in via contenxt, but I just decided to pass them in this case the one level...
   if (!mysqlUser) {
     return <Loading />;
   } else {

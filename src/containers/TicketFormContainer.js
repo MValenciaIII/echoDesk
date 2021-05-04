@@ -17,8 +17,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
 import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
-// docs to package here; https://www.npmjs.com/package/react-toastify
-
 export default function TicketFormContainer({ children, ...restProps }) {
   const formClassname =
     'p-8 mx-auto text-text-base bg-off-base rounded-lg max-w-max sm:max-w-lg';
@@ -35,6 +33,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     getAllTickets,
   } = useContext(UserContext);
 
+  // default values pulled from context and passed into React-hook-form
   const defaultValues = {
     client_full_name: mysqlUser.fname + ' ' + mysqlUser.lname,
     department_id: mysqlUser.department_id,
@@ -49,11 +48,13 @@ export default function TicketFormContainer({ children, ...restProps }) {
     files: null,
   };
 
+  // This is passed into React-hook form and is invoked before submission for client side validation
   const resolver = yupResolver(inputTicketSchema);
 
   async function onSubmit(data, event) {
     event.preventDefault();
 
+    // desturcturing out files to make a separate api call IF They exist... ~wk 5/4
     let { files, ...restdata } = data;
 
     async function submitFiles(id) {
@@ -85,12 +86,13 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }
     }
 
-    // ! SUPPLMENTING  TICKET DATA WITH AUTH INFO;
+    // ! SUPPLMENTING  TICKET INPUTTED DATA WITH AUTH INFO; restdata is picked off above to separate from files
     restdata.status_id = '1'; //default of open; not from form;send...
     restdata.client_id = mysqlUser.id; // attaching the user's ID to the ticket
+    // # this line filters out null values from the Object...
     restdata = Object.fromEntries(
       Object.entries(restdata).filter(([item, val]) => val)
-    );
+    ); 
     // Posting new TICKETS
     try {
       let response = await fetch(createTicketRoute, {
@@ -108,7 +110,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.log(filesSentResponse);
       if (response.ok) {
         if (auth0UserMeta?.isAdmin) {
-          await getAllTickets();
+          await getAllTickets(); 
         } else {
           await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
         }
@@ -138,7 +140,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.warn(error);
     }
   }
-
+// Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
   function showAssignAgentToAdmins() {
     if (auth0UserMeta.isAdmin) {
       return (
@@ -250,6 +252,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           classNames="block px-2 py-1 mx-auto mt-3 font-bold text-text-base-inverted bg-light-base rounded-md hover:bg-action hover:text-text-base"
         />
       </InputTicketForm>
+      {/* The toast Package handles the positioning of this... link to doc found above... Thus can sit at bottom of this file */}
       <ToastContainer transition={Zoom} />
     </>
   );

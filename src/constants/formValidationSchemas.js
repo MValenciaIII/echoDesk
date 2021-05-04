@@ -1,9 +1,12 @@
 import * as yup from 'yup';
 
+// FOUND ON THE INTERNET...  I THINK IT BASICALLY VALIDATES 7 OR 10 DIGIT NUMBERS
 export const phoneValidationRegex = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 
+//SUPPORTED FORMATS FOR FILES
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
+//READ THE YUP DOCUMENTATION TO SEE HOW THESE WORK... GET CALLED BEOFRE SUBMISSION ON FORM SUBMISSIONS
 export const profileSchema = yup.object().shape({
   fname: yup
     .string()

@@ -1,3 +1,5 @@
+//ALL API ROUTES ARE DEFINED HERE AS THE SOURCE OF TRUTH FOR API
+
 const baseApiUrl = 'https://www.mema4kids.info/api/';
 
 export const allTicketsRoute = 'https://www.mema4kids.info/api/tickets';

@@ -14,6 +14,8 @@ function App() {
   if (isLoading) {
     return <Loading />;
   }
+
+  // flex-col plus min-h-screen = take up full height of browser if not a ton of content there;
   return (
     <div id="App" className="flex flex-col min-h-screen">
       <Switch>

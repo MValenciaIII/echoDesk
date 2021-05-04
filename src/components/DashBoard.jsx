@@ -67,10 +67,7 @@ Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   );
 };
 
-Dashboard.QuickFilters = function DashboardQuickFilters({
-  showFilters,
-  children,
-}) {
+Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
   let {
     setAllTickets,
     mysqlUser,
@@ -82,6 +79,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
 
   const { handleSubmit, register, reset } = useForm();
 
+  // same logic as the big filter, just smaller...
   async function onSubmit(data, event) {
     let url;
 
@@ -125,7 +123,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
   }
 
   useEffect(
-    //This will clear the quick filters checkbox when the big filter is used
+    //This will clear the quick filters checkbox whichFilter var is changed from big to quick or vice versa.
     (e) => {
       reset();
     },
@@ -168,7 +166,6 @@ Dashboard.QuickFilters = function DashboardQuickFilters({
             id="assignedToMe"
             name="assignedToMe"
             className="mx-1"
-            // todo: uncomment this line below when agents have been made;
             value={mysqlUser && mysqlUser.agent_id}
           />
         </label>

@@ -5,6 +5,7 @@ import Dashboard from '../components/DashBoard';
 
 //called by agentHome.js PAGE;
 function DashboardContainer(props) {
+  // State for page to determine whether to display quick filters or not
   let [showFilters, setShowFilters] = useState(true);
 
   return (

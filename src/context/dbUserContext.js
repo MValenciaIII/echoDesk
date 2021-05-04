@@ -21,6 +21,7 @@ function UserContextProvider(props) {
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
 
+  // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
     if (user && user[AUTH0_META_PROP]) {
       let meta = user[AUTH0_META_PROP];
@@ -28,12 +29,14 @@ function UserContextProvider(props) {
     }
   }, [user]);
 
+  // once we know their admin meta status, we can fetch all the tickets for an admin...
   useEffect(() => {
     if (auth0UserMeta?.isAdmin) {
       getAllTickets();
     }
   }, [auth0UserMeta]);
 
+  // Theme handling via localStorage, not DB
   function fetchTheme() {
     if (localStorage.colorTheme) {
       document.documentElement.classList.add(localStorage.colorTheme);
@@ -52,12 +55,9 @@ function UserContextProvider(props) {
     setThemeColor(newTheme);
   }
 
+  // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
   let barIndex;
-  let defaultuserId; //i.e. the current auth0 user with pipe removed
-  // if (user) {
-  //   barIndex = user.sub.indexOf('|') + 1;
-  //   defaultuserId = user.sub.substring(barIndex);
-  // }
+  let defaultuserId;
 
   function reduceAuthSubToNumbers(sub) {
     barIndex = user.sub.indexOf('|') + 1;
@@ -65,7 +65,7 @@ function UserContextProvider(props) {
     return defaultuserId;
   }
 
-  //!! EXPORTED FUNCTIONS;  NOT RUN THROUGH USE EFFECT HERE BECAUSE THE AUTH0 CLIENT IS UNDEFINED AT THIS POINT IN THE TREE;  IT IS ONLY DEFINED AFTER TRYING TO LOGIN;  THESE ARE CALLED AT THE PAGES LEVEL AFTER AUTH0 USER IS DEFINED
+  //!! EXPORTED FUNCTIONS;  NOT RUN THROUGH USE EFFECT HERE BECAUSE THE AUTH0 CLIENT IS UNDEFINED AT THIS POINT IN THE TREE;  IT IS ONLY DEFINED AFTER TRYING TO LOGIN;  THESE ARE CALLED AT THE PAGES LEVEL AFTER AUTH0 USER IS DEFINED AND LOGGEDIN
 
   async function getAllTickets() {
     try {
@@ -73,6 +73,7 @@ function UserContextProvider(props) {
       let response = await fetch(ticketsUrl);
       let allTickets = await response.json();
 
+      //sorting could be done via api, but here it just sorts them as a default by newest id's
       let defaultSorted = allTickets.sort((one, two) => {
         return two.id - one.id;
       });
@@ -86,6 +87,7 @@ function UserContextProvider(props) {
     }
   }
 
+  //default param in case the param is omitted...
   async function getDbUser(userId = defaultuserId) {
     try {
       let url = dbUserRoute(userId);
@@ -96,7 +98,7 @@ function UserContextProvider(props) {
       }
     } catch (error) {
       console.log(error);
-      setmysqlUser({});
+      setmysqlUser({}); ///setting to an empty object to avoid "Cannot access prop of undefined errors on initial creation of user in profile page"
     }
   }
 
