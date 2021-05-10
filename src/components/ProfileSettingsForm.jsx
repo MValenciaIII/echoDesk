@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from '../components/ErrorMessage';
+
+// ! COLLECTION OF RESUABLE FORM COMPONENTS.  CALLED IN THE PROFILE SETTINGS CONTAINERR
+//SEE EXPLANATION OF THIS IN DOCS HERE... https://react-hook-form.com/advanced-usage#SmartFormComponent
 export default function ProfileSettingsForm({
   children,
   onSubmit,

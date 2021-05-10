@@ -25,13 +25,12 @@ export default function AgentInputTicket(props) {
 
   //Redirect if not an admin;
   useEffect(() => {
-
     if (auth0UserMeta && !auth0UserMeta?.isAdmin) {
       history.push('/');
     }
   }, [user]);
 
-  // ||mysqlUserTickets
+  // To know who put in the ticket, and are they an admin?
   if (!mysqlUser || !auth0UserMeta) {
     return <Loading />;
   } else {
@@ -40,13 +39,11 @@ export default function AgentInputTicket(props) {
         <div
           id="agentTicketInputContainer"
           className={'bg-base p-8 w-full flex-grow'}
+          // flex-grow to make sure it takes up whole height of browser if content is small
         >
           <TicketForm />
         </div>
       </HeaderFooter>
     );
   }
-
-  // !; only for when I want to take auth fetch off or server is down;
-  // return <Dashboard />;
 }

@@ -28,7 +28,7 @@ import {
 import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
-//todo: maybe make a flexbox with flex grow version of this one day; Flex presents it's own challenges as well as grid, but might could make it look a bit nicer using flex grow than column widths;
+
 export default function Ticket({
   children,
   id,
@@ -56,7 +56,6 @@ export default function Ticket({
   }
 
   async function onSubmit(data, event) {
-    //todo: remove  later;
     event.preventDefault();
     data.id = id; //attaching ticket id to the request to update via id;
 
@@ -95,6 +94,7 @@ export default function Ticket({
     }
   }
 
+  // THE COMPONENT RENDERS ITS CHILDREN, BUT THERE IS SOME STATE TO KEPT AT THIS LEVEL (IE NOT THE CONTAINER LEVEL) AND I PREFERRED TO PASS THOSE PROPS TO CHILDREN VIA MAP INSTEAD OF RENDER PROP
   let childrenWithProps = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
       id,
@@ -473,7 +473,6 @@ Ticket.AgentAssignedTo = function TicketAgentAssignedTo({
          `}
           // onChange={(event) => }
         >
-          {/* //todo:   check freshdesk for current agents b4 deploying */}
           {<AssignToAgentSelect />}
         </select>
       </label>

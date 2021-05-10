@@ -1,6 +1,6 @@
 import React from 'react';
 
-//@# this utility file is used for creating coordinated select service forms along with the watch method on react hook forms;
+//@# this utility file is used for creating coordinated select service forms along with the watch method on react hook forms;  They really make more logical sense to also belong in a constants file so that all of our inputs for select elements live in single place when we need to tweak them in the future;  It wouldn't be a massive reworking, but just changing a number of the imports;   WK 5-4-2021
 
 export function subServiceTypes(mainCategoryId) {
   switch (mainCategoryId) {

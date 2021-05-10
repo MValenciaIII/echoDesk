@@ -7,6 +7,7 @@ export default function SettingsDropdown(props) {
   const { logout } = useAuth0();
   let { auth0UserMeta, setcurrentFilterQuery } = useContext(UserContext); //meta info from auth0 used to determie which link to render for agent or for client
 
+  // Extra link logic for agents and home link
   function clientOrAgentLink() {
     if (auth0UserMeta?.isAdmin) {
       return '/agentHome';

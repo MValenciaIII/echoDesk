@@ -61,15 +61,13 @@ export function FilterPrimaryServiceCategories() {
   );
 }
 export function FilterAgentOptions() {
-  // todo: remove  when needed
-  // ;
+// USED TO SHOW THE LOGGED IN AGENT AT THE TOP OF THE LIST
   const { mysqlUser } = useContext(UserContext);
 
   let currentAgent = mysqlUser && mysqlUser.agent_id ? mysqlUser.agent_id : '';
   return (
     <>
       <option value="">Any</option>
-      {/* todo: create Assigned to me value that at submit fills value with currently loggedin Mysql user */}
       <option value={currentAgent}>Assigned to Me</option>
       <option value="1">Alisha Torrence</option>
       <option value="2">Bob Buseck</option>

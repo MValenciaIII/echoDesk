@@ -1,6 +1,7 @@
 import React from 'react';
 
-// @#  a collection of helper functions for mySql word and value conversions;
+// @#  a collection of helper functions for mySql word and value conversions ~WK 5/4/2021 ;
+// ! Technially these are not as consistent as I would like on being utility functions versus constants for options.  If I could start over, I'd populate the options for each table via  DB call...  E.g. A call to the Branches table, "Select * from Branch".. Then map over the return array and create an option that has corresponding value for each option. But as is, the options here must be updated here or in the constants folder when Agents are added to the system;
 
 export function departmentWordToValue(word) {
   switch (word) {
@@ -148,6 +149,7 @@ export function serviceIDToWord(val) {
   }
 }
 
+// ! I don't think this one is currently called.  On Fresh desk there is a 3rd category, but we trimmed it back to 2 again to avoid creating a 3 subcategory which seemed a little redundant; ~wk 5/4/2021
 export function subserviceIDToWord(val) {
   switch (val) {
     case '1':
@@ -270,7 +272,7 @@ export function statusIdToWord(id) {
   }
 }
 
-// todo: move these to the constants folder to use for refactoring forms;
+// todo: move these to the constants folder to use for refactoring forms; Would have to track down where these are being imported and change file path... Might have to de-duplicate a few of the
 export function AssignToAgentSelect() {
   return (
     <>

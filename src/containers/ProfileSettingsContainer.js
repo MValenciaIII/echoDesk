@@ -43,21 +43,19 @@ export default function TicketFormContainer({
     office_phone: mysqlUser.office_phone || '',
   };
 
+  // runs validation before submitting via yup
   const resolver = yupResolver(profileSchema);
   const { auth0UserMeta } = useContext(UserContext);
 
   async function onSubmit(data, event) {
-    //todo: remove  before prod;
-    // ;
-
     event.preventDefault();
 
     // adding the id from auth0;  passed in from props whose parent is a page;
-    data.id = userSub; //passed in through props;  It's auth0 sub minus the auth0| that comes on it; Just the number
+    data.id = userSub; //id is passed in through props;  It's auth0 sub minus the auth0| that comes on it; Just the number
 
-    // 1 = admin; 0 = normal client
+    // 1 = admin; 0 = normal client;   SHOULD always run the if statement.  ~wk 5/4/2021
     if (auth0UserMeta) {
-      // mySql not converting the bool, hence the manual 1 or 0;
+      // mySql require 1 or 0 for bool types
       data.isAdmin = auth0UserMeta.isAdmin ? '1' : '0';
       data.agent_id = auth0UserMeta.agent_id || null;
     } else {
@@ -65,7 +63,7 @@ export default function TicketFormContainer({
       data.agent_id = null;
     }
 
-    //! Posting new Users
+    //! Posting new Users;  If they've never been created, then they won't have a first name in our DB
     if (!mysqlUser.fname) {
       try {
         let valueToSubmit = { ...data };
@@ -102,10 +100,10 @@ export default function TicketFormContainer({
           });
         }
 
+        // !POPULATING The agents table is a separate call if they are an admin
         if (auth0UserMeta?.isAdmin) {
-          // !CREATING AGENTS
           try {
-            // todo: see about putting more agent meta in; doubtful for now;  GROUPS
+            // ! if additional meta-data is desired (such as agent group or something else) that would go here;
             let agentData = {};
             agentData.id = auth0UserMeta?.agent_id;
             agentData.client_id = userSub;
@@ -150,7 +148,7 @@ export default function TicketFormContainer({
         console.error(error);
       }
     }
-    // PATCHING EXISTING USERS
+    //! IF THEY DO HAVE A FIRST NAME IN OUR DB, THEN WE ARE MAKING A PATCH (VIA POST METHOD) TO THE EXISTING USER.
     else {
       try {
         let valueToSubmit = { ...data };

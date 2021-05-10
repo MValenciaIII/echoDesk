@@ -1,10 +1,9 @@
 import { React } from 'react';
-
 import Ticketcontainer from './TicketsContainer';
 import InputTicketForm from '../containers/TicketFormContainer';
 import Dashboard from '../components/DashBoard';
 
-// reminder: containers props are coming from pages folder;  I.e. ClientHome would be the caller here;
+// reminder: containers props are coming from pages folder;  I.e. ClientHome Page would be the caller here;
 function DashboardContainer({ mysqlUser, ...restProps }) {
   return (
     <Dashboard>

@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Auth0ProviderWithHistory from './auth/auth0-provider-with-history';
 import { UserContextProvider } from './context/dbUserContext';
 
+// ! this is the basic guide followed for setting up auth with rect
 // https://auth0.com/blog/complete-guide-to-react-user-authentication/
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -27,7 +28,3 @@ ReactDOM.render(
   </Router>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

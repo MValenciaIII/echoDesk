@@ -2,6 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { subServiceTypes } from '../utils/ticketCategories';
 import ErrorMessage from '../components/ErrorMessage';
+
+// ! COLLECTION OF RESUABLE FORM COMPONENTS.  CALLED IN THE PROFILE SETTINGS CONTAINERR
+//SEE EXPLANATION OF THIS IN DOCS HERE... https://react-hook-form.com/advanced-usage#SmartFormComponent
 export default function InputTicketForm({
   children,
   onSubmit,
@@ -23,6 +26,7 @@ export default function InputTicketForm({
   } = methods;
   const mainServicetype = watch('service_id', '1');
 
+  // ! CLEARS OUT THE TICKET IF SUBMIT WAS SUCCESSFUL
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset({ ...defaultValues });

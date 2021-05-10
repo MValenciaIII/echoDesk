@@ -13,6 +13,8 @@ import {
 import AgentTicketFilterForm from '../components/AgentTicketFilter';
 import { filteringRoute, allTicketsRoute } from '../constants/apiRoutes';
 
+//! Notice all the constants that have been imported so that the options have a single source of truth in the constants file
+
 export default function AgentTicketFilterContainer({ children, ...restProps }) {
   const { setAllTickets, setcurrentFilterQuery, setWhichFilter } = useContext(
     UserContext
@@ -31,27 +33,30 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   };
 
   async function onSubmit(data, event) {
-    // todo: remove  too
     try {
+      // This url will be the filtering route, BUT the query parameters will be appended to the the filtering url...
       let url;
-
       let formData = new FormData(event.target);
       const dataArray = [...formData.entries()].filter((entry) => entry[1]);
+      // Make the filtering query into a string to append to url
       const dataAsString = new URLSearchParams(dataArray).toString();
       console.log(dataAsString);
 
+      //removing the nulls from the object
       let dataArrayWithNullsRemoved = Object.entries(data).filter(
         ([item, val]) => val
       );
+      //An empty filter resets the form and just gets all the ticket
       if (dataArrayWithNullsRemoved.length === 0) {
         url = allTicketsRoute;
       } else {
         url = filteringRoute;
         url = url.concat(dataAsString);
       }
-      console.log({ url });
+
       // ! This context state setter is getting stored to context in order to later access it on the refreshing of the ticket when a comment is submitted to determine whether to fetch ALL tickets or to fetch the currently set filtered tickets
       setcurrentFilterQuery(url);
+      //This test piece of state is used to determine whether to use the little filter or the bigger more powerful filter
       setWhichFilter('BIG');
 
       let response = await fetch(url, {
@@ -192,9 +197,8 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
         options={<FilterPrimaryServiceCategories />}
       />
 
-      {/* note the name prop is required even though not an input due to the react.children.map conditional in the corresponiding agent ticket filter component */}
-      {/* // todo: CONTINUE TESTING REACTSELECT FOR BETTER UX ON OUR FORM SUBMISSIONS  ~ WK Wednesday April 07, 2021 04:49PM*/}
-      {/* <AgentTicketFilterForm.ReactSelect name="reactSelect" /> */}
+      {/* note the name prop is required even though not an input due to the react.children.map in the component file.  It only renders a child if the component has a name prop, but I added a couple of components that are not inputs (e.g. flex pane and submit button)  */}
+
       <AgentTicketFilterForm.FlexPane
         classNames="flex justify-between mt-3 items-end"
         name="flexPane"
