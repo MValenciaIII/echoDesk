@@ -5,6 +5,7 @@ import ProtectedRoute from './auth/protected-route';
 import ClientDashboard from './pages/clientHome';
 import AgentHome from './pages/agentHome';
 import ProfileSettings from './pages/profile';
+import ChartsPage from './pages/chartsPages';
 import AgentInputTicket from './pages/agentInputTicket.js';
 import Loading from './components/Loading';
 
@@ -22,6 +23,7 @@ function App() {
         <ProtectedRoute path="/profilesettings" component={ProfileSettings} />
         <ProtectedRoute path="/agentHome" component={AgentHome} />
         <ProtectedRoute path="/agentInputTicket" component={AgentInputTicket} />
+        <ProtectedRoute exact path="/charts" component={ChartsPage} />
         <ProtectedRoute exact path="/" component={ClientDashboard} />
       </Switch>
     </div>
