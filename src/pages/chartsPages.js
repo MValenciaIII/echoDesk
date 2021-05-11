@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { history } from 'react-router-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import sub from 'date-fns/sub';
@@ -9,8 +10,14 @@ import { UserContext } from '../context/dbUserContext';
 import HeaderFooter from '../containers/HeaderFooter';
 
 export default function ChartsPage(props) {
-  const { allTickets } = useContext(UserContext);
+  const { allTickets, auth0UserMeta } = useContext(UserContext);
   let today = new Date();
+
+  useEffect(() => {
+    if (auth0UserMeta && !auth0UserMeta.isAdmin) {
+      history.push('/');
+    }
+  }, [auth0UserMeta]);
 
   function CreatedDaysAgoFilter(ticket, number) {
     let difference = differenceInDays(today, parseISO(ticket.created_at));
