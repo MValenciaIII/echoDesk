@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { history } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import sub from 'date-fns/sub';
@@ -11,6 +11,7 @@ import HeaderFooter from '../containers/HeaderFooter';
 
 export default function ChartsPage(props) {
   const { allTickets, auth0UserMeta } = useContext(UserContext);
+  let history = useHistory();
   let today = new Date();
 
   useEffect(() => {
