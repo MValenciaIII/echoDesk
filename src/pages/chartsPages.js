@@ -27,7 +27,11 @@ export default function ChartsPage(props) {
   const options = {
     title: {
       text: 'Ticket Volume',
+      style: {
+        fontFamily: 'monospace',
+      },
     },
+
     chart: {
       spacingBottom: 15,
       spacingTop: 10,
@@ -45,6 +49,7 @@ export default function ChartsPage(props) {
       type: 'datetime',
       categories: [],
     },
+
     series: [
       { name: 'New Tickets', data: [] },
       { name: 'Closed/Resolved Tickets', data: [] },
@@ -75,7 +80,15 @@ export default function ChartsPage(props) {
   // todo: style
   return (
     <HeaderFooter>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <div className="flex-grow w-full p-8 bg-base ">
+        <div
+          id="ChartsPageContainer"
+          className={'max-w-screen-2xl mx-auto'}
+          // flex-grow to make sure it takes up whole height of browser if content is small
+        >
+          <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+      </div>
     </HeaderFooter>
   );
 }
