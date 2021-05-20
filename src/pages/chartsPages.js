@@ -8,9 +8,16 @@ import parseISO from 'date-fns/parseISO';
 import format from 'date-fns/format';
 import { UserContext } from '../context/dbUserContext';
 import HeaderFooter from '../containers/HeaderFooter';
+import ChartsWidget from '../components/ChartsWidgets';
+import LoaderIcon from '../components/Loading';
 
 export default function ChartsPage(props) {
   const { allTickets, auth0UserMeta } = useContext(UserContext);
+  let onlyOpenTickets = allTickets.filter(
+    (ticket) => ticket.status_id !== 3 && ticket.status_id !== 4
+  );
+  console.dir(allTickets);
+  // debugger;
   let history = useHistory();
   let today = new Date();
 
@@ -86,6 +93,10 @@ export default function ChartsPage(props) {
     options.xAxis.categories.unshift(xFormatted);
   }
   // todo: style
+  if (!allTickets) {
+    return <LoaderIcon />;
+  }
+
   return (
     <HeaderFooter>
       <div className="flex-grow w-full p-8 bg-base ">
@@ -94,6 +105,39 @@ export default function ChartsPage(props) {
           className={'max-w-screen-2xl mx-auto'}
           // flex-grow to make sure it takes up whole height of browser if content is small
         >
+          <div className="flex flex-wrap justify-around gap-4 mb-3">
+            <ChartsWidget
+              category="Unresolved"
+              number={onlyOpenTickets.length}
+            />
+            <ChartsWidget
+              category="Open"
+              number={
+                onlyOpenTickets.filter((ticket) => ticket.status_id === 1)
+                  .length
+              }
+            />
+            <ChartsWidget
+              category="Pending"
+              number={
+                onlyOpenTickets.filter((ticket) => ticket.status_id === 2)
+                  .length
+              }
+            />
+            <ChartsWidget
+              category="Urgent"
+              number={
+                onlyOpenTickets.filter((ticket) => ticket.priority_id === 4)
+                  .length
+              }
+            />
+            <ChartsWidget
+              category="Unassigned"
+              number={
+                onlyOpenTickets.filter((ticket) => !ticket.agent_id).length
+              }
+            />
+          </div>
           <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
       </div>

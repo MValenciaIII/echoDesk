@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '../context/dbUserContext';
 import InputTicketForm from '../components/InputTicketForm';
@@ -18,6 +19,7 @@ import { inputTicketSchema } from '../constants/formValidationSchemas';
 import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
 export default function TicketFormContainer({ children, ...restProps }) {
+  let history = useHistory();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formClassname =
     'p-8 mx-auto text-text-base bg-off-base rounded-lg max-w-max sm:max-w-lg';
@@ -138,6 +140,9 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.warn(error);
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => {
+        history.push('/');
+      }, 1350);
     }
   }
   // Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
