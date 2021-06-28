@@ -21,7 +21,7 @@ export default function AgentTicketFilterContainer({ children, ...restProps }) {
   );
   const defaultValues = {
     agent_id: '',
-    created_at: '1 Year',
+    created_at: '12 Month',
     Resolution_due_by: '',
     First_Response_due_by: '',
     status_id: '',
