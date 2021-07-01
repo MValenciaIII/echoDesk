@@ -83,6 +83,9 @@ export function FilterAgentOptions() {
       <option value="12">Preston White</option>
       <option value="13">Scott Davis</option>
       <option value="14">Wesley Edwards</option>
+      <option value="15">Brent Bennett</option>
+      <option value="16">Donald McDuffey</option>
+      <option value="17">Terry Breland</option>
     </>
   );
 }
