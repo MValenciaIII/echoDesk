@@ -7,7 +7,7 @@ export function FilterLocationOptions() {
       <option value="">Any</option>
       <option value="1">HQ(Pearl)</option>
       <option value="2">Bolton Building (Biloxi)</option>
-      <option value="3">Warehouse(Byram)</option>
+      <option value="3">SELOC(Byram)</option>
     </>
   );
 }
@@ -57,6 +57,8 @@ export function FilterPrimaryServiceCategories() {
       <option value="7">Surveilance Camera System</option>
       <option value="8">Training</option>
       <option value="9">Thermoscan Account</option>
+      <option value="10">Freshmarket</option>
+      <option value="11">Safety</option>
     </>
   );
 }
