@@ -22,6 +22,10 @@ export function subServiceTypes(mainCategoryId) {
       return <Training />;
     case '9':
       return <Thermoscan />;
+    case '10':
+      return <Freshmarket />
+    case '11':
+      return <Safety />
     default:
       break;
   }
@@ -119,6 +123,25 @@ function Thermoscan(props) {
   );
 }
 
+function Freshmarket(props) {
+  return (
+    <>
+      <option value="36">Payment Error</option>
+      <option value="37">Add Items</option>
+      <option value="38">Account Help</option>
+    </>
+  );
+}
+
+function Safety(props) {
+  return (
+    <>
+      <option value="36">Hazard Outside </option>
+      <option value="37">Hazard Inside</option>
+      <option value="38">Hazard Parking Lot</option>
+    </>
+  );
+}
 export function PrimaryServiceCategories() {
   return (
     <>
@@ -131,9 +154,12 @@ export function PrimaryServiceCategories() {
       <option value="7">Surveilance Camera System</option>
       <option value="8">Training</option>
       <option value="9">Thermoscan Account</option>
+      <option value="10">Freshmarket</option>
+      <option value="11">Safety</option>
     </>
   );
 }
+
 
 export function DepartmentOptions() {
   return (
@@ -160,7 +186,7 @@ export function LocationOptions() {
   return (
     <>
       <option value="1">HQ(Pearl)</option>
-      <option value="2">Warehouse(Byram)</option>
+      <option value="2">SELOC(Byram)</option>
       <option value="3">Bolton Building (Biloxi)</option>
     </>
   );
