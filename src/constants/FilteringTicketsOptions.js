@@ -78,7 +78,7 @@ export function FilterAgentOptions() {
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
       <option value="7">James Dear Jr.</option>
-      <option value="8">James Montgomery</option>
+      <option value="8">Holly Tran</option>
       <option value="9">Latoya Lofton</option>
       <option value="10">Lenard Brent</option>
       <option value="11">Margarito Valencia</option>
