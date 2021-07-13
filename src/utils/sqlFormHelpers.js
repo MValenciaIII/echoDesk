@@ -301,9 +301,9 @@ export function AssignToAgentSelect() {
 export function TicketLocationsOptions() {
   return (
     <>
-      <option value="1">HQ - Pearl</option>
+      <option value="1">SEOC (Pearl)</option>
       <option value="2">Bolton Building (Biloxi)</option>
-      <option value="3">Warehouse (Byram)</option>
+      <option value="3">SELOC (Byram)</option>
     </>
   );
 }

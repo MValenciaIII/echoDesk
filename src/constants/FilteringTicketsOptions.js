@@ -5,7 +5,7 @@ export function FilterLocationOptions() {
   return (
     <>
       <option value="">Any</option>
-      <option value="1">HQ(Pearl)</option>
+      <option value="1">SEOC(Pearl)</option>
       <option value="2">Bolton Building (Biloxi)</option>
       <option value="3">SELOC(Byram)</option>
     </>
