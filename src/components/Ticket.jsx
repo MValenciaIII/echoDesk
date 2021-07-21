@@ -26,6 +26,7 @@ import {
   AttachmentPaperclipIcon,
 } from './Icons';
 import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
+import { data } from 'autoprefixer';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
 
@@ -350,6 +351,7 @@ Ticket.AgentStatus = function TicketAgentStatus({
 };
 
 Ticket.Description = function TicketDescription({
+  id,
   children,
   title,
   description,
@@ -385,8 +387,9 @@ Ticket.Description = function TicketDescription({
       className="flex-grow col-span-12 p-1 border border-red-500 bg-light-base md:col-span-11"
     >
       <h2 className="inline-block font-bold text-text-base-inverted text-md">
-        {title}
+        #{id}-{title}
       </h2>
+
 
       <h3 className="w-11/12 text-xs break-words whitespace-normal text-text-base-inverted-muted md:text-sm md:w-5/6">
         {description}
