@@ -26,6 +26,8 @@ export function subServiceTypes(mainCategoryId) {
       return <Freshmarket />
     case '11':
       return <Safety />
+    case '12':
+      return <Documentationscanning />
     default:
       break;
   }
@@ -51,13 +53,15 @@ function IT(props) {
       <option value="8">Website</option>
       <option value="9">Microsoft</option>
       <option value="10">Computer</option>
+      <option value="40">VOIP Phone</option>
+      <option value="41">Copier/ Copy Machine</option>
     </>
   );
 }
 function Communications(props) {
   return (
     <>
-      <option value="11">Telephone</option>
+      <option value="11">Cell</option>
       <option value="12">Mifi Issues</option>
       <option value="13">ATHOC</option>
       <option value="14">Monitors/TV</option>
@@ -142,6 +146,14 @@ function Safety(props) {
     </>
   );
 }
+
+function Documentationscanning(props) {
+  return (
+    <>
+      <option value="39">Error </option>
+    </>
+  );
+}
 export function PrimaryServiceCategories() {
   return (
     <>
@@ -156,6 +168,7 @@ export function PrimaryServiceCategories() {
       <option value="9">Thermoscan Account</option>
       <option value="10">Freshmarket</option>
       <option value="11">Safety</option>
+      <option value="12">Documentation Scanning</option>
     </>
   );
 }
@@ -176,7 +189,7 @@ export function DepartmentOptions() {
       <option value="10">External Affairs</option>
       <option value="11">Logistics</option>
       <option value="12">Operations</option>
-      <option value="13">Individual Assistance</option>
+      <option value="14">Individual Assistance</option>
       <option value="13">Information Technology</option>
     </>
   );
