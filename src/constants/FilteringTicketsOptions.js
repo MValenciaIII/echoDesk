@@ -38,8 +38,8 @@ export function FilterDepartmentOptions() {
       <option value="10">External Affairs</option>
       <option value="11">Logistics</option>
       <option value="12">Operations</option>
-      <option value="14">Individual Assistance</option>
-      <option value="13">Information Technology</option>
+      <option value="13">Individual Assistance</option>
+      <option value="14">Information Technology</option>
     </>
   );
 }

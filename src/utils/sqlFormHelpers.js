@@ -75,9 +75,9 @@ export function departmentIdToValue(val) {
 
 export function locationWordToValue(word) {
   switch (word) {
-    case 'HQ(Pearl)':
+    case 'SEOC(Pearl)':
       return 1;
-    case 'Warehouse(Byram)':
+    case 'SELOC(Byram)':
       return 2;
     case 'Bolton Building (Biloxi)':
       return 3;
@@ -89,9 +89,9 @@ export function locationWordToValue(word) {
 export function locationIdToWord(word) {
   switch (word) {
     case '1':
-      return 'HQ(Pearl)';
+      return 'SEOC(Pearl)';
     case '2':
-      return 'Warehouse(Byram)';
+      return 'SELOC(Byram)';
     case '3':
       return 'Bolton Building (Biloxi)';
     default:
@@ -119,6 +119,12 @@ export function serviceWordValueToNumberValue(word) {
       return 8;
     case 'THERMOSCAN ACCOUNT':
       return 9;
+    case 'FRESHMARKET':
+      return 10;
+    case 'SAFETY':
+      return 11;
+    case 'DOCUMENTATION SCANNING':
+      return 12;
     default:
       break;
   }
@@ -144,6 +150,12 @@ export function serviceIDToWord(val) {
       return 'TRAINING';
     case '9':
       return 'THERMOSCAN ACCOUNT';
+    case '10':
+      return 'FRESHMARKET';
+    case '11':
+      return 'SAFETY';
+    case '12':
+      return 'DOCUMENTATION SCANNING';
     default:
       break;
   }
@@ -222,6 +234,24 @@ export function subserviceIDToWord(val) {
       return 'Photo Access';
     case '35':
       return 'Account Removal';
+    case '36':
+      return 'Payment Error';
+    case '37':
+      return 'Add Items';
+    case '38':
+      return 'Account Help';
+    case '39':
+      return 'Hazard Outside';
+    case '40':
+      return 'Hazard Inside';
+    case '41':
+      return 'Hazard Parking Lot';
+    case '42':
+      return 'Document Error';
+    case '43':
+      return 'VOIP Phone';
+    case '44':
+      return ' Copier Copy Machine';
     default:
       break;
   }

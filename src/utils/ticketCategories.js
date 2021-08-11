@@ -150,7 +150,7 @@ function Safety(props) {
 function Documentationscanning(props) {
   return (
     <>
-      <option value="42">Error </option>
+      <option value="42">Document Error </option>
     </>
   );
 }
@@ -189,8 +189,8 @@ export function DepartmentOptions() {
       <option value="10">External Affairs</option>
       <option value="11">Logistics</option>
       <option value="12">Operations</option>
-      <option value="14">Individual Assistance</option>
-      <option value="13">Information Technology</option>
+      <option value="13">Individual Assistance</option>
+      <option value="14">Information Technology</option>
     </>
   );
 }
@@ -199,8 +199,8 @@ export function LocationOptions() {
   return (
     <>
       <option value="1">SEOC(Pearl)</option>
-      <option value="2">Bolton Building (Biloxi)</option>
-      <option value="3">SELOC(Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+      <option value="2">SELOC(Byram)</option>
     </>
   );
 }
