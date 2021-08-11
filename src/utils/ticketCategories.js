@@ -53,8 +53,8 @@ function IT(props) {
       <option value="8">Website</option>
       <option value="9">Microsoft</option>
       <option value="10">Computer</option>
-      <option value="40">VOIP Phone</option>
-      <option value="41">Copier Copy Machine</option>
+      <option value="43">VOIP Phone</option>
+      <option value="44">Copier Copy Machine</option>
     </>
   );
 }
@@ -140,9 +140,9 @@ function Freshmarket(props) {
 function Safety(props) {
   return (
     <>
-      <option value="36">Hazard Outside </option>
-      <option value="37">Hazard Inside</option>
-      <option value="38">Hazard Parking Lot</option>
+      <option value="39">Hazard Outside </option>
+      <option value="40">Hazard Inside</option>
+      <option value="41">Hazard Parking Lot</option>
     </>
   );
 }
@@ -150,7 +150,7 @@ function Safety(props) {
 function Documentationscanning(props) {
   return (
     <>
-      <option value="39">Error </option>
+      <option value="42">Error </option>
     </>
   );
 }
