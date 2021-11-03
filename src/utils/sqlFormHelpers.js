@@ -325,6 +325,7 @@ export function AssignToAgentSelect() {
       <option value="16">Donald McDuffey</option>
       <option value="17">Terry Breland</option>
       <option value="18">Lily Victory</option>
+      <option value="19">Andrew Minga</option>
     </>
   );
 }
