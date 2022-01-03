@@ -156,6 +156,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
             name="hideClosed"
             id="hideClosed"
             className="mx-1"
+            
           />
         </label>
         <label className="mx-2" htmlFor="assignedToMe">

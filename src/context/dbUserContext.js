@@ -75,11 +75,11 @@ function UserContextProvider(props) {
 
       //sorting could be done via api, but here it just sorts them as a default by newest id's
       let defaultSorted = allTickets.sort((one, two) => {
-        return two.id - one.id;
+        return two.id - one.id ;
       });
-
+      
       if (response.ok) {
-        setAllTickets([...defaultSorted]);
+        setAllTickets([...defaultSorted.filter(ticketOrder => ticketOrder.status_id !== 3 && ticketOrder.status_id !== 4)]);
       }
     } catch (error) {
       console.error({ error });
