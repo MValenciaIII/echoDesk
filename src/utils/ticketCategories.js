@@ -55,6 +55,7 @@ function IT(props) {
       <option value="10">Computer</option>
       <option value="43">VOIP Phone</option>
       <option value="44">Copier Copy Machine</option>
+      <option value="45">Network</option>
     </>
   );
 }
