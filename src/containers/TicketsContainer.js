@@ -61,6 +61,8 @@ export default function TicketsContainer(props) {
                 contactEmail={ticket.email}
                 title={ticket.subject}
               />
+              <Ticket.ApprovalInfo
+              />
             </Ticket>
             <Ticket.ActivityLogContainer>
               {ticket.notes?.map((note) => (

@@ -610,6 +610,20 @@ Ticket.ContactInfo = function TicketContactInfo({
   );
 };
 
+Ticket.ApprovalInfo = function TicketApprovalInfo({
+children,
+...restprops
+}) { return (
+  <div className="col-span-6 p-2">
+    <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" />
+    <p className="ml-2 inline-block" >Needs Approval</p>
+    <select name="BureauDirs" id="bureauApprove"></select>
+    <select name="MitsDir" id="mitsApprove"></select>
+    <select name="Cio" id="cioApprove"></select>
+  </div>
+)
+};
+
 Ticket.DueIn = function TicketDueIn({ children, dueIn, ...restProps }) {
   return (
     <div className="flex-grow w-1/3 p-2 md:border-0 md:text-lg md:w-auto lg:text-2xl xl:text-3xl">
