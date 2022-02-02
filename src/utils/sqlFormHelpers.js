@@ -330,12 +330,26 @@ export function AssignToAgentSelect() {
   );
 }
 
+export function AssignApprovalBereau() {
+  return (
+    <>
+      <option value="">Not yet Assigned</option>
+      <option value="5">Chris Watts</option>
+      <option value="10">Lenard Brent</option>
+      <option value="12">Preston White</option>
+      <option value="13">Scott Davis</option>
+      <option value="14">Wesley Edwards</option>
+      <option value="19">Drew Minga</option>
+    </>
+  )
+}
+
 export function TicketLocationsOptions() {
   return (
     <>
       <option value="1">SEOC (Pearl)</option>
-      <option value="2">Bolton Building (Biloxi)</option>
-      <option value="3">SELOC (Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+      <option value="2">SELOC (Byram)</option>
     </>
   );
 }

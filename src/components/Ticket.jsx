@@ -16,6 +16,7 @@ import {
   priorityIDtoWord,
   AssignToAgentSelect,
   TicketLocationsOptions,
+  AssignApprovalBereau
 } from '../utils/sqlFormHelpers';
 import {
   UserIcon,
@@ -612,14 +613,32 @@ Ticket.ContactInfo = function TicketContactInfo({
 
 Ticket.ApprovalInfo = function TicketApprovalInfo({
 children,
+handleChange,
+id,
+status,
+register,
+approveBureau,
 ...restprops
 }) { return (
   <div className="col-span-6 p-2">
     <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" />
     <p className="ml-2 inline-block" >Needs Approval</p>
-    <select name="BureauDirs" id="bureauApprove"></select>
     <select name="MitsDir" id="mitsApprove"></select>
     <select name="Cio" id="cioApprove"></select>
+
+    <label className="mx-auto text-center w-max">
+        <UserIcon />
+        <select
+          ref={register}
+          name="BureauDirs"
+          defaultValue={String(approveBureau)}
+          className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base rounded-lg
+         `}
+          // onChange={(event) => }
+        >
+          {<AssignApprovalBereau />}
+        </select>
+      </label>
   </div>
 )
 };
