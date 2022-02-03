@@ -334,12 +334,10 @@ export function AssignApprovalBereau() {
   return (
     <>
       <option value="">Not yet Assigned</option>
-      <option value="5">Chris Watts</option>
-      <option value="10">Lenard Brent</option>
-      <option value="12">Preston White</option>
-      <option value="13">Scott Davis</option>
-      <option value="14">Wesley Edwards</option>
-      <option value="19">Drew Minga</option>
+      <option value="1">Lenard Brent</option>
+      <option value="2">Preston White</option>
+      <option value="3">Scott Davis</option>
+      <option value="4">Wesley Edwards</option>
     </>
   )
 }
