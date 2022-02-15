@@ -295,6 +295,32 @@ export function AssignToAgentSelect() {
   );
 }
 
+
+
+
+
+export function departmentTicketSelect() {
+  return (
+    <>
+      <option value="">All Tickets</option>
+      <option value="1">Executive Branch</option>
+      <option value="2">Preparedness Branch</option>
+      <option value="3">Mitigation Branch</option>
+      <option value="4">Warehouse Branch</option>
+      <option value="5">Support Services Branch</option>
+      <option value="6">Human Resources Branch</option>
+      <option value="7">Maintenance Branch</option>
+      <option value="8">Recovery Branch</option>
+      <option value="9">Field Services Branch</option>
+      <option value="10">External Affairs Branch</option>
+      <option value="11">Logistics Branch</option>
+      <option value="12">Operations Branch</option>
+      <option value="13">Individual Branch</option>
+      <option value="14">Information Branch</option>
+    </>
+  )
+}
+
 export function TicketLocationsOptions() {
   return (
     <>

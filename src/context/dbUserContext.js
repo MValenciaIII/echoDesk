@@ -4,6 +4,7 @@ import {
   allTicketsRoute,
   dbUserRoute,
   dbUsersTicketsRoute,
+  departmentTicketsRoute,
 } from '../constants/apiRoutes';
 import { AUTH0_META_PROP } from '../constants/domain';
 
@@ -15,6 +16,7 @@ function UserContextProvider(props) {
   const [mysqlUser, setmysqlUser] = useState();
   const [mysqlUserTickets, setmysqlUserTickets] = useState();
   const [allTickets, setAllTickets] = useState();
+  const [allDepartmentTickets, setDepartmentTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
   const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
@@ -33,6 +35,7 @@ function UserContextProvider(props) {
   useEffect(() => {
     if (auth0UserMeta?.isAdmin) {
       getAllTickets();
+      getDepartmentTickets();
     }
   }, [auth0UserMeta]);
 
@@ -84,6 +87,25 @@ function UserContextProvider(props) {
     } catch (error) {
       console.error({ error });
       setAllTickets([]);
+    }
+  }
+
+  async function getDepartmentTickets(id) {
+    try {
+      let dpTicketsUrl = departmentTicketsRoute(id);
+      let response = await fetch(dpTicketsUrl);
+      let departmentTickets = await response.json();
+
+      let defaultSorted = departmentTickets.sort((one, two) => {
+        return two.id - one.id;
+      });
+      if (response.ok) {
+        setDepartmentTickets([...defaultSorted]);
+      }
+      
+    } catch (error) {
+      console.log({error});
+      setDepartmentTickets([]);
     }
   }
 
@@ -141,6 +163,9 @@ function UserContextProvider(props) {
         addThemeToHTML,
         whichFilter,
         setWhichFilter,
+        allDepartmentTickets,
+        setDepartmentTickets,
+        getDepartmentTickets
       }}
     >
       {props.children}
