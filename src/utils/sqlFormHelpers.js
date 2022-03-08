@@ -309,8 +309,6 @@ export function AssignToAgentSelect() {
       <option value="">Not yet Assigned</option>
       <option value="1">Alisha Torrence</option>
       <option value="2">Bob Buseck</option>
-      <option value="3">Casey Donovan Mott</option>
-      <option value="4">Charllieya Smith</option>
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
       <option value="7">James Dear Jr.</option>
@@ -323,7 +321,6 @@ export function AssignToAgentSelect() {
       <option value="14">Wesley Edwards</option>
       <option value="15">Brent Bennett</option>
       <option value="16">Donald McDuffey</option>
-      <option value="17">Terry Breland</option>
       <option value="18">Lily Victory</option>
       <option value="19">Drew Minga</option>
     </>
