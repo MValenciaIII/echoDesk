@@ -208,6 +208,7 @@ Ticket.Status = function TicketStatus({
         className={`${statusClasses()}  w-full md:h-1/2`}
       >
         <select
+        disabled
           ref={register}
           name="status_id"
           defaultValue={status}
