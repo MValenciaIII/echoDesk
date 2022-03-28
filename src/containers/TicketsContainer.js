@@ -61,7 +61,9 @@ export default function TicketsContainer(props) {
                 contactEmail={ticket.email}
                 title={ticket.subject}
               />
-              <Ticket.ApprovalInfo approveBureau={ticket.bureauapprover_id}
+              <Ticket.ApprovalInfo 
+              ifapproved={ticket.approved}
+              approveBureau={ticket.bureauapprover_id}
               />
             </Ticket>
             <Ticket.ActivityLogContainer>

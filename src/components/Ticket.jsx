@@ -617,11 +617,12 @@ handleChange,
 id,
 status,
 register,
+ifapproved,
 approveBureau,
 ...restprops
 }) { return (
   <div className="col-span-6 p-2">
-    <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" />
+    <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" value={ifapproved || 0} />
     <p className="ml-2 inline-block" >Needs Approval</p>
     <select name="MitsDir" id="mitsApprove"></select>
     <select name="Cio" id="cioApprove"></select>
