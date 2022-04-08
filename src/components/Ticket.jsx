@@ -625,13 +625,12 @@ ifapproved,
 approveBureau,
 ...restprops
 }) { return (
-  <div className="col-span-6 p-2">
-    <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" value={ifapproved || 0}  onChange={approvalBoxShow} />
+  <div className="col-span-6 p-2 ">
+    <input className="ml-2 inline-block" type="checkbox" name="Approval" id="approve" checked={ifapproved}  onChange={approvalBoxShow} />
     <p className="ml-2 inline-block" >Needs Approval</p>
-    <select name="MitsDir" id="mitsApprove"></select>
-    <select name="Cio" id="cioApprove"></select>
 
-    <label className="mx-auto text-center w-max">
+
+    <label className="mx-auto text-center w-max" className="hidden">
         <UserIcon />
         <select
           ref={register}
@@ -643,6 +642,8 @@ approveBureau,
         >
           {<AssignApprovalBereau />}
         </select>
+        <select name="MitsDir" id="mitsApprove"></select>
+        <select name="Cio" id="cioApprove"></select>
       </label>
   </div>
 )

@@ -63,7 +63,7 @@ export default function TicketsContainer(props) {
               />
               <Ticket.ApprovalInfo 
               ifapproved={ticket.approved}
-              approveBureau={ticket.bureauapprover_id}
+              // approveBureau={ticket.bureauapprover_id}
               />
             </Ticket>
             <Ticket.ActivityLogContainer>
