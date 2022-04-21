@@ -342,6 +342,24 @@ export function AssignApprovalBereau() {
   )
 }
 
+export function AssignApprovalMitsDir() {
+  return (
+    <>
+      <option value="">Not yet Assigned</option>
+      <option value="5">Chris Watts</option>
+    </>
+  )
+}
+
+export function AssignApprovalCio() {
+  return (
+    <>
+      <option value="">Not yet Assigned</option>
+      <option value="2">Bob Buseck</option>
+    </>
+  )
+}
+
 export function TicketLocationsOptions() {
   return (
     <>

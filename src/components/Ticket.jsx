@@ -16,7 +16,9 @@ import {
   priorityIDtoWord,
   AssignToAgentSelect,
   TicketLocationsOptions,
-  AssignApprovalBereau
+  AssignApprovalBereau,
+  AssignApprovalMitsDir,
+  AssignApprovalCio
 } from '../utils/sqlFormHelpers';
 import {
   UserIcon,
@@ -630,7 +632,7 @@ approveBureau,
     <p className="ml-2 inline-block" >Needs Approval</p>
 
 
-    <label className="mx-auto text-center w-max" className="">
+    <label className="mx-auto text-center w-max hidden" >
         <UserIcon />
         <select
           ref={register}
@@ -642,8 +644,16 @@ approveBureau,
         >
           {<AssignApprovalBereau />}
         </select>
-        <select name="MitsDir" id="mitsApprove"></select>
-        <select name="Cio" id="cioApprove"></select>
+        <UserIcon />
+        <select name="MitsDir" id="mitsApprove" className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base rounded-lg
+         `}>
+          {<AssignApprovalMitsDir />}
+        </select>
+        <UserIcon />
+        <select name="Cio" id="cioApprove" className={`inline-block w-max p-2 mx-auto mt-1  text-text-base bg-off-base rounded-lg
+         `}>
+          {<AssignApprovalCio />}
+        </select>
       </label>
   </div>
 )
