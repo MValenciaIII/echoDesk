@@ -613,9 +613,7 @@ Ticket.ContactInfo = function TicketContactInfo({
   );
 };
 
-function approvalBoxShow() {
-  
-}  
+
 
 Ticket.ApprovalInfo = function TicketApprovalInfo({
 children,
@@ -623,12 +621,17 @@ handleChange,
 id,
 status,
 register,
-ifapproved,
 approveBureau,
 ...restprops
-}) { return (
+}) { 
+  let [ifapproved, setApproved] = useState(0);
+  const handleApproval = () =>{
+    setApproved(prev => prev === 0 ? 1 : 0)
+    console.log(ifapproved)
+  } 
+  return (
   <div className="col-span-6 p-2 ">
-    <input className="ml-2 inline-block" type="checkbox" name="approved" id="approve" ref={register} checked={ifapproved}  onClick={approvalBoxShow}  />
+    <input className="ml-2 inline-block" type="checkbox" name="approved" id="approve" ref={register} checked={ifapproved}  onChange={handleApproval}  />
     <p className="ml-2 inline-block" >Needs Approval</p>
 
 
