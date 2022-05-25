@@ -621,17 +621,32 @@ handleChange,
 id,
 status,
 register,
+ifapproved,
 approveBureau,
 ...restprops
 }) { 
-  let [ifapproved, setApproved] = useState(0);
-  const handleApproval = () =>{
-    setApproved(prev => prev === 0 ? 1 : 0)
-    console.log(ifapproved)
-  } 
+  //  let [ifapproved, setApproved] = useState(approveState);
+  let handleApproval = ({target: {name, checked}}) => ({[name]: checked});
+  // {
+  //   // const {checked} = e.target
+    
+  //   // if(ifapproved) {
+  //   //   ifapproved = false
+  //   // } else {
+  //   //   ifapproved = true
+  //   // }
+  //   // console.log(checked)
+  //   // setApproved((ifapproved) => ({
+  //   //   ...ifapproved,
+  //   //   ifapproved: checked
+  //   // }))
+  //   this.setState({
+  //     [event.target.id]: event.target.checked
+  //   });
+  // } 
   return (
   <div className="col-span-6 p-2 ">
-    <input className="ml-2 inline-block" type="checkbox" name="approved" id="approve" ref={register} checked={ifapproved}  onChange={handleApproval}  />
+    <input className="ml-2 inline-block" type="checkbox" name={'ifapproved'} id="approve" ref={register} checked={ifapproved}  onChange={handleApproval}  />
     <p className="ml-2 inline-block" >Needs Approval</p>
 
 
