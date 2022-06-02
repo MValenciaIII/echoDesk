@@ -6,8 +6,8 @@ export function FilterLocationOptions() {
     <>
       <option value="">Any</option>
       <option value="1">SEOC(Pearl)</option>
-      <option value="2">Bolton Building (Biloxi)</option>
-      <option value="3">SELOC(Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+      <option value="2">SELOC(Byram)</option>
     </>
   );
 }
