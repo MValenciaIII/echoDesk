@@ -621,11 +621,11 @@ handleChange,
 id,
 status,
 register,
-ifapproved,
+checkedApproved,
 approveBureau,
 ...restprops
 }) { 
-  //  let [ifapproved, setApproved] = useState(approveState);
+    let [ifapproved, setApproved] = useState(Boolean(Number(checkedApproved)));
   let handleApproval = ({target: {name, checked}}) => ({[name]: checked});
   // {
   //   // const {checked} = e.target
@@ -646,7 +646,7 @@ approveBureau,
   // } 
   return (
   <div className="col-span-6 p-2 ">
-    <input className="ml-2 inline-block" type="checkbox" name={'ifapproved'} id="approve" ref={register} checked={ifapproved}  onChange={handleApproval}  />
+    <input className="ml-2 inline-block" type="checkbox" name={'approved'} id="approve" ref={register} checked={ifapproved}  onClick={() => setApproved((c) => !c)}  />
     <p className="ml-2 inline-block" >Needs Approval</p>
 
 
