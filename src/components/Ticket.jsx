@@ -38,6 +38,7 @@ export default function Ticket({
   id,
   activityLogShown,
   toggleActivityLog,
+  toggleCheckbox,
   status,
   ...restProps
 }) {
@@ -104,6 +105,7 @@ export default function Ticket({
       id,
       activityLogShown,
       toggleActivityLog,
+      toggleCheckbox,
       register: register,
       watch: watch,
       reset,
@@ -125,14 +127,19 @@ export default function Ticket({
 Ticket.Container = function TicketContainer({ children, ...restprops }) {
   //The activity or notes log state will be accessed by the activity log form and by a ticket component below;  The state will be consumed to either display the log or hide, and to rotate an svg;
   const [activityLogShown, setActivityLogShown] = useState(false);
+  const [checkedApproved, setCheckedApproved] = useState(false)
   function toggleActivityLog() {
     setActivityLogShown(!activityLogShown);
+  }
+  function toggleCheckbox() {
+    setCheckedApproved(!checkedApproved)
   }
   // mapping with clone Element again to pass along these additional props to children;
   let childrenWithProps = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
       activityLogShown,
       toggleActivityLog,
+      checkedApproved
     });
   });
 
@@ -622,11 +629,10 @@ id,
 status,
 register,
 checkedApproved,
+toggleCheckbox,
 approveBureau,
 ...restprops
 }) { 
-    let [ifapproved, setApproved] = useState(Boolean(Number(checkedApproved)));
-  let handleApproval = ({target: {name, checked}}) => ({[name]: checked});
   // {
   //   // const {checked} = e.target
     
@@ -646,7 +652,7 @@ approveBureau,
   // } 
   return (
   <div className="col-span-6 p-2 ">
-    <input className="ml-2 inline-block" type="checkbox" name={'approved'} id="approve" ref={register} checked={ifapproved}  onClick={() => setApproved((c) => !c)}  />
+    <input className="ml-2 inline-block" type="checkbox" name={'approved'} id="approve" ref={register} defaultChecked={checkedApproved}  onClick={toggleCheckbox}  />
     <p className="ml-2 inline-block" >Needs Approval</p>
 
 
