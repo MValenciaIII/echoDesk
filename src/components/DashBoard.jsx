@@ -18,6 +18,7 @@ Dashboard.TicketsContainer = function DashboardTicketsContainer({ children }) {
   return (
     <div
       id="dashboardTicketsContainer"
+      //!! where the w-4/4 needs to be added
       className="order-2 h-full p-4 md:w-full lg:order-none lg:w-3/4 ticketPanel lg:mx-2"
     >
       {children}
@@ -59,6 +60,7 @@ Dashboard.Header = function DashboardHeader({
     );
 };
 
+//!!Where the hidden command needs to be added.
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {
   return (
     <div id="formContainer" className="order-1 m-3 md:order-none">
