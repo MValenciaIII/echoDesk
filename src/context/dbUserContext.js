@@ -20,7 +20,7 @@ function UserContextProvider(props) {
   const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
-
+  const [filterPreference, setFilterPreference] = useState();
   // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
     if (user && user[AUTH0_META_PROP]) {
@@ -47,6 +47,7 @@ function UserContextProvider(props) {
       return 'defaultBlueTheme';
     }
   }
+  //? Being Called from Header.
   function addThemeToHTML(newTheme) {
     if (newTheme === themeColor) return;
     document.documentElement.classList.replace(themeColor, newTheme);
@@ -55,6 +56,13 @@ function UserContextProvider(props) {
     setThemeColor(newTheme);
   }
 
+  function fetchFilterPreference() {
+
+  }
+  //? being called from Dashboard
+  function addPreferenceToHTML() {
+
+  }
   // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
   let barIndex;
   let defaultuserId;
@@ -141,6 +149,9 @@ function UserContextProvider(props) {
         addThemeToHTML,
         whichFilter,
         setWhichFilter,
+        addPreferenceToHTML,
+        filterPreference,
+        setFilterPreference
       }}
     >
       {props.children}

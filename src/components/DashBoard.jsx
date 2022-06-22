@@ -80,7 +80,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
   let quickFilterButtonRef = useRef();
 
   const { handleSubmit, register, reset } = useForm();
-
+  let { addPreferenceToHTML } = useContext(UserContext)
   // same logic as the big filter, just smaller...
   async function onSubmit(data, event) {
     let url;
@@ -94,6 +94,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
     let dataArrayWithNullsRemoved = Object.entries(data).filter(
       ([item, val]) => val
     );
+
 
     if (dataArrayWithNullsRemoved.length === 0) {
       url = allTicketsRoute;
@@ -131,6 +132,8 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
     },
     [reset, whichFilter]
   );
+
+    //!! FUNCTION HideFilter is located dbUserContext.js 
 
   return (
     <div id="filtersContainer" className={showFilters ? 'block' : 'hidden'}>
@@ -178,6 +181,12 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
           className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
         >
           Apply Quick Filters
+        </button>
+        <button
+          className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
+          onClick={addPreferenceToHTML()}
+        >
+          Hide/Open Filter Sidebar
         </button>
       </form>
     </div>
