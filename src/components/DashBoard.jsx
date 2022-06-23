@@ -80,7 +80,9 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
   let quickFilterButtonRef = useRef();
 
   const { handleSubmit, register, reset } = useForm();
+
   let { addPreferenceToHTML } = useContext(UserContext)
+
   // same logic as the big filter, just smaller...
   async function onSubmit(data, event) {
     let url;
@@ -182,13 +184,14 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
         >
           Apply Quick Filters
         </button>
-        <button
-          className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
-          onClick={addPreferenceToHTML()}
-        >
-          Hide/Open Filter Sidebar
-        </button>
       </form>
+      <button
+          className="inline-block p-1 ml-2 rounded-md text-text-muted bg-action w-max hover:text-text-base"
+          value={'open'}
+          onClick={(e) => addPreferenceToHTML(e.target.value)}
+        >
+          Open/Hide Filter Sidebar
+        </button>
     </div>
   );
 };

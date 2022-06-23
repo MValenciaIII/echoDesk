@@ -21,6 +21,8 @@ function UserContextProvider(props) {
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
   const [filterPreference, setFilterPreference] = useState();
+  //? const [filterVisual, setFilterVisual] = useState
+
   // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
     if (user && user[AUTH0_META_PROP]) {
@@ -60,7 +62,12 @@ function UserContextProvider(props) {
 
   }
   //? being called from Dashboard
-  function addPreferenceToHTML() {
+  function addPreferenceToHTML(visualFilterRequest) {
+    // if (visualFilterRequest === )
+    let agentFormContainer = document.getElementById("formContainer");
+    let agentTicketsContainer = document.getElementById("dashboardTicketsContainer")
+    agentFormContainer.classList.add("hidden")
+    agentTicketsContainer.classList.replace("lg:w-3/4", "lg:w-4/4")
 
   }
   // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
