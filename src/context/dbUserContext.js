@@ -6,6 +6,7 @@ import {
   dbUsersTicketsRoute,
 } from '../constants/apiRoutes';
 import { AUTH0_META_PROP } from '../constants/domain';
+import { boolean } from 'yup';
 
 const UserContext = React.createContext();
 
@@ -20,6 +21,8 @@ function UserContextProvider(props) {
   const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
+  //? const [filterPreference, setFilterPreference] = useState(fetchFilterPreference());
+  const [filterStatus, setFilterStatus] = useState(true);
 
   // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
@@ -47,6 +50,7 @@ function UserContextProvider(props) {
       return 'defaultBlueTheme';
     }
   }
+  //? Being Called from Header.
   function addThemeToHTML(newTheme) {
     if (newTheme === themeColor) return;
     document.documentElement.classList.replace(themeColor, newTheme);
@@ -55,6 +59,26 @@ function UserContextProvider(props) {
     setThemeColor(newTheme);
   }
 
+  function fetchFilterPreference() {
+
+  }
+  //? being called from Dashboard
+   function addPreferenceToHTML() {
+    //if (visualFilterRequest === filterStatus) return;
+    console.log(filterStatus)
+    setFilterStatus(filterStatus => !filterStatus);
+    localStorage.setItem('filterPreference', filterStatus)
+    console.log(filterStatus)
+    
+    //console.log(setFilterStatus(!filterStatus))
+    // setFilterStatus(!filterStatus);
+    // let agentFormContainer = document.getElementById("formContainer");
+    // let agentTicketsContainer = document.getElementById("dashboardTicketsContainer")
+    // agentFormContainer.classList.add("hidden")
+    // agentTicketsContainer.classList.replace("lg:w-3/4", "lg:w-4/4")
+
+
+  }
   // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
   let barIndex;
   let defaultuserId;
@@ -141,6 +165,9 @@ function UserContextProvider(props) {
         addThemeToHTML,
         whichFilter,
         setWhichFilter,
+        addPreferenceToHTML,
+        filterStatus,
+
       }}
     >
       {props.children}

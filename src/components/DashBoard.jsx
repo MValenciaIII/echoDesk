@@ -15,10 +15,13 @@ Dashboard.InnerContainer = function DashboardInnerContainer({ children }) {
 };
 
 Dashboard.TicketsContainer = function DashboardTicketsContainer({ children }) {
+  let { filterStatus } = useContext(UserContext)
+
   return (
     <div
       id="dashboardTicketsContainer"
-      className="order-2 h-full p-4 md:w-full lg:order-none lg:w-3/4 ticketPanel lg:mx-2"
+      //!! where the w-4/4 needs to be added
+      className={`order-2 h-full p-4 md:w-full lg:order-none ticketPanel lg:mx-2 ${filterStatus ? 'lg:w-4/4' : 'lg:w-3/4'}`}
     >
       {children}
     </div>
@@ -59,9 +62,12 @@ Dashboard.Header = function DashboardHeader({
     );
 };
 
+//!!Where the hidden command needs to be added.
 Dashboard.FormContainer = function DashboardFormContainer({ children }) {
+  let { filterStatus } = useContext(UserContext)
+
   return (
-    <div id="formContainer" className="order-1 m-3 md:order-none">
+    <div id="formContainer" className={`order-1 m-3 md:order-none ${filterStatus ? 'hidden' : ''}`}>
       {children}
     </div>
   );
@@ -79,6 +85,8 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
 
   const { handleSubmit, register, reset } = useForm();
 
+  let { addPreferenceToHTML, filterStatus } = useContext(UserContext)
+
   // same logic as the big filter, just smaller...
   async function onSubmit(data, event) {
     let url;
@@ -92,6 +100,7 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
     let dataArrayWithNullsRemoved = Object.entries(data).filter(
       ([item, val]) => val
     );
+
 
     if (dataArrayWithNullsRemoved.length === 0) {
       url = allTicketsRoute;
@@ -129,6 +138,8 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
     },
     [reset, whichFilter]
   );
+
+    //!! FUNCTION HideFilter is located dbUserContext.js 
 
   return (
     <div id="filtersContainer" className={showFilters ? 'block' : 'hidden'}>
@@ -178,6 +189,13 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
           Apply Quick Filters
         </button>
       </form>
+      
+      <button
+          className="inline-block p-1 ml-2 mt-4 rounded-md text-text-muted bg-action w-max hover:text-text-base"
+          onClick={ addPreferenceToHTML}
+        >
+          {filterStatus ? 'Open' : 'Hide'} Filter Sidebar
+        </button>
     </div>
   );
 };
