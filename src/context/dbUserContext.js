@@ -22,7 +22,7 @@ function UserContextProvider(props) {
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
   //? const [filterPreference, setFilterPreference] = useState(fetchFilterPreference());
-  const [filterStatus, setFilterStatus] = useState(true);
+  const [filterStatus, setFilterStatus] = useState(false);
 
   // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
