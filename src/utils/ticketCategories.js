@@ -20,10 +20,10 @@ export function subServiceTypes(mainCategoryId) {
       return <SurveilanceSystem />;
     case '8':
       return <Training />;
-    case '9':
-      return <Thermoscan />;
-    case '10':
-      return <Freshmarket />
+    // case '9':
+    //   return <Thermoscan />;
+    // case '10':
+    //   return <Freshmarket />
     case '11':
       return <Safety />
     case '12':
@@ -91,8 +91,8 @@ function Employee(props) {
 function Wasp(props) {
   return (
     <>
-      <option value="22">WASP Account Issues</option>
-      <option value="23">WASP Software Issues</option>
+      <option value="22">Account Issues</option>
+      <option value="23">Software Issues</option>
     </>
   );
 }
@@ -119,24 +119,25 @@ function Training(props) {
     </>
   );
 }
-function Thermoscan(props) {
-  return (
-    <>
-      <option value="34">Photo Access</option>
-      <option value="35">Account Removal</option>
-    </>
-  );
-}
+//! Removed
+// function Thermoscan(props) {
+//   return (
+//     <>
+//       <option value="34">Photo Access</option>
+//       <option value="35">Account Removal</option>
+//     </>
+//   );
+// }
 
-function Freshmarket(props) {
-  return (
-    <>
-      <option value="36">Payment Error</option>
-      <option value="37">Add Items</option>
-      <option value="38">Account Help</option>
-    </>
-  );
-}
+// function Freshmarket(props) {
+//   return (
+//     <>
+//       <option value="36">Payment Error</option>
+//       <option value="37">Add Items</option>
+//       <option value="38">Account Help</option>
+//     </>
+//   );
+// }
 
 function Safety(props) {
   return (
@@ -163,11 +164,11 @@ export function PrimaryServiceCategories() {
       <option value="3">Communications</option>
       <option value="4">GIS</option>
       <option value="5">Employee Setup</option>
-      <option value="6">Wasp Inventory System</option>
+      <option value="6">Claris Inventory Management System</option>
       <option value="7">Surveilance Camera System</option>
       <option value="8">Training</option>
-      <option value="9">Thermoscan Account</option>
-      <option value="10">Freshmarket</option>
+      {/* <option value="9">Thermoscan Account</option>
+      <option value="10">Freshmarket</option> */}
       <option value="11">Safety</option>
       <option value="12">Documentation Scanning</option>
     </>
@@ -257,21 +258,21 @@ export function AgentOptions() {
   return (
     <>
       <option value="">Not yet Assigned</option>
-      <option value="1">Alisha Torrence</option>
+      {/* <option value="1">Alisha Torrence</option> */}
       <option value="2">Bob Buseck</option>
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
       <option value="7">James Dear Jr.</option>
-      <option value="8">Holly Tran</option>
+      {/* <option value="8">Holly Tran</option> */}
       <option value="9">Latoya Lofton</option>
       <option value="10">Lenard Brent</option>
       <option value="11">Margarito Valencia</option>
       <option value="12">Preston White</option>
       <option value="13">Scott Davis</option>
       <option value="14">Wesley Edwards</option>
-      <option value="15">Brent Bennett</option>
+      {/* <option value="15">Brent Bennett</option>
       <option value="16">Donald McDuffey</option>
-      <option value="18">Lily Victory</option>
+      <option value="18">Lily Victory</option> */}
       <option value="19">Drew Minga</option>
     </>
   );

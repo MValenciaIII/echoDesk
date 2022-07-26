@@ -307,21 +307,21 @@ export function AssignToAgentSelect() {
   return (
     <>
       <option value="">Not yet Assigned</option>
-      <option value="1">Alisha Torrence</option>
+      {/* <option value="1">Alisha Torrence</option> */}
       <option value="2">Bob Buseck</option>
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
       <option value="7">James Dear Jr.</option>
-      <option value="8">Holly Tran</option>
+      {/* <option value="8">Holly Tran</option> */}
       <option value="9">Latoya Lofton</option>
       <option value="10">Lenard Brent</option>
       <option value="11">Margarito Valencia</option>
       <option value="12">Preston White</option>
       <option value="13">Scott Davis</option>
       <option value="14">Wesley Edwards</option>
-      <option value="15">Brent Bennett</option>
+      {/* <option value="15">Brent Bennett</option>
       <option value="16">Donald McDuffey</option>
-      <option value="18">Lily Victory</option>
+      <option value="18">Lily Victory</option> */}
       <option value="19">Drew Minga</option>
     </>
   );
