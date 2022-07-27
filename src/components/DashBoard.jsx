@@ -190,7 +190,12 @@ Dashboard.QuickFilters = function DashboardQuickFilters({ showFilters }) {
         </button>
       </form>
       
-      
+      <button
+          className="inline-block p-1 ml-2 mt-4 rounded-md text-text-muted bg-action w-max hover:text-text-base"
+          onClick={ addPreferenceToHTML}
+        >
+          {filterStatus ? 'Open' : 'Hide'} Filter Sidebar
+        </button>
     </div>
   );
 };

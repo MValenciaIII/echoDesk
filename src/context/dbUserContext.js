@@ -22,6 +22,13 @@ function UserContextProvider(props) {
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
 
+
+
+  const [filterStatus, setFilterStatus] = useState();
+
+
+
+
   // on Context load, Set the app.metadata into state which is passed along via an Auth0 rule
   useEffect(() => {
     if (user && user[AUTH0_META_PROP]) {
@@ -37,6 +44,12 @@ function UserContextProvider(props) {
     }
   }, [auth0UserMeta]);
 
+  useEffect(() => {
+    let ignore = false;
+    
+    if (!ignore)  fetchFilterPreference()
+    return () => { ignore = true; }
+    },[]);
   // Theme handling via localStorage, not DB
   function fetchTheme() {
     if (localStorage.colorTheme) {
@@ -56,6 +69,44 @@ function UserContextProvider(props) {
     localStorage.setItem('colorTheme', newTheme);
     setThemeColor(newTheme);
   }
+
+
+
+
+
+
+
+  function fetchFilterPreference() {
+    if(localStorage.setFilterPreference === 'true') {
+      console.log('setting true')
+      setFilterStatus(true);
+      return localStorage.setFilterPreference;
+    } else if (localStorage.setFilterPreference === 'false') {
+       console.log('working')
+       setFilterStatus(false)
+       localStorage.setItem('setFilterPreference', 'false')
+    }
+  }
+  //? being called from Dashboard
+   function addPreferenceToHTML() {
+    if (filterStatus === false) {
+      setFilterStatus(true);
+      console.log('true here')
+      localStorage.setItem('setFilterPreference', 'true')
+    } else if (filterStatus === true) {
+      setFilterStatus(false)
+      console.log('false here')
+      localStorage.setItem('setFilterPreference', 'false')
+    }
+
+  }
+
+
+
+
+
+
+
 
   // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
   let barIndex;
@@ -143,6 +194,8 @@ function UserContextProvider(props) {
         addThemeToHTML,
         whichFilter,
         setWhichFilter,
+        addPreferenceToHTML,
+        filterStatus,
 
       }}
     >
