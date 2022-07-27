@@ -67,12 +67,6 @@ function UserContextProvider(props) {
     setThemeColor(newTheme);
   }
 
-
-
-
-
-
-
   function fetchFilterPreference() {
     if(localStorage.setFilterPreference === 'true') {
       console.log('setting true')
@@ -97,13 +91,6 @@ function UserContextProvider(props) {
     }
 
   }
-
-
-
-
-
-
-
 
   // Again, should probably make this reference the utility function that is defined in util for it;   ~wk 5/4
   let barIndex;
