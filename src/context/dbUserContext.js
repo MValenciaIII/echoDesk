@@ -21,9 +21,6 @@ function UserContextProvider(props) {
   const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
 
   const [themeColor, setThemeColor] = useState(fetchTheme());
-
-
-
   const [filterStatus, setFilterStatus] = useState();
 
 
