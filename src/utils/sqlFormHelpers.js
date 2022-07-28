@@ -307,7 +307,7 @@ export function AssignToAgentSelect() {
   return (
     <>
       <option value="">Not yet Assigned</option>
-      {/* <option value="1">Alisha Torrence</option> */}
+      <option value="1">Alisha Torrence</option>
       <option value="2">Bob Buseck</option>
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
