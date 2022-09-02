@@ -201,8 +201,9 @@ export function LocationOptions() {
   return (
     <>
       <option value="1">SEOC(Pearl)</option>
-      <option value="3">Bolton Building (Biloxi)</option>
       <option value="2">SELOC(Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+      <option value="4">Alternate site (see notes)</option>
     </>
   );
 }
