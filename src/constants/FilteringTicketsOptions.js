@@ -6,8 +6,9 @@ export function FilterLocationOptions() {
     <>
       <option value="">Any</option>
       <option value="1">SEOC(Pearl)</option>
-      <option value="3">Bolton Building (Biloxi)</option>
       <option value="2">SELOC(Byram)</option>
+      <option value="3">Bolton Building (Biloxi)</option>
+      <option value="4">Alternate Site (see notes)</option>
     </>
   );
 }
@@ -73,7 +74,7 @@ export function FilterAgentOptions() {
       <option value="">Any</option>
       <option value={currentAgent}>Assigned to Me</option>
       <option value="1">Alisha Torrence</option>
-      <option value="2">Bob Buseck</option>
+      {/* <option value="2">Bob Buseck</option> */}
       <option value="5">Chris Watts</option>
       <option value="6">Gray Macoy</option>
       <option value="7">James Dear Jr.</option>
