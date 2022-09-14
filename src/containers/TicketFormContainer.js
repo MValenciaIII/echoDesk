@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '../context/dbUserContext';
 import InputTicketForm from '../components/InputTicketForm';
@@ -18,6 +19,8 @@ import { inputTicketSchema } from '../constants/formValidationSchemas';
 import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
 
 export default function TicketFormContainer({ children, ...restProps }) {
+  let history = useHistory();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formClassname =
     'p-8 mx-auto text-text-base bg-off-base rounded-lg max-w-max sm:max-w-lg';
 
@@ -26,12 +29,8 @@ export default function TicketFormContainer({ children, ...restProps }) {
   const inputClassNames =
     'block p-1 rounded-sm text-text-base-inverted w-56 l lg:w-72';
 
-  const {
-    mysqlUser,
-    getDbUsersTickets,
-    auth0UserMeta,
-    getAllTickets,
-  } = useContext(UserContext);
+  const { mysqlUser, getDbUsersTickets, auth0UserMeta, getAllTickets } =
+    useContext(UserContext);
 
   // default values pulled from context and passed into React-hook-form
   const defaultValues = {
@@ -53,6 +52,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
 
   async function onSubmit(data, event) {
     event.preventDefault();
+    setIsSubmitting(true);
 
     // desturcturing out files to make a separate api call IF They exist... ~wk 5/4
     let { files, ...restdata } = data;
@@ -92,7 +92,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     // # this line filters out null values from the Object...
     restdata = Object.fromEntries(
       Object.entries(restdata).filter(([item, val]) => val)
-    ); 
+    );
     // Posting new TICKETS
     try {
       let response = await fetch(createTicketRoute, {
@@ -110,7 +110,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       console.log(filesSentResponse);
       if (response.ok) {
         if (auth0UserMeta?.isAdmin) {
-          await getAllTickets(); 
+          await getAllTickets();
         } else {
           await getDbUsersTickets(); //runs set state on tickets to re-render tickets view
         }
@@ -138,9 +138,14 @@ export default function TicketFormContainer({ children, ...restProps }) {
       //FORM WILL RESET DUE USEEFFECT HOOK IN THE COMPONENT FILE AND GO BACK TO DEFAULT VALUES
     } catch (error) {
       console.warn(error);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => {
+        history.push('/');
+      }, 1350);
     }
   }
-// Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
+  // Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
   function showAssignAgentToAdmins() {
     if (auth0UserMeta.isAdmin) {
       return (
@@ -249,6 +254,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
           type="submit"
           value="Submit"
           onClick={onSubmit}
+          isSubmitting={isSubmitting}
           classNames="block px-2 py-1 mx-auto mt-3 font-bold text-text-base-inverted bg-light-base rounded-md hover:bg-action hover:text-text-base"
         />
       </InputTicketForm>

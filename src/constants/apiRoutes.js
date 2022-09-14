@@ -2,7 +2,15 @@
 
 const baseApiUrl = 'https://www.mema4kids.info/api/';
 
+
 export const allTicketsRoute = 'https://www.mema4kids.info/api/tickets';
+
+
+export function departmentTicketsRoute (id) {
+  return baseApiUrl.concat(`tickets/departmenttickets/${id}`);
+}
+
+// export const departmentTicketsRoute = 'https://www.mema4kids.info/api/tickets/departmenttickets/2'
 
 export function dbUserRoute(id) {
   return baseApiUrl.concat(`users/${id}`);

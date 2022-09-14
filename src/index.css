@@ -5,7 +5,6 @@
 
 /* ! THESE REPRESENT HSL VALUES! PICKED UP IN TAILWIND.CONFIG FILE VIA EXTENDING COLORS */
 
-
 :root {
   --color-base: 215, 28%, 17%; /*#1F2937: */
   --color-off-base: 217, 19%, 27%; /* #374151:*/

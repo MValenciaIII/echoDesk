@@ -21,6 +21,7 @@ export default function SettingsDropdown(props) {
       <li className={`text-text-muted text-sm  underline m-2 inline-block`}>
         <Link to={clientOrAgentLink()}>Dashboard</Link>
       </li>
+
       <li className={`text-text-muted text-sm underline m-2 inline-block`}>
         <Link
           onClick={(e) => setcurrentFilterQuery(null)}
@@ -38,6 +39,11 @@ export default function SettingsDropdown(props) {
           >
             Input a ticket
           </Link>
+        </li>
+      )}
+      {auth0UserMeta && auth0UserMeta.isAdmin && (
+        <li className={`text-text-muted text-sm underline m-2 inline-block`}>
+          <Link to="/charts">Data Charts</Link>
         </li>
       )}
 

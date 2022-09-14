@@ -183,6 +183,7 @@ InputTicketForm.Submit = function InputTicketFormSubmit({
   name,
   classNames,
   register,
+  isSubmitting,
   ...rest
 }) {
   return (
@@ -191,7 +192,8 @@ InputTicketForm.Submit = function InputTicketFormSubmit({
       name={name}
       type="submit"
       className={classNames}
-      value="Submit"
+      value={isSubmitting ? 'Submitting...' : 'Submit'}
+      disabled={isSubmitting ? true : false}
     />
   );
 };

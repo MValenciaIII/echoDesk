@@ -4,6 +4,7 @@ import {
   allTicketsRoute,
   dbUserRoute,
   dbUsersTicketsRoute,
+  departmentTicketsRoute,
 } from '../constants/apiRoutes';
 import { AUTH0_META_PROP } from '../constants/domain';
 import { boolean } from 'yup';
@@ -16,6 +17,7 @@ function UserContextProvider(props) {
   const [mysqlUser, setmysqlUser] = useState();
   const [mysqlUserTickets, setmysqlUserTickets] = useState();
   const [allTickets, setAllTickets] = useState();
+  const [allDepartmentTickets, setDepartmentTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
   const [whichFilter, setWhichFilter] = useState('QUICK'); //will be BIG OR QUICK
@@ -38,6 +40,7 @@ function UserContextProvider(props) {
   useEffect(() => {
     if (auth0UserMeta?.isAdmin) {
       getAllTickets();
+      getDepartmentTickets();
     }
   }, [auth0UserMeta]);
 
@@ -124,6 +127,25 @@ function UserContextProvider(props) {
     }
   }
 
+  async function getDepartmentTickets(id) {
+    try {
+      let dpTicketsUrl = departmentTicketsRoute(id);
+      let response = await fetch(dpTicketsUrl);
+      let departmentTickets = await response.json();
+
+      let defaultSorted = departmentTickets.sort((one, two) => {
+        return two.id - one.id;
+      });
+      if (response.ok) {
+        setDepartmentTickets([...defaultSorted]);
+      }
+      
+    } catch (error) {
+      console.log({error});
+      setDepartmentTickets([]);
+    }
+  }
+
   //default param in case the param is omitted...
   async function getDbUser(userId = defaultuserId) {
     try {
@@ -180,7 +202,9 @@ function UserContextProvider(props) {
         setWhichFilter,
         addPreferenceToHTML,
         filterStatus,
-
+        allDepartmentTickets,
+        setDepartmentTickets,
+        getDepartmentTickets
       }}
     >
       {props.children}
