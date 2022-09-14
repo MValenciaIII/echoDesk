@@ -17,6 +17,7 @@ function UserContextProvider(props) {
   const [mysqlUser, setmysqlUser] = useState();
   const [mysqlUserTickets, setmysqlUserTickets] = useState();
   const [allTickets, setAllTickets] = useState();
+  const [allOpenTickets, setAllOpenTickets] = useState();
   const [allDepartmentTickets, setDepartmentTickets] = useState();
   const [auth0UserMeta, setAuth0UserMeta] = useState();
   const [currentFilterQuery, setcurrentFilterQuery] = useState();
@@ -119,6 +120,7 @@ function UserContextProvider(props) {
       });
       
       if (response.ok) {
+        setAllOpenTickets(([...defaultSorted]));
         setAllTickets([...defaultSorted.filter(ticketOrder => ticketOrder.status_id !== 3 && ticketOrder.status_id !== 4)]);
       }
     } catch (error) {
@@ -193,6 +195,8 @@ function UserContextProvider(props) {
         allTickets,
         setAllTickets,
         getAllTickets,
+        allOpenTickets,
+        setAllOpenTickets,
         currentFilterQuery,
         setcurrentFilterQuery,
         setThemeColor,

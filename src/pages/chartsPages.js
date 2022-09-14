@@ -14,9 +14,9 @@ import { differenceInMonths } from 'date-fns';
 import { departmentTicketSelect } from '../utils/sqlFormHelpers';
 
 export default function ChartsPage(props) {
-  const { allTickets, allDepartmentTickets, getDepartmentTickets, auth0UserMeta } = useContext(UserContext);
+  const { allOpenTickets, allDepartmentTickets, getDepartmentTickets, auth0UserMeta } = useContext(UserContext);
   let onlyOpenDepartmentTickets = allDepartmentTickets
-  let onlyOpenTickets = allTickets
+  let onlyOpenTickets = allOpenTickets
   //using this state to change branches.
   const [departmentBranch, setDepartmentBranch] = useState("");
   const [trackButton, setTrackButton] = useState("weekly");
@@ -133,14 +133,14 @@ if (trackButton === 'weekly') {
   if (departmentBranch === "") {
     for (let i = 0; i < 6; i++) {
       //   arbitrary 5 day view fo tickets...
-      let newTickets = allTickets?.filter((ticket) =>
+      let newTickets = onlyOpenTickets?.filter((ticket) =>
         CreatedDaysAgoFilter(ticket, i)
       );
       let length = newTickets?.length;
       weeklyOptions.series[0].data.unshift(length); //unshift to front of array
   
       //  Closed by day view
-      let closedResolvedArr = allTickets?.filter((ticket) =>
+      let closedResolvedArr = onlyOpenTickets?.filter((ticket) =>
         ClosedByDayFilter(ticket, i)
       );
       weeklyOptions.series[1].data.unshift(closedResolvedArr?.length);
@@ -153,7 +153,7 @@ if (trackButton === 'weekly') {
       weeklyOptions.xAxis.categories.unshift(xFormatted);
     }
     // todo: style
-    if (!allTickets) {
+    if (!onlyOpenTickets) {
       return <LoaderIcon />;
     }
 
@@ -193,14 +193,14 @@ if (trackButton === 'weekly') {
   if (departmentBranch === "") {
     for (let i = 0; i < 13; i++) {
       //   arbitrary 5 day view fo tickets...
-      let newTickets = allTickets?.filter((ticket) =>
+      let newTickets = onlyOpenTickets?.filter((ticket) =>
       createdMonthlyFilter(ticket, i)
       );
       let length = newTickets?.length;
       annualDepartmentOptions.series[0].data.unshift(length); //unshift to front of array
   
       //  Closed by day view
-      let closedResolvedArr = allTickets?.filter((ticket) =>
+      let closedResolvedArr = onlyOpenTickets?.filter((ticket) =>
       closedByMonthFilter(ticket, i)
       );
       annualDepartmentOptions.series[1].data.unshift(closedResolvedArr?.length);
@@ -213,7 +213,7 @@ if (trackButton === 'weekly') {
       annualDepartmentOptions.xAxis.categories.unshift(xFormatted);
     }
     // todo: style
-    if (!allTickets) {
+    if (!onlyOpenTickets) {
       return <LoaderIcon />;
     }
 
