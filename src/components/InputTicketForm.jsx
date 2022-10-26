@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { subServiceTypes } from '../utils/ticketCategories';
+import { sendEmailRoute } from '../constants/apiRoutes';
 import ErrorMessage from '../components/ErrorMessage';
 
 // ! COLLECTION OF RESUABLE FORM COMPONENTS.  CALLED IN THE PROFILE SETTINGS CONTAINERR
@@ -26,10 +27,24 @@ export default function InputTicketForm({
   } = methods;
   const mainServicetype = watch('service_id', '1');
 
+  //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
+  //? Where does this need to be - When the SUBMIT button is Pressed
+  //? variables in the back 
+  //* RECIPIENT - ?
+  //* typeOfNotification - newTicket
+  //* Text - Description of Ticket
+  //? Making a function to send all details.
+
+  function sendNewTicket() {
+
+  };
+
+
   // ! CLEARS OUT THE TICKET IF SUBMIT WAS SUCCESSFUL
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset({ ...defaultValues });
+      sendNewTicket()
     }
   }, [defaultValues, isSubmitSuccessful, reset]);
 
