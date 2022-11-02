@@ -11,7 +11,7 @@ import {
   PriorityOptions,
   AgentOptions,
 } from '../utils/ticketCategories';
-
+import axios from 'axios';
 // docs to package here; https://www.npmjs.com/package/react-toastify
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -50,6 +50,8 @@ export default function TicketFormContainer({ children, ...restProps }) {
   // This is passed into React-hook form and is invoked before submission for client side validation
   const resolver = yupResolver(inputTicketSchema);
 
+
+
   async function onSubmit(data, event) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -86,6 +88,10 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }
     }
 
+
+
+
+
     // ! SUPPLMENTING  TICKET INPUTTED DATA WITH AUTH INFO; restdata is picked off above to separate from files
     restdata.status_id = '1'; //default of open; not from form;send...
     restdata.client_id = mysqlUser.id; // attaching the user's ID to the ticket
@@ -94,6 +100,12 @@ export default function TicketFormContainer({ children, ...restProps }) {
       Object.entries(restdata).filter(([item, val]) => val)
     );
     // Posting new TICKETS
+    try {
+      axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeofNotif: 'newTicket', recipient: 'mvalencia@mema.ms.gov', text:restdata.description})
+    } catch (error) {
+      console.log(error)
+    }
+
     try {
       let response = await fetch(createTicketRoute, {
         method: 'POST',
@@ -144,6 +156,25 @@ export default function TicketFormContainer({ children, ...restProps }) {
         history.push('/');
       }, 1350);
     }
+
+
+      //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
+  //? Where does this need to be - When the SUBMIT button is Pressed
+  //? variables in the back 
+  //* RECIPIENT - ?
+  //* typeOfNotification - newTicket
+  //* Text - Description of Ticket
+  //? Making a function to send all details.
+
+  // function sendNewTicket(restdata) {
+    // try {
+    //   axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeofNotif: 'newTicket', recipient: 'mvalencia@mema.ms.gov', text:restdata.description})
+    // } catch (error) {
+    //   console.log(error)
+    // }
+  //}
+
+
   }
   // Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
   function showAssignAgentToAdmins() {
