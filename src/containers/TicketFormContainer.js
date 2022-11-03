@@ -16,7 +16,7 @@ import axios from 'axios';
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { inputTicketSchema } from '../constants/formValidationSchemas';
-import { createTicketRoute, imagePostRoute } from '../constants/apiRoutes';
+import { createTicketRoute, imagePostRoute, sendEmailRoute } from '../constants/apiRoutes';
 
 export default function TicketFormContainer({ children, ...restProps }) {
   let history = useHistory();
@@ -100,11 +100,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       Object.entries(restdata).filter(([item, val]) => val)
     );
     // Posting new TICKETS
-    try {
-      axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeofNotif: 'newTicket', recipient: 'mvalencia@mema.ms.gov', text:restdata.description})
-    } catch (error) {
-      console.log(error)
-    }
+
 
     try {
       let response = await fetch(createTicketRoute, {
@@ -157,7 +153,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }, 1350);
     }
 
-
+    sendNewTicket(restdata)
       //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
   //? Where does this need to be - When the SUBMIT button is Pressed
   //? variables in the back 
@@ -166,16 +162,25 @@ export default function TicketFormContainer({ children, ...restProps }) {
   //* Text - Description of Ticket
   //? Making a function to send all details.
 
-  // function sendNewTicket(restdata) {
-    // try {
-    //   axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeofNotif: 'newTicket', recipient: 'mvalencia@mema.ms.gov', text:restdata.description})
-    // } catch (error) {
-    //   console.log(error)
-    // }
-  //}
+
 
 
   }
+
+
+ function sendNewTicket(restdata) {
+    try {
+      axios.post( 'http://10.250.138.41:3075/api/mail/sendNotification' , { recipientSentee: 'mvalencia@mema.ms.gov', typeOfNotification: 'newTicket', text:restdata.description})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // try {
+  //   axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeOfNotification: 'newTicket', recipientSentee: 'mvalencia@mema.ms.gov', text:restdata.description})
+  // } catch (error) {
+  //   console.log(error)
+  // }
   // Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
   function showAssignAgentToAdmins() {
     if (auth0UserMeta.isAdmin) {

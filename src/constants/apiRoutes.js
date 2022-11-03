@@ -1,16 +1,16 @@
 //ALL API ROUTES ARE DEFINED HERE AS THE SOURCE OF TRUTH FOR API
 
-const baseApiUrl = 'http://10.250.138.65:3075/api/';
+const baseApiUrl = 'http://10.250.138.41:3075/api/';
 
 
-export const allTicketsRoute = 'http://10.250.138.65:3075/api/tickets';
+export const allTicketsRoute = 'http://10.250.138.41:3075/api/tickets';
 
 
 export function departmentTicketsRoute (id) {
   return baseApiUrl.concat(`tickets/departmenttickets/${id}`);
 }
 
-// export const departmentTicketsRoute = 'http://10.250.138.65:3075/api/tickets/departmenttickets/2'
+// export const departmentTicketsRoute = 'http://10.250.138.41:3075/api/tickets/departmenttickets/2'
 
 export function dbUserRoute(id) {
   return baseApiUrl.concat(`users/${id}`);
@@ -19,7 +19,7 @@ export function dbUsersTicketsRoute(id) {
   return baseApiUrl.concat(`tickets/${id}`);
 }
 export const createTicketRoute =
-  'http://10.250.138.65:3075/api/tickets/create';
+  'http://10.250.138.41:3075/api/tickets/create';
 
 export const filteringRoute = baseApiUrl.concat('tickets/filter/search?');
 
