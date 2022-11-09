@@ -151,16 +151,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
       }, 1350);
     }
     sendNewTicket(restdata)
-      //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
-  //? Where does this need to be - When the SUBMIT button is Pressed
-  //? variables in the back 
-  //* RECIPIENT - ?
-  //* typeOfNotification - newTicket
-  //* Text - Description of Ticket
-  //? Making a function to send all details.
-
-
-
 
   }
 
@@ -180,11 +170,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
     }
   }
 
-  // try {
-  //   axios.post("http://10.250.138.46:3075/api/mail/sendNotification", {typeOfNotification: 'newTicket', recipientSentee: 'mvalencia@mema.ms.gov', text:restdata.description})
-  // } catch (error) {
-  //   console.log(error)
-  // }
+
   // Extra field for admins to assign an agent during ticket creation  ~wk 5/4/2021
   function showAssignAgentToAdmins() {
     if (auth0UserMeta.isAdmin) {
