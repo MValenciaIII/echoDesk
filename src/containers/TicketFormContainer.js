@@ -55,7 +55,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
   async function onSubmit(data, event) {
     event.preventDefault();
     setIsSubmitting(true);
-
     // desturcturing out files to make a separate api call IF They exist... ~wk 5/4
     let { files, ...restdata } = data;
 
@@ -100,7 +99,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
       Object.entries(restdata).filter(([item, val]) => val)
     );
     // Posting new TICKETS
-
 
     try {
       let response = await fetch(createTicketRoute, {
@@ -152,7 +150,6 @@ export default function TicketFormContainer({ children, ...restProps }) {
         history.push('/');
       }, 1350);
     }
-
     sendNewTicket(restdata)
       //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
   //? Where does this need to be - When the SUBMIT button is Pressed
@@ -168,9 +165,16 @@ export default function TicketFormContainer({ children, ...restProps }) {
   }
 
 
- function sendNewTicket(restdata) {
+ async function sendNewTicket(restdata) {
+
     try {
-      axios.post( 'http://10.250.138.41:3075/api/mail/sendNotification' , { recipientSentee: 'mvalencia@mema.ms.gov', typeOfNotification: 'newTicket', text:restdata.description})
+     await fetch (sendEmailRoute, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({toReceive:"mvalencia@mema.ms.gov", typeOfNotification: "newTicket", subject:`Subject: ${restdata.subject}`, text:`Description: ${restdata.description}` })
+      })
     } catch (error) {
       console.log(error)
     }
