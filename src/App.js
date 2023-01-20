@@ -8,6 +8,7 @@ import ProfileSettings from './pages/profile';
 import ChartsPage from './pages/chartsPages';
 import AgentInputTicket from './pages/agentInputTicket.js';
 import Loading from './components/Loading';
+import AgentCreateBoard from './pages/agentCreate';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -25,6 +26,7 @@ function App() {
         <ProtectedRoute path="/agentInputTicket" component={AgentInputTicket} />
         <ProtectedRoute exact path="/charts" component={ChartsPage} />
         <ProtectedRoute exact path="/" component={ClientDashboard} />
+        <ProtectedRoute exact path="/createadmin" component={AgentCreateBoard} />
       </Switch>
     </div>
   );

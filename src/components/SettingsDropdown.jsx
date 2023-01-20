@@ -46,7 +46,16 @@ export default function SettingsDropdown(props) {
           <Link to="/charts">Data Charts</Link>
         </li>
       )}
-
+      {auth0UserMeta && auth0UserMeta.isAdmin && (
+        <li className={`text-text-muted text-sm underline m-2 inline-block`}>
+          <Link
+            
+            to="/createAdmin"
+          >
+            Create an Admin
+          </Link>
+        </li>
+      )}
       <li className={`text-text-muted text-sm underline m-2 inline-block`}>
         <button
           className={`text-text-muted text-sm underline inline-block`}
