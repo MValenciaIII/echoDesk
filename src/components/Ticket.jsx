@@ -25,7 +25,7 @@ import {
   MailEnvelopeOpen,
   AttachmentPaperclipIcon,
 } from './Icons';
-import { updateTicketRoute, createNoteRoute } from '../constants/apiRoutes';
+import { updateTicketRoute, createNoteRoute, sendEmailRoute } from '../constants/apiRoutes';
 import { data } from 'autoprefixer';
 
 // @# Large file of compound components for anything on a ticket;  There are agent components and Client only components for ways their ticket might look a little different; The call stack here currently is that the TicketsContainer in containers folder is mapping over ticket data.  The top ticket here is using React Clone Element in order to pass some of its own props and state (namely form methods, editing state) for each ticket down into the individual components below;
@@ -711,6 +711,7 @@ Ticket.InputNote = function InputNote({
   children,
   ticket_id,
   client_id,
+  title,
   ...restProps
 }) {
   const { register, handleSubmit, reset } = useForm();
@@ -730,10 +731,11 @@ Ticket.InputNote = function InputNote({
     if (!data.note_text) {
       return;
     }
+    data.title = title;
     data.ticket_id = ticket_id;
     data.client_id = client_id;
     // PATCHING EXISTING TICKETS
-
+    
     try {
       let response = await fetch(createNoteRoute, {
         method: 'POST',
@@ -765,7 +767,25 @@ Ticket.InputNote = function InputNote({
     } catch (error) {
       console.error({ error });
     }
+
+    sendEmailNotification(data)
   }
+
+  async function sendEmailNotification(data) {
+
+    try {
+     await fetch (sendEmailRoute, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({toReceive:"mvalencia@mema.ms.gov", typeOfNotification: "newComment", subject:`Subject: Ticket # - ${data.ticket_id}`, text:`${data.note_text}` })
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   return (
     <form
