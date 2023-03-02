@@ -173,7 +173,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({toReceive:"mvalencia@mema.ms.gov", typeOfNotification: "newTicket", subject:`Subject: ${restdata.subject}`, text:`Description: ${restdata.description}` })
+        body: JSON.stringify({toReceive:"itadmin@mema.ms.gov", typeOfNotification: "newTicket", subject:`Subject: ${restdata.subject}`, text:`Description: ${restdata.description}` })
       })
     } catch (error) {
       console.log(error)

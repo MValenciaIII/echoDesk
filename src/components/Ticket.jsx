@@ -779,7 +779,7 @@ Ticket.InputNote = function InputNote({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({toReceive:"mvalencia@mema.ms.gov", typeOfNotification: "newComment", subject:`Subject: Ticket # - ${data.ticket_id}`, text:`${data.note_text}` })
+        body: JSON.stringify({toReceive:"itadmin@mema.ms.gov", typeOfNotification: "newComment", subject:`Subject: Ticket # - ${data.ticket_id}`, text:`${data.note_text}` })
       })
     } catch (error) {
       console.log(error)
