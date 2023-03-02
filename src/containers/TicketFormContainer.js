@@ -150,7 +150,7 @@ export default function TicketFormContainer({ children, ...restProps }) {
         history.push('/');
       }, 1350);
     }
-    sendNewTicket(restdata)
+   // sendNewTicket(restdata)
       //* TRYING TO SEND A EMAIL WHEN INPUT TICKET HAS BEEN SUBMITTED
   //? Where does this need to be - When the SUBMIT button is Pressed
   //? variables in the back 

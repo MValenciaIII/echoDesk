@@ -768,7 +768,7 @@ Ticket.InputNote = function InputNote({
       console.error({ error });
     }
 
-    sendEmailNotification(data)
+   // sendEmailNotification(data)
   }
 
   async function sendEmailNotification(data) {
