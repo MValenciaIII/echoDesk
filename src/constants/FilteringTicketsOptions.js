@@ -89,7 +89,6 @@ export function FilterAgentOptions() {
       <option value="16">Donald McDuffey</option>
       <option value="18">Lily Victory</option> */}
       <option value="19">Drew Minga</option>
-      <option value="20">Nathan Brownstein</option>
     </>
   );
 }
