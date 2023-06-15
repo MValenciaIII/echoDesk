@@ -1,9 +1,9 @@
 //ALL API ROUTES ARE DEFINED HERE AS THE SOURCE OF TRUTH FOR API
 
-const baseApiUrl = 'http://18.213.41.97/api/';
+const baseApiUrl = 'https://www.mema4kids.info/api/';
 
 
-export const allTicketsRoute = 'http://18.213.41.97/api/tickets';
+export const allTicketsRoute = 'https://www.mema4kids.info/api/tickets';
 
 
 export function departmentTicketsRoute (id) {
@@ -19,7 +19,7 @@ export function dbUsersTicketsRoute(id) {
   return baseApiUrl.concat(`tickets/${id}`);
 }
 export const createTicketRoute =
-  'http://18.213.41.97/api/tickets/create';
+  'https://www.mema4kids.info/api/tickets/create';
 
 export const filteringRoute = baseApiUrl.concat('tickets/filter/search?');
 
