@@ -17,7 +17,7 @@ ReactDOM.render(
     <Auth0ProviderWithHistory
       domain={domain}
       clientId={clientId}
-      redirectUri={window.location.origin}
+      redirectUri={window.location.replace('https://memaadmin.servicedesk-us.comodo.com/index.php')}
       audience="https://memaechodesk.us.auth0.com/api/v2/"
       scope="read:current_user  update:current_user_metadata"
     >
